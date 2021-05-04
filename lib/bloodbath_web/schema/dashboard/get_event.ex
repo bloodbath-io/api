@@ -1,4 +1,4 @@
-defmodule Bloodbath.Schema.Dashboard.GetSpace do
+defmodule Bloodbath.Schema.Dashboard.GetEvent do
   use Absinthe.Schema.Notation
   alias Crudry.Middlewares.TranslateErrors
 

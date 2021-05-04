@@ -14,6 +14,8 @@ defmodule Bloodbath.Schema do
 
   import_types Bloodbath.Schema.Dashboard.GetEvent
   import_types Bloodbath.Schema.Dashboard.ListEvents
+  import_types Bloodbath.Schema.Dashboard.CreateEvent
+  import_types Bloodbath.Schema.Dashboard.RemoveEvent
 
   query do
     import_fields :dashboard_list_events

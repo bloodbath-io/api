@@ -12,6 +12,6 @@ defmodule Bloodbath.Repo.Migrations.CreateOrganizations do
     end
 
     create unique_index(:organizations, [:slug])
-    create unique_index(:api_key)
+    create unique_index(:organizations, [:api_key])
   end
 end
