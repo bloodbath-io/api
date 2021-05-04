@@ -1,4 +1,4 @@
-defmodule Bigseat.DataCase do
+defmodule Bloodbath.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -10,7 +10,7 @@ defmodule Bigseat.DataCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use Bigseat.DataCase, async: true`, although
+  by setting `use Bloodbath.DataCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -18,20 +18,20 @@ defmodule Bigseat.DataCase do
 
   using do
     quote do
-      alias Bigseat.Repo
+      alias Bloodbath.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Bigseat.DataCase
+      import Bloodbath.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Bigseat.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Bloodbath.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Bigseat.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Bloodbath.Repo, {:shared, self()})
     end
 
     :ok

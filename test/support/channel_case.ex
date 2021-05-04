@@ -1,4 +1,4 @@
-defmodule BigseatWeb.ChannelCase do
+defmodule BloodbathWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -11,7 +11,7 @@ defmodule BigseatWeb.ChannelCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use BigseatWeb.ChannelCase, async: true`, although
+  by setting `use BloodbathWeb.ChannelCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -21,18 +21,18 @@ defmodule BigseatWeb.ChannelCase do
     quote do
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
-      import BigseatWeb.ChannelCase
+      import BloodbathWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint BigseatWeb.Endpoint
+      @endpoint BloodbathWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Bigseat.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Bloodbath.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Bigseat.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Bloodbath.Repo, {:shared, self()})
     end
 
     :ok

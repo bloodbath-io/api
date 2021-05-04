@@ -1,9 +1,9 @@
-defmodule Bigseat.MixProject do
+defmodule Bloodbath.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :bigseat,
+      app: :bloodbath,
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -19,7 +19,7 @@ defmodule Bigseat.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Bigseat.Application, []},
+      mod: {Bloodbath.Application, []},
       extra_applications: [:iex, :logger, :runtime_tools, :absinthe_plug]
     ]
   end

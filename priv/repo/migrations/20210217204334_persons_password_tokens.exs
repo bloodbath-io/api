@@ -1,4 +1,4 @@
-defmodule Bigseat.Repo.Migrations.PersonsPasswordTokens do
+defmodule Bloodbath.Repo.Migrations.PersonsPasswordTokens do
   use Ecto.Migration
 
   def change do

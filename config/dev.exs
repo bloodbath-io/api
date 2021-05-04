@@ -1,10 +1,10 @@
 use Mix.Config
 
 # Configure your database
-config :bigseat, Bigseat.Repo,
+config :bloodbath, Bloodbath.Repo,
   username: "postgres",
   password: "postgres",
-  database: "bigseat_dev",
+  database: "bloodbath_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10,
@@ -17,7 +17,7 @@ config :bigseat, Bigseat.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :bigseat, BigseatWeb.Endpoint,
+config :bloodbath, BloodbathWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,

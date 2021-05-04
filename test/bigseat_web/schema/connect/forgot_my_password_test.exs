@@ -1,7 +1,7 @@
-defmodule BigseatWeb.Schema.ForgotMyPasswordTest do
-  use BigseatWeb.ConnCase, async: true
-  alias Bigseat.Factory.PersonFactory
-  use Bigseat.HelpersCase
+defmodule BloodbathWeb.Schema.ForgotMyPasswordTest do
+  use BloodbathWeb.ConnCase, async: true
+  alias Bloodbath.Factory.PersonFactory
+  use Bloodbath.HelpersCase
 
   describe "forgot_my_password" do
     setup do

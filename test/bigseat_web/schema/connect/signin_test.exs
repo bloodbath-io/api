@@ -1,7 +1,7 @@
-defmodule BigseatWeb.Schema.SigninTest do
-  use BigseatWeb.ConnCase, async: true
-  alias Bigseat.Factory.PersonFactory
-  use Bigseat.HelpersCase
+defmodule BloodbathWeb.Schema.SigninTest do
+  use BloodbathWeb.ConnCase, async: true
+  alias Bloodbath.Factory.PersonFactory
+  use Bloodbath.HelpersCase
 
   describe "signin" do
     setup do
@@ -22,7 +22,7 @@ defmodule BigseatWeb.Schema.SigninTest do
         %{"signin" =>
           %{
             "id" => person.id,
-            "api_key" => person.api_key
+            "access_token" => person.access_token
           }
         }
       }
@@ -36,7 +36,7 @@ defmodule BigseatWeb.Schema.SigninTest do
           password: "#{payload.password}"
         ) {
           id
-          api_key
+          access_token
         }
       }
       """

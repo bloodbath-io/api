@@ -1,7 +1,7 @@
-defmodule BigseatWeb.Schema.ChangePasswordFromTokenTest do
-  use BigseatWeb.ConnCase, async: true
-  alias Bigseat.Factory.PersonFactory
-  use Bigseat.HelpersCase
+defmodule BloodbathWeb.Schema.ChangePasswordFromTokenTest do
+  use BloodbathWeb.ConnCase, async: true
+  alias Bloodbath.Factory.PersonFactory
+  use Bloodbath.HelpersCase
 
   describe "change_password_from_token" do
     setup do

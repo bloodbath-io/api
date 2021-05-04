@@ -1,7 +1,7 @@
-defmodule BigseatWeb.Schema.EditMyAccountTest do
-  use BigseatWeb.ConnCase, async: true
-  alias Bigseat.Factory.PersonFactory
-  use Bigseat.HelpersCase
+defmodule BloodbathWeb.Schema.EditMyAccountTest do
+  use BloodbathWeb.ConnCase, async: true
+  alias Bloodbath.Factory.PersonFactory
+  use Bloodbath.HelpersCase
 
   describe "edit_my_account" do
     setup do

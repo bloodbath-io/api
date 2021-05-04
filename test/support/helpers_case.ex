@@ -1,5 +1,5 @@
 
-defmodule Bigseat.HelpersCase do
+defmodule Bloodbath.HelpersCase do
   use ExUnit.CaseTemplate
 
   using do
@@ -35,7 +35,7 @@ defmodule Bigseat.HelpersCase do
       end
 
       defp authorize(conn, person) do
-        conn |> put_req_header("authorization", "Bearer #{person.api_key}")
+        conn |> put_req_header("authorization", "Bearer #{person.access_token}")
       end
 
       defp camel_cased_map_keys(val = %Plug.Upload{}), do: val

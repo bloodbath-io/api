@@ -1,9 +1,9 @@
-defmodule Bigseat.Factory.OrganizationFactory do
-  use ExMachina.Ecto, repo: Bigseat.Repo
+defmodule Bloodbath.Factory.OrganizationFactory do
+  use ExMachina.Ecto, repo: Bloodbath.Repo
 
   def organization_factory do
     name = Faker.Pokemon.location()
-    %Bigseat.Core.Organization{
+    %Bloodbath.Core.Organization{
       name: name,
       slug: Inflex.parameterize(name)
     }

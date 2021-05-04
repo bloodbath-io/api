@@ -1,7 +1,7 @@
-defmodule BigseatWeb.Schema.SignupTest do
-  use BigseatWeb.ConnCase, async: true
-  use Bigseat.HelpersCase
-  alias Bigseat.Core.{
+defmodule BloodbathWeb.Schema.SignupTest do
+  use BloodbathWeb.ConnCase, async: true
+  use Bloodbath.HelpersCase
+  alias Bloodbath.Core.{
     Person,
     Organization
   }
