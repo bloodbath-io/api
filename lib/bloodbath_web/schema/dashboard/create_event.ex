@@ -10,7 +10,7 @@ defmodule Bloodbath.Schema.Dashboard.CreateEvent do
       arg :endpoint, non_null(:string)
       arg :start_at, non_null(:datetime)
 
-      middleware BloodbathWeb.Middleware.AuthorizedAdmin
+      middleware BloodbathWeb.Middleware.AuthorizedOwner
       resolve &resolve/3
       middleware TranslateErrors
     end

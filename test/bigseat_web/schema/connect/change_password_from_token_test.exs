@@ -6,7 +6,7 @@ defmodule BloodbathWeb.Schema.ChangePasswordFromTokenTest do
   describe "change_password_from_token" do
     setup do
       [
-        person: PersonFactory.insert(:person, is_admin: true),
+        person: PersonFactory.insert(:person, is_owner: true),
       ]
     end
 

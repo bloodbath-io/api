@@ -5,7 +5,7 @@ defmodule BloodbathWeb.Schema.RemovePersonTest do
 
   describe "add_new_team_member" do
     setup do
-      myself = PersonFactory.insert(:person, is_admin: true)
+      myself = PersonFactory.insert(:person, is_owner: true)
       [
         myself: myself,
         other_team_member: PersonFactory.insert(:person, email: "other-team-member@gmail.com", organization: myself.organization)

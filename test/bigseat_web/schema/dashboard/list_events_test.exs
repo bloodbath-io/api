@@ -11,8 +11,8 @@ defmodule BloodbathWeb.Schema.ListEventsTest do
   describe "list events" do
     setup do
       organization = OrganizationFactory.insert(:organization)
-      myself = PersonFactory.insert(:person, is_admin: true, organization: organization)
-      team_member = PersonFactory.insert(:person, is_admin: false, organization: organization)
+      myself = PersonFactory.insert(:person, is_owner: true, organization: organization)
+      team_member = PersonFactory.insert(:person, is_owner: false, organization: organization)
       space = SpaceFactory.insert(:space, organization: organization)
       booking = EventFactory.insert(:booking, person: team_member, space: space)
 

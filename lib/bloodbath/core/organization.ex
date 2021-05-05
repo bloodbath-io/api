@@ -6,10 +6,11 @@ defmodule Bloodbath.Core.Organization do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "organizations" do
-    has_many :spaces, Bloodbath.Core.Space
+    has_many :events, Bloodbath.Core.Event
     has_many :people, Bloodbath.Core.Person
     field :name, :string
     field :slug, :string
+    field :api_key, :string
 
     timestamps()
   end
@@ -18,6 +19,7 @@ defmodule Bloodbath.Core.Organization do
     organization
     |> cast(attrs, [:name, :slug])
     |> cast_assoc(:people)
+    |> put_api_key()
     |> put_slug()
     |> validate_required([:name, :slug])
     |> unique_constraint(:slug)
@@ -37,6 +39,16 @@ defmodule Bloodbath.Core.Organization do
       changeset
     _ ->
       put_change(changeset, :slug, Bloodbath.Core.Organization.Helper.slug_with(changeset.changes, 0, options))
+    end
+  end
+
+  defp put_api_key(changeset) do
+    case Ecto.get_meta(changeset.data, :state) do
+      :built ->
+        api_key = :crypto.strong_rand_bytes(64) |> Base.url_encode64
+        changeset |> put_change(:api_key, api_key)
+      :loaded ->
+        changeset
     end
   end
 end

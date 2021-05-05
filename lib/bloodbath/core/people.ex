@@ -23,8 +23,7 @@ defmodule Bloodbath.Core.People do
     # those are default attributes
     # when you create from scratch
     person_characteristics = %{
-      is_admin: true,
-      group: :office,
+      is_owner: true,
       type: "TeamMember",
       origin: "native"
     }
@@ -45,10 +44,8 @@ defmodule Bloodbath.Core.People do
   end
 
   def create_team_member(params \\ %{}, %Organization{} = organization) do
-    # it's a team member but he has no admin power
-    # the group must be defined by hand
     person_characteristics = %{
-      is_admin: false,
+      is_owner: false,
       type: "TeamMember"
     }
 

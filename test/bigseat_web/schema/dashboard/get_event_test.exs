@@ -10,7 +10,7 @@ defmodule BloodbathWeb.Schema.GetSpaceTest do
     setup do
       [
         space: SpaceFactory.insert(:space),
-        myself: PersonFactory.insert(:person, is_admin: true)
+        myself: PersonFactory.insert(:person, is_owner: true)
       ]
     end
 

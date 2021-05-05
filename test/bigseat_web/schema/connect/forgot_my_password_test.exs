@@ -6,7 +6,7 @@ defmodule BloodbathWeb.Schema.ForgotMyPasswordTest do
   describe "forgot_my_password" do
     setup do
       [
-        person: PersonFactory.insert(:person, is_admin: true, email: "existing-email@gmail.com"),
+        person: PersonFactory.insert(:person, is_owner: true, email: "existing-email@gmail.com"),
       ]
     end
 

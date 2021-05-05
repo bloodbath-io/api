@@ -7,7 +7,7 @@ defmodule Bloodbath.Schema.Dashboard.GetEvent do
     field :get_event, :dashboard_event do
       arg :id, non_null(:uuid)
 
-      middleware BloodbathWeb.Middleware.AuthorizedAdmin
+      middleware BloodbathWeb.Middleware.AuthorizedOwner
       resolve &resolve/3
       middleware TranslateErrors
     end

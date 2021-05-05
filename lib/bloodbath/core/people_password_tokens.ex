@@ -9,7 +9,7 @@ defmodule Bloodbath.Core.PeoplePasswordTokens do
   }
 
   def request_new_password_by_email(email) do
-    person = Person |> where(email: ^email) |> where(is_admin: true) |> Repo.one()
+    person = Person |> where(email: ^email) |> Repo.one()
     case person do
       %Person{} ->
         {:ok, %{token: token}} = %PeoplePasswordToken{}

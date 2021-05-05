@@ -5,7 +5,7 @@ defmodule Bloodbath.Factory.EventFactory do
   }
 
   def event_factory do
-    person = PersonFactory.build(:person, is_admin: false)
+    person = PersonFactory.build(:person, is_owner: false)
 
     %Bloodbath.Core.Event{
       start_at: Timex.shift(DateTime.utc_now(), days: 1, hours: 1),

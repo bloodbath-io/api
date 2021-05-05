@@ -1,7 +1,7 @@
-defmodule BloodbathWeb.Middleware.AuthorizedAdmin do
+defmodule BloodbathWeb.Middleware.AuthorizedOwner do
   @behaviour Absinthe.Middleware
 
-  def call(resolution = %{context: %{myself: %{ is_admin: true }}}, _config) do
+  def call(resolution = %{context: %{myself: %{ is_owner: true }}}, _config) do
     resolution
   end
 
@@ -11,6 +11,6 @@ defmodule BloodbathWeb.Middleware.AuthorizedAdmin do
   end
 
   defp not_authorized_error do
-    %{message: "Not authorized, you're not an admin"}
+    %{message: "Not authorized, you're not a owner"}
   end
 end

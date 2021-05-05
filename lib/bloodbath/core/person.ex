@@ -12,10 +12,9 @@ defmodule Bloodbath.Core.Person do
     field :password, :string, virtual: true
     field :encrypted_password, :string
     field :first_name, :string
-    field :group, Ecto.Enum, values: [:remote, :office]
     field :type, :string
     field :origin, :string
-    field :is_admin, :boolean, default: false
+    field :is_owner, :boolean, default: false
     field :last_name, :string
     field :access_token, :string
 
@@ -24,10 +23,10 @@ defmodule Bloodbath.Core.Person do
 
   def create_changeset(person, attrs) do
     person
-    |> cast(attrs, [:email, :password, :first_name, :last_name, :is_admin, :type, :group, :origin, :access_token])
+    |> cast(attrs, [:email, :password, :first_name, :last_name, :is_owner, :type, :origin, :access_token])
     |> cast_assoc(:organization)
     |> put_access_token()
-    |> validate_required([:email, :first_name, :last_name, :access_token, :type, :group, :origin])
+    |> validate_required([:email, :first_name, :last_name, :access_token, :type, :origin])
     |> unique_constraint(:email, name: :people_organization_id_email_index)
     |> validate_unique_admin()
     |> put_encrypted_password()
@@ -35,16 +34,16 @@ defmodule Bloodbath.Core.Person do
 
   def update_changeset(person, attrs) do
     person
-    |> cast(attrs, [:email, :password, :first_name, :last_name, :group])
+    |> cast(attrs, [:email, :password, :first_name, :last_name])
     |> unique_constraint(:email, name: :people_organization_id_email_index)
     |> put_encrypted_password()
   end
 
   defp validate_unique_admin(changeset) do
     case changeset do
-      %Ecto.Changeset{valid?: true, changes: %{is_admin: true}} ->
+      %Ecto.Changeset{valid?: true, changes: %{is_owner: true}} ->
         email = Map.get(changeset.changes, :email)
-        query = from person in Bloodbath.Core.Person, where: person.email == ^email, where: person.is_admin == true
+        query = from person in Bloodbath.Core.Person, where: person.email == ^email, where: person.is_owner == true
 
         case Bloodbath.Repo.exists?(query) == false do
           true -> changeset

@@ -6,7 +6,7 @@ defmodule BloodbathWeb.Schema.EditMyAccountTest do
   describe "edit_my_account" do
     setup do
       [
-        myself: PersonFactory.insert(:person, is_admin: true),
+        myself: PersonFactory.insert(:person, is_owner: true),
       ]
     end
 

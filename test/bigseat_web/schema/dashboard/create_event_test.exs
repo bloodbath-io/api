@@ -1,15 +1,15 @@
-defmodule BloodbathWeb.Schema.CreateSpaceTest do
+defmodule BloodbathWeb.Schema.CreateEventTest do
   use BloodbathWeb.ConnCase, async: true
   alias Bloodbath.Factory.{
     PersonFactory,
   }
   use Bloodbath.HelpersCase
-  alias Bloodbath.Core.Space
+  alias Bloodbath.Core.Event
 
-  describe "create_space" do
+  describe "create_event" do
     setup do
       [
-        myself: PersonFactory.insert(:person, is_admin: true),
+        myself: PersonFactory.insert(:person, is_owner: true),
       ]
     end
 
@@ -23,20 +23,20 @@ defmodule BloodbathWeb.Schema.CreateSpaceTest do
 
       response = graphql_query(auth_conn, %{query: query(), variables: variables(), file: avatar()}, :success)
 
-      created_space = Space |> first() |> Repo.one()
-      assert response == %{"data" => %{"createSpace" => %{"id" => created_space.id}}}
+      created_event = Event |> first() |> Repo.one()
+      assert response == %{"data" => %{"createEvent" => %{"id" => created_event.id}}}
     end
 
 
     defp query() do
       """
-      mutation createSpace(
+      mutation createEvent(
         $openHours: OpenHoursInput!
         $avatar: Upload
       ) {
-        createSpace(
+        createEvent(
           avatar: $avatar,
-          name: "My space",
+          name: "My event",
           openHours: $openHours,
           maximumPeople: 10
           dailyCheckin: true
@@ -48,7 +48,7 @@ defmodule BloodbathWeb.Schema.CreateSpaceTest do
     end
 
     def avatar() do
-      %Plug.Upload{path: "test/support/files/valid-space-avatar.png", filename: "valid-space-avatar.png"}
+      %Plug.Upload{path: "test/support/files/valid-event-avatar.png", filename: "valid-event-avatar.png"}
     end
 
     def variables() do

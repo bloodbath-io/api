@@ -10,7 +10,7 @@ defmodule Bigseat.Schema.Dashboard.EditMyAccount do
       arg :email, :string
       arg :password, :string
 
-      middleware BigseatWeb.Middleware.AuthorizedAdmin
+      middleware BigseatWeb.Middleware.AuthorizedOwner
       resolve &resolve/3
       middleware TranslateErrors
     end
