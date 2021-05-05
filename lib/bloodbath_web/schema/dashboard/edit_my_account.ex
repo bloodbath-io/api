@@ -1,4 +1,4 @@
-defmodule Bigseat.Schema.Dashboard.EditMyAccount do
+defmodule Bloodbath.Schema.Dashboard.EditMyAccount do
   use Absinthe.Schema.Notation
   alias Crudry.Middlewares.TranslateErrors
 
@@ -10,14 +10,14 @@ defmodule Bigseat.Schema.Dashboard.EditMyAccount do
       arg :email, :string
       arg :password, :string
 
-      middleware BigseatWeb.Middleware.AuthorizedOwner
+      middleware BloodbathWeb.Middleware.AuthorizedOwner
       resolve &resolve/3
       middleware TranslateErrors
     end
   end
 
   def resolve(_parent, args, %{ context: %{ myself: myself }}) do
-    Bigseat.Core.People.update(myself, args)
+    Bloodbath.Core.People.update(myself, args)
   end
 
   def resolve(_parent, _args, _resolution) do

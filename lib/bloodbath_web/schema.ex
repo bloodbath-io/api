@@ -16,6 +16,7 @@ defmodule Bloodbath.Schema do
   import_types Bloodbath.Schema.Dashboard.ListEvents
   import_types Bloodbath.Schema.Dashboard.CreateEvent
   import_types Bloodbath.Schema.Dashboard.RemoveEvent
+  import_types Bloodbath.Schema.Dashboard.EditMyAccount
 
   query do
     import_fields :dashboard_list_events
@@ -29,5 +30,6 @@ defmodule Bloodbath.Schema do
     import_fields :connect_forgot_my_password
     import_fields :dashboard_create_event
     import_fields :dashboard_remove_event
+    import_fields :dashboard_edit_my_account
   end
 end
