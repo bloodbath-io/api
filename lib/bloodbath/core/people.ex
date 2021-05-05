@@ -9,10 +9,12 @@ defmodule Bloodbath.Core.People do
   }
 
   def list do
-    Repo.all(Person)
+    Person |> Repo.all
   end
 
-  def get(id), do: Repo.get(Person, id)
+  def get(id) do
+    Person |> Repo.get(id)
+  end
 
   def create_owner(params = %{ organization: organization_params } \\ %{}) do
     organization_changeset = %Organization{}

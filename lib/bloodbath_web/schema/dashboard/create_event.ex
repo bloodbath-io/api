@@ -16,8 +16,8 @@ defmodule Bloodbath.Schema.Dashboard.CreateEvent do
     end
   end
 
-  def resolve(_parent, args, %{ context: %{ myself: %{ organization_id: organization_id} }}) do
-    Bloodbath.Core.Events.create(args, organization_id)
+  def resolve(_parent, args, %{ context: %{ myself: myself }}) do
+    Bloodbath.Core.Events.create(myself, args)
   end
 
   def resolve(_parent, _args, _resolution) do
