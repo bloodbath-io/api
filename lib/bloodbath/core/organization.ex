@@ -64,8 +64,14 @@ defmodule Bloodbath.Core.Organization.Helper do
       "#{raw_slug}#{iteration}"
     end
     ignore = options[:ignore]
-    query = from organization in Bloodbath.Core.Organization, where: organization.slug == ^end_slug and organization.slug != ^ignore
 
+    query = if ignore do
+      from organization in Bloodbath.Core.Organization, where: organization.slug == ^end_slug and organization.slug != ^ignore
+    else
+      from organization in Bloodbath.Core.Organization, where: organization.slug == ^end_slug
+    end
+
+    IO.puts "DOES IT EXIST? #{Bloodbath.Repo.exists?(query)}"
     if Bloodbath.Repo.exists?(query) do
       Bloodbath.Core.Organization.Helper.slug_with(params, iteration+1, options)
     else
