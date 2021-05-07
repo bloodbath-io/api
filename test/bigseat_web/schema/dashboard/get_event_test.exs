@@ -1,15 +1,15 @@
-defmodule BloodbathWeb.Schema.GetSpaceTest do
+defmodule BloodbathWeb.Schema.GetEventTest do
   use BloodbathWeb.ConnCase, async: true
   alias Bloodbath.Factory.{
     PersonFactory,
-    SpaceFactory
+    EventFactory
   }
   use Bloodbath.HelpersCase
 
   describe "get_space" do
     setup do
       [
-        space: SpaceFactory.insert(:space),
+        space: EventFactory.insert(:space),
         myself: PersonFactory.insert(:person, is_owner: true)
       ]
     end
@@ -23,7 +23,7 @@ defmodule BloodbathWeb.Schema.GetSpaceTest do
       auth_conn = conn |> authorize(myself)
 
       response = graphql_query(auth_conn, %{query: query(), variables: space |> variables()}, :success)
-      assert response == %{"data" => %{"getSpace" => %{"id" => "#{space.id}"}}}
+      assert response == %{"data" => %{"getEvent" => %{"id" => "#{space.id}"}}}
     end
 
     defp query() do
@@ -31,7 +31,7 @@ defmodule BloodbathWeb.Schema.GetSpaceTest do
       query(
         $id: UUID4!
       ) {
-        getSpace(id: $id) {
+        getEvent(id: $id) {
           id
         }
       }
