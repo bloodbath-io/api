@@ -21,25 +21,25 @@ defmodule Bloodbath.Core.Event do
 
   def create_changeset(booking, attrs) do
     booking
-    |> cast(attrs, [:start_at, :end_at])
+    |> cast(attrs, [:start_at, :origin, :status, :headers, :payload, :endpoint])
     |> cast_assoc(:person)
-    |> cast_assoc(:space)
-    |> validate_required([:start_at, :end_at])
+    |> cast_assoc(:organization)
+    |> validate_required([:start_at, :origin, :status, :headers, :payload, :endpoint])
   end
 
   def update_changeset(space, attrs) do
     space
-    |> cast(attrs, [:start_at, :end_at])
+    |> cast(attrs, [:status])
     |> cast_assoc(:person)
-    |> cast_assoc(:space)
+    |> cast_assoc(:organization)
   end
 
-  def range(query, from, to) do
-    from booking in query,
-    where: (
-        booking.start_at >= ^from and booking.start_at <= ^to
-      ) or (
-        booking.end_at >= ^from and booking.end_at <= ^to
-      )
-  end
+  # def range(query, from, to) do
+  #   from booking in query,
+  #   where: (
+  #       booking.start_at >= ^from and booking.start_at <= ^to
+  #     ) or (
+  #       booking.end_at >= ^from and booking.end_at <= ^to
+  #     )
+  # end
 end

@@ -17,7 +17,8 @@ defmodule Bloodbath.Schema.Dashboard.CreateEvent do
   end
 
   def resolve(_parent, args, %{ context: %{ myself: myself }}) do
-    Bloodbath.Core.Events.create(myself, args)
+    parameters = Map.merge(args, %{origin: "graphql_api"})
+    Bloodbath.Core.Events.create(myself, parameters)
   end
 
   def resolve(_parent, _args, _resolution) do

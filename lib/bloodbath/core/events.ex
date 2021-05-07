@@ -3,7 +3,8 @@ defmodule Bloodbath.Core.Events do
   alias Bloodbath.Repo
 
   alias Bloodbath.Core.{
-    Event
+    Event,
+    Organization
   }
 
   def get(id) do
@@ -16,9 +17,12 @@ defmodule Bloodbath.Core.Events do
 
   def create(person, params) do
     organization = Organization |> Repo.get(person.organization_id)
+    event_attributes = %{
+      status: "scheduled"
+    }
 
     %Event{}
-    |> Event.create_changeset(params)
+    |> Event.create_changeset(Map.merge(event_attributes, params))
     |> Ecto.Changeset.put_assoc(:organization, organization)
     |> Ecto.Changeset.put_assoc(:person, person)
     |> Repo.insert()
