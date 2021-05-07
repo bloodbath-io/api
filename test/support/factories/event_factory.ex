@@ -5,11 +5,16 @@ defmodule Bloodbath.Factory.EventFactory do
   }
 
   def event_factory do
-    person = PersonFactory.build(:person, is_owner: false)
+    person = PersonFactory.build(:person, is_owner: true)
 
     %Bloodbath.Core.Event{
       start_at: Timex.shift(DateTime.utc_now(), days: 1, hours: 1),
+      headers: "{}",
+      payload: "{}",
+      endpoint: "https://test.com/yes",
       person: person,
+      origin: "graphql_api",
+      status: "scheduled",
       organization: person.organization
     }
   end

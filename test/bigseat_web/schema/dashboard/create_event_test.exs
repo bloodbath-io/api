@@ -21,7 +21,7 @@ defmodule BloodbathWeb.Schema.CreateEventTest do
     test "with authentication", %{conn: conn, myself: myself} do
       auth_conn = conn |> authorize(myself)
 
-      response = graphql_query(auth_conn, %{query: query(), variables: variables(), file: avatar()}, :success)
+      response = graphql_query(auth_conn, %{query: query(), variables: variables()}, :success)
 
       created_event = Event |> first() |> Repo.one()
       assert response == %{"data" => %{"createEvent" => %{"id" => created_event.id}}}
@@ -31,34 +31,30 @@ defmodule BloodbathWeb.Schema.CreateEventTest do
     defp query() do
       """
       mutation createEvent(
-        $openHours: OpenHoursInput!
-        $avatar: Upload
+        $payload: String!
+        $headers: String!
+        $endpoint: String!
+        $startAt:  DateTime!
       ) {
         createEvent(
-          avatar: $avatar,
-          name: "My event",
-          openHours: $openHours,
-          maximumPeople: 10
-          dailyCheckin: true
+          payload: $payload
+          headers: $headers
+          endpoint: $endpoint
+          startAt: $startAt
         ) {
           id
         }
       }
-      """
-    end
 
-    def avatar() do
-      %Plug.Upload{path: "test/support/files/valid-event-avatar.png", filename: "valid-event-avatar.png"}
+      """
     end
 
     def variables() do
       %{
-        avatar: "file",
-        open_hours: [%{
-          day_of_the_week: "monday",
-          open_time: "10:59:40Z",
-          close_time: "20:59:40Z"
-        }]
+        payload: "{test: true}",
+        headers: "{}",
+        endpoint: "https://test.com",
+        start_at: "2021-05-09 00:04:34.025409Z"
       }
     end
   end

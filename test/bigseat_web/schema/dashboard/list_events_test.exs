@@ -3,8 +3,7 @@ defmodule BloodbathWeb.Schema.ListEventsTest do
   alias Bloodbath.Factory.{
     PersonFactory,
     EventFactory,
-    OrganizationFactory,
-    EventFactory
+    OrganizationFactory
   }
   use Bloodbath.HelpersCase
 
@@ -12,15 +11,12 @@ defmodule BloodbathWeb.Schema.ListEventsTest do
     setup do
       organization = OrganizationFactory.insert(:organization)
       myself = PersonFactory.insert(:person, is_owner: true, organization: organization)
-      team_member = PersonFactory.insert(:person, is_owner: false, organization: organization)
-      space = EventFactory.insert(:space, organization: organization)
-      booking = EventFactory.insert(:booking, person: team_member, space: space)
+      event = EventFactory.insert(:event, person: myself, organization: organization)
 
       [
-        booking: booking,
+        event: event,
         myself: myself,
-        team_member: team_member,
-        space: space
+        organization: organization
       ]
     end
 
@@ -29,7 +25,7 @@ defmodule BloodbathWeb.Schema.ListEventsTest do
       assert Map.has_key?(response, "errors")
     end
 
-    test "gets a booking by id", %{conn: conn, booking: booking, space: space, myself: myself, team_member: team_member} do
+    test "gets a event by id", %{conn: conn, event: event, myself: myself, organization: organization} do
       auth_conn = conn |> authorize(myself)
 
       response = graphql_query(auth_conn, %{query: query()}, :success)
@@ -37,7 +33,7 @@ defmodule BloodbathWeb.Schema.ListEventsTest do
         "data" => %{
           "listEvents" =>
           [
-            %{"id" => "#{booking.id}", "person" => %{"id" => team_member.id}, "space" => %{"id" => space.id}}
+            %{"id" => "#{event.id}", "person" => %{"id" => myself.id}, "organization" => %{"id" => organization.id}}
           ]
         }
       }
@@ -52,7 +48,7 @@ defmodule BloodbathWeb.Schema.ListEventsTest do
           person {
             id
           }
-          space {
+          organization {
             id
           }
         }

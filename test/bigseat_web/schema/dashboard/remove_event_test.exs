@@ -1,34 +1,38 @@
-defmodule BloodbathWeb.Schema.RemovePersonTest do
+defmodule BloodbathWeb.Schema.RemoveEventTest do
   use BloodbathWeb.ConnCase, async: true
-  alias Bloodbath.Factory.PersonFactory
+  alias Bloodbath.Factory.{
+    EventFactory,
+    PersonFactory
+  }
   use Bloodbath.HelpersCase
 
   describe "add_new_team_member" do
     setup do
       myself = PersonFactory.insert(:person, is_owner: true)
+
       [
         myself: myself,
-        other_team_member: PersonFactory.insert(:person, email: "other-team-member@gmail.com", organization: myself.organization)
+        event: EventFactory.insert(:event, organization: myself.organization)
       ]
     end
 
-    test "without authentication", %{conn: conn, other_team_member: other_team_member} do
-      response = graphql_query(conn, %{query: query(), variables: %{id: other_team_member.id}}, :success)
+    test "without authentication", %{conn: conn, event: event} do
+      response = graphql_query(conn, %{query: query(), variables: %{id: event.id}}, :success)
       assert Map.has_key?(response, "errors")
     end
 
-    test "with authentication", %{conn: conn, myself: myself, other_team_member: other_team_member} do
+    test "with authentication", %{conn: conn, myself: myself, event: event} do
       auth_conn = conn |> authorize(myself)
-      response = graphql_query(auth_conn, %{query: query(), variables: %{id: other_team_member.id}}, :success)
-      assert response == %{"data" => %{"removePerson" => %{"id" => other_team_member.id}}}
+      response = graphql_query(auth_conn, %{query: query(), variables: %{id: event.id}}, :success)
+      assert response == %{"data" => %{"removeEvent" => %{"id" => event.id}}}
     end
 
     defp query() do
       """
-      mutation removePerson(
+      mutation removeEvent(
         $id: UUID4!
       ) {
-        removePerson(
+        removeEvent(
           id: $id
         ) {
           id

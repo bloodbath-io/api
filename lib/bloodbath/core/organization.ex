@@ -71,7 +71,6 @@ defmodule Bloodbath.Core.Organization.Helper do
       from organization in Bloodbath.Core.Organization, where: organization.slug == ^end_slug
     end
 
-    IO.puts "DOES IT EXIST? #{Bloodbath.Repo.exists?(query)}"
     if Bloodbath.Repo.exists?(query) do
       Bloodbath.Core.Organization.Helper.slug_with(params, iteration+1, options)
     else

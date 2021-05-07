@@ -2,28 +2,33 @@ defmodule BloodbathWeb.Schema.GetEventTest do
   use BloodbathWeb.ConnCase, async: true
   alias Bloodbath.Factory.{
     PersonFactory,
-    EventFactory
+    EventFactory,
+    OrganizationFactory
   }
   use Bloodbath.HelpersCase
 
-  describe "get_space" do
+  describe "get_event" do
     setup do
+      organization = OrganizationFactory.insert(:organization)
+      myself = PersonFactory.insert(:person, is_owner: true, organization: organization)
+      event = EventFactory.insert(:event, person: myself, organization: organization)
+
       [
-        space: EventFactory.insert(:space),
-        myself: PersonFactory.insert(:person, is_owner: true)
+        event: event,
+        myself: myself
       ]
     end
 
-    test "without authentication", %{conn: conn, space: space} do
-      response = graphql_query(conn, %{query: query(), variables: space |> variables()}, :success)
+    test "without authentication", %{conn: conn, event: event} do
+      response = graphql_query(conn, %{query: query(), variables: event |> variables()}, :success)
       assert Map.has_key?(response, "errors")
     end
 
-    test "by id", %{conn: conn, space: space, myself: myself} do
+    test "by id", %{conn: conn, event: event, myself: myself} do
       auth_conn = conn |> authorize(myself)
 
-      response = graphql_query(auth_conn, %{query: query(), variables: space |> variables()}, :success)
-      assert response == %{"data" => %{"getEvent" => %{"id" => "#{space.id}"}}}
+      response = graphql_query(auth_conn, %{query: query(), variables: event |> variables()}, :success)
+      assert response == %{"data" => %{"getEvent" => %{"id" => "#{event.id}"}}}
     end
 
     defp query() do
@@ -38,9 +43,9 @@ defmodule BloodbathWeb.Schema.GetEventTest do
       """
     end
 
-    def variables(space) do
+    def variables(event) do
       %{
-        id: space.id
+        id: event.id
       }
     end
   end

@@ -3,9 +3,11 @@ defmodule Bloodbath.Factory.OrganizationFactory do
 
   def organization_factory do
     name = Faker.Pokemon.location()
+
     %Bloodbath.Core.Organization{
       name: name,
-      slug: Inflex.parameterize(name)
+      slug: Inflex.parameterize(name),
+      api_key: :crypto.strong_rand_bytes(64) |> Base.url_encode64,
     }
   end
 end
