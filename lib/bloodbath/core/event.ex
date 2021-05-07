@@ -10,6 +10,8 @@ defmodule Bloodbath.Core.Event do
     belongs_to :person, Bloodbath.Core.Person
     belongs_to :organization, Bloodbath.Core.Organization
     field :scheduled_for, :utc_datetime
+    field :enqueued_at, :utc_datetime
+    field :processed_at, :utc_datetime
     field :origin, :string
     field :status, :string
     field :headers, :string

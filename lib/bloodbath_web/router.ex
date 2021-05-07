@@ -5,8 +5,17 @@ defmodule BloodbathWeb.Router do
     plug CORSPlug
   end
 
+  pipeline :rest do
+    plug :accepts, ["json"]
+  end
+
   pipeline :authenticated do
     plug BloodbathWeb.Pipeline.Authenticated
+  end
+
+  scope "/rest", BloodbathWeb do
+    pipe_through :rest
+    resources "/events", EventController, except: [:new, :edit, :update]
   end
 
   scope "/" do
