@@ -1,12 +1,41 @@
+# this is a hack for Jason to accept tuples as errors
+# basically changeset.errors directly put into the view
+# defmodule TupleEncoder do
+#   alias Jason.Encoder
+
+#   defimpl Encoder, for: Tuple do
+#     def encode(data, options) when is_tuple(data) do
+#       data
+#       |> Tuple.to_list()
+#       |> Encoder.List.encode(options)
+#     end
+#   end
+# end
+
 defmodule BloodbathWeb.ErrorView do
   use BloodbathWeb, :view
 
-  def translate_errors(changeset) do
-    Ecto.Changeset.traverse_errors(changeset, &translate_error/1)
+  # def translate_errors(changeset) do
+  #   Ecto.Changeset.traverse_errors(changeset, &translate_error/1)
+  # end
+  def render_detail({message, values}) do
+    Enum.reduce values, message, fn {k, v}, acc ->
+      String.replace(acc, "%{#{k}}", to_string(v))
+    end
+  end
+
+  def render_detail(message) do
+    message
   end
 
   def render("error.json", %{changeset: changeset}) do
-    %{errors: translate_errors(changeset)}
+    errors = Enum.map(changeset.errors, fn {field, detail} ->
+      %{
+        "#{field}": render_detail(detail)
+      }
+    end)
+
+    %{errors: errors}
   end
 
   def render("400.json", _assigns) do
