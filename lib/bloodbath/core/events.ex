@@ -7,6 +7,10 @@ defmodule Bloodbath.Core.Events do
     Organization
   }
 
+  def get!(id) do
+    Event |> Repo.get!(id) |> Repo.preload([:person, :organization])
+  end
+
   def get(id) do
     Event |> Repo.get(id) |> Repo.preload([:person, :organization])
   end
@@ -17,20 +21,17 @@ defmodule Bloodbath.Core.Events do
 
   def create(person, params) do
     organization = Organization |> Repo.get(person.organization_id)
-    event_attributes = %{
-      status: "scheduled"
-    }
 
     %Event{}
-    |> Event.create_changeset(Map.merge(event_attributes, params))
+    |> Event.create_changeset(params)
     |> Ecto.Changeset.put_assoc(:organization, organization)
     |> Ecto.Changeset.put_assoc(:person, person)
     |> Repo.insert()
   end
 
-  def update(%Event{} = event, attrs) do
+  def update(%Event{} = event, params) do
     event
-    |> Event.update_changeset(attrs)
+    |> Event.update_changeset(params)
     |> Repo.update()
   end
 

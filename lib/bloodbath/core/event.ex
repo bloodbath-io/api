@@ -13,7 +13,6 @@ defmodule Bloodbath.Core.Event do
     field :enqueued_at, :utc_datetime
     field :processed_at, :utc_datetime
     field :origin, :string
-    field :status, :string
     field :headers, :string
     field :payload, :string
     field :endpoint, :string

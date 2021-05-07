@@ -9,7 +9,6 @@ defmodule Bloodbath.Repo.Migrations.CreateEvents do
       add :processed_at, :utc_datetime, null: true
 
       add :origin, :string, null: false
-      add :status, :string, null: false
       add :headers, :string, null: false
       add :payload, :string, null: false
       add :endpoint, :string, null: false
