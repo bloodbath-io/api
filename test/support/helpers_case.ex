@@ -35,7 +35,7 @@ defmodule Bloodbath.HelpersCase do
       end
 
       defp authorize(conn, person) do
-        conn |> put_req_header("authorization", "Bearer #{person.access_token}")
+        conn |> put_req_header("authorization", "Bearer #{person.api_key}")
       end
 
       defp camel_cased_map_keys(val = %Plug.Upload{}), do: val

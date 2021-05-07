@@ -22,7 +22,7 @@ defmodule BloodbathWeb.Schema.SigninTest do
         %{"signin" =>
           %{
             "id" => person.id,
-            "access_token" => person.access_token
+            "api_key" => person.api_key
           }
         }
       }
@@ -36,7 +36,7 @@ defmodule BloodbathWeb.Schema.SigninTest do
           password: "#{payload.password}"
         ) {
           id
-          access_token
+          api_key
         }
       }
       """

@@ -23,8 +23,11 @@ defmodule Bloodbath.Repo.Migrations.CreateEvents do
     create index(:events, [:organization_id])
 
     create index(:events, [:scheduled_for])
+    create index(:events, [:enqueued_at])
+    create index(:events, [:processed_at])
     create index(:events, [:organization_id, :scheduled_for])
+    create index(:events, [:organization_id, :enqueued_at])
+    create index(:events, [:organization_id, :processed_at])
     create index(:events, [:person_id, :scheduled_for])
-    create index(:events, [:organization_id, :status])
   end
 end

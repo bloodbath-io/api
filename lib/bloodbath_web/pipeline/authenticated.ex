@@ -17,15 +17,15 @@ defmodule BloodbathWeb.Pipeline.Authenticated do
   end
 
   defp build_context(conn) do
-    with ["Bearer " <> access_token] <- get_req_header(conn, "authorization"),
-        {:ok, myself} <- authorize(access_token) do
+    with ["Bearer " <> api_key] <- get_req_header(conn, "authorization"),
+        {:ok, myself} <- authorize(api_key) do
         {:ok, %{myself: myself}}
     end
   end
 
-  defp authorize(access_token) do
+  defp authorize(api_key) do
     Person
-    |> where(access_token: ^access_token)
+    |> where(api_key: ^api_key)
     |> Repo.one()
     |> case do
       nil -> {:error, "Invalid api key"}

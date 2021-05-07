@@ -18,7 +18,6 @@ defmodule BloodbathWeb.EventView do
     %{
       id: event.id,
       origin: event.origin,
-      status: event.status,
       headers: event.headers,
       payload: event.payload,
       endpoint: event.endpoint,

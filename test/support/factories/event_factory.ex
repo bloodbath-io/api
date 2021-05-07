@@ -14,7 +14,6 @@ defmodule Bloodbath.Factory.EventFactory do
       endpoint: "https://test.com/yes",
       person: person,
       origin: "graphql_api",
-      status: "scheduled",
       organization: person.organization
     }
   end

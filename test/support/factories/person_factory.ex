@@ -10,7 +10,7 @@ defmodule Bloodbath.Factory.PersonFactory do
       last_name: Faker.Person.last_name(),
       origin: "native",
       encrypted_password: Comeonin.Bcrypt.hashpwsalt("password"),
-      access_token: :crypto.strong_rand_bytes(64) |> Base.url_encode64,
+      api_key: :crypto.strong_rand_bytes(64) |> Base.url_encode64,
       type: "TeamMember"
     }
   end

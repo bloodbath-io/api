@@ -22,15 +22,15 @@ defmodule Bloodbath.Core.Event do
 
   def create_changeset(booking, attrs) do
     booking
-    |> cast(attrs, [:scheduled_for, :origin, :status, :headers, :payload, :endpoint])
+    |> cast(attrs, [:scheduled_for, :origin, :headers, :payload, :endpoint])
     |> cast_assoc(:person)
     |> cast_assoc(:organization)
-    |> validate_required([:scheduled_for, :origin, :status, :headers, :payload, :endpoint])
+    |> validate_required([:scheduled_for, :origin, :headers, :payload, :endpoint])
   end
 
   def update_changeset(space, attrs) do
     space
-    |> cast(attrs, [:status])
+    |> cast(attrs, [:enqueued_at, :processed_at])
     |> cast_assoc(:person)
     |> cast_assoc(:organization)
   end

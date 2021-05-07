@@ -7,7 +7,7 @@ defmodule Bloodbath.Schema.Types do
     field :last_name, :string
     field :email, :string
     field :password, :string
-    field :access_token, :string
+    field :api_key, :string
     field :organization, :dashboard_organization
     field :password_recovery_token, :string
   end

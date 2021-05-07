@@ -16,17 +16,17 @@ defmodule Bloodbath.Core.Person do
     field :origin, :string
     field :is_owner, :boolean, default: false
     field :last_name, :string
-    field :access_token, :string
+    field :api_key, :string
 
     timestamps()
   end
 
   def create_changeset(person, attrs) do
     person
-    |> cast(attrs, [:email, :password, :first_name, :last_name, :is_owner, :type, :origin, :access_token])
+    |> cast(attrs, [:email, :password, :first_name, :last_name, :is_owner, :type, :origin, :api_key])
     |> cast_assoc(:organization)
-    |> put_access_token()
-    |> validate_required([:email, :first_name, :last_name, :access_token, :type, :origin])
+    |> put_api_key()
+    |> validate_required([:email, :first_name, :last_name, :api_key, :type, :origin])
     |> unique_constraint(:email, name: :people_organization_id_email_index)
     |> validate_unique_admin()
     |> put_encrypted_password()
@@ -63,11 +63,11 @@ defmodule Bloodbath.Core.Person do
     end
   end
 
-  defp put_access_token(changeset) do
+  defp put_api_key(changeset) do
     case Ecto.get_meta(changeset.data, :state) do
       :built ->
-        access_token = :crypto.strong_rand_bytes(64) |> Base.url_encode64
-        changeset |> put_change(:access_token, access_token)
+        api_key = :crypto.strong_rand_bytes(64) |> Base.url_encode64
+        changeset |> put_change(:api_key, api_key)
       :loaded ->
         changeset
     end
