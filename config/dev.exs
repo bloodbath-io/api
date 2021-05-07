@@ -19,7 +19,7 @@ config :bloodbath, Bloodbath.Repo,
 # with webpack to recompile .js and .css sources.
 config :bloodbath, BloodbathWeb.Endpoint,
   http: [port: 4000],
-  debug_errors: true,
+  # debug_errors: true,
   code_reloader: true,
   check_origin: false,
   watchers: []
