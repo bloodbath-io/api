@@ -4,7 +4,9 @@ defmodule Bloodbath.Repo.Migrations.CreateEvents do
   def change do
     create table(:events, primary_key: false) do
       add :id, :binary_id, primary_key: true
-      add :start_at, :utc_datetime, null: false
+      add :scheduled_for, :utc_datetime, null: false
+      add :enqueued_at, :utc_datetime, null: true
+      add :processed_at, :utc_datetime, null: true
 
       add :origin, :string, null: false
       add :status, :string, null: false
@@ -21,9 +23,9 @@ defmodule Bloodbath.Repo.Migrations.CreateEvents do
     create index(:events, [:origin])
     create index(:events, [:organization_id])
 
-    create index(:events, [:start_at])
-    create index(:events, [:organization_id, :start_at])
-    create index(:events, [:person_id, :start_at])
+    create index(:events, [:scheduled_for])
+    create index(:events, [:organization_id, :scheduled_for])
+    create index(:events, [:person_id, :scheduled_for])
     create index(:events, [:organization_id, :status])
   end
 end

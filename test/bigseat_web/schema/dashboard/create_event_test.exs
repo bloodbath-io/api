@@ -34,13 +34,13 @@ defmodule BloodbathWeb.Schema.CreateEventTest do
         $payload: String!
         $headers: String!
         $endpoint: String!
-        $startAt:  DateTime!
+        $scheduledFor:  DateTime!
       ) {
         createEvent(
           payload: $payload
           headers: $headers
           endpoint: $endpoint
-          startAt: $startAt
+          scheduledFor: $scheduledFor
         ) {
           id
         }
@@ -54,7 +54,7 @@ defmodule BloodbathWeb.Schema.CreateEventTest do
         payload: "{test: true}",
         headers: "{}",
         endpoint: "https://test.com",
-        start_at: "2021-05-09 00:04:34.025409Z"
+        scheduled_for: "2021-05-09 00:04:34.025409Z"
       }
     end
   end

@@ -8,7 +8,7 @@ defmodule Bloodbath.Factory.EventFactory do
     person = PersonFactory.build(:person, is_owner: true)
 
     %Bloodbath.Core.Event{
-      start_at: Timex.shift(DateTime.utc_now(), days: 1, hours: 1),
+      scheduled_for: Timex.shift(DateTime.utc_now(), days: 1, hours: 1),
       headers: "{}",
       payload: "{}",
       endpoint: "https://test.com/yes",

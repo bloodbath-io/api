@@ -22,7 +22,7 @@ defmodule Bloodbath.Schema.Types do
 
   object :dashboard_event do
     field :id, :uuid
-    field :start_at, :datetime
+    field :scheduled_for, :datetime
     field :payload, :string
     field :headers, :string
     field :endpoint, :string

@@ -9,7 +9,7 @@ defmodule Bloodbath.Core.Event do
   schema "events" do
     belongs_to :person, Bloodbath.Core.Person
     belongs_to :organization, Bloodbath.Core.Organization
-    field :start_at, :utc_datetime
+    field :scheduled_for, :utc_datetime
     field :origin, :string
     field :status, :string
     field :headers, :string
@@ -21,10 +21,10 @@ defmodule Bloodbath.Core.Event do
 
   def create_changeset(booking, attrs) do
     booking
-    |> cast(attrs, [:start_at, :origin, :status, :headers, :payload, :endpoint])
+    |> cast(attrs, [:scheduled_for, :origin, :status, :headers, :payload, :endpoint])
     |> cast_assoc(:person)
     |> cast_assoc(:organization)
-    |> validate_required([:start_at, :origin, :status, :headers, :payload, :endpoint])
+    |> validate_required([:scheduled_for, :origin, :status, :headers, :payload, :endpoint])
   end
 
   def update_changeset(space, attrs) do
@@ -37,7 +37,7 @@ defmodule Bloodbath.Core.Event do
   # def range(query, from, to) do
   #   from booking in query,
   #   where: (
-  #       booking.start_at >= ^from and booking.start_at <= ^to
+  #       booking.scheduled_for >= ^from and booking.scheduled_for <= ^to
   #     ) or (
   #       booking.end_at >= ^from and booking.end_at <= ^to
   #     )
