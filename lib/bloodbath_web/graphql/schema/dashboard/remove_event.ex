@@ -10,7 +10,7 @@ defmodule Bloodbath.Schema.Dashboard.RemoveEvent do
     field :remove_event, :dashboard_event do
       arg :id, non_null(:uuid)
 
-      middleware BloodbathWeb.Middleware.AuthorizedOwner
+      middleware BloodbathWeb.Graphql.Middleware.AuthorizedOwner
       resolve &resolve/3
       middleware TranslateErrors
     end

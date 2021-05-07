@@ -10,7 +10,7 @@ defmodule Bloodbath.Schema.Dashboard.EditMyAccount do
       arg :email, :string
       arg :password, :string
 
-      middleware BloodbathWeb.Middleware.AuthorizedOwner
+      middleware BloodbathWeb.Graphql.Middleware.AuthorizedOwner
       resolve &resolve/3
       middleware TranslateErrors
     end

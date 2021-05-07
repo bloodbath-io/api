@@ -4,7 +4,7 @@ defmodule BloodbathWeb.FallbackController do
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
     conn
     |> put_status(:unprocessable_entity)
-    |> put_view(BloodbathWeb.ChangesetView)
+    |> put_view(BloodbathWeb.ErrorView)
     |> render("error.json", changeset: changeset)
   end
 

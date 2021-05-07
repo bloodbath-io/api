@@ -1,4 +1,4 @@
-defmodule BloodbathWeb.Middleware.AuthorizedTeamMember do
+defmodule BloodbathWeb.Graphql.Middleware.AuthorizedTeamMember do
   @behaviour Absinthe.Middleware
 
   def call(resolution = %{context: %{myself: %{ is_owner: _ }}}, _config) do
@@ -11,6 +11,6 @@ defmodule BloodbathWeb.Middleware.AuthorizedTeamMember do
   end
 
   defp not_authorized_error do
-    %{message: "Not authorized, you're not a team member"}
+    %{message: "Unauthorized. You're not a team member"}
   end
 end

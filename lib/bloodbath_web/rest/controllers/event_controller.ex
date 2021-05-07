@@ -11,8 +11,10 @@ defmodule BloodbathWeb.EventController do
     render(conn, "index.json", events: events)
   end
 
-  def create(conn, %{"event" => event_params}) do
-    with {:ok, %Event{} = event} <- Events.create(event_params) do
+  def create(conn, params) do
+    attributes = params |> Map.merge(%{"origin" => "rest_api"})
+
+    with {:ok, %Event{} = event} <- Events.create(conn |> myself, attributes) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.event_path(conn, :show, event))
@@ -31,5 +33,9 @@ defmodule BloodbathWeb.EventController do
     with {:ok, %Event{}} <- Events.delete(event) do
       send_resp(conn, :no_content, "")
     end
+  end
+
+  def myself(conn) do
+    conn.assigns[:rest][:context][:myself]
   end
 end

@@ -9,11 +9,18 @@ defmodule BloodbathWeb.Pipeline.Authenticated do
 
   def init(opts), do: opts
 
-  def call(conn, _) do
+  def call(conn, %{routing_origin: routing_origin}) do
    case build_context(conn) do
-    {:ok, context} -> put_private(conn, :absinthe, %{context: context})
+    {:ok, context} -> conn |> insert(context, routing_origin)
     _ -> conn
    end
+  end
+
+  defp insert(conn, context, routing_origin) do
+    case routing_origin do
+      :rest -> conn |> assign(:rest, %{context: context})
+      :graphql -> conn |> put_private(:absinthe, %{context: context})
+    end
   end
 
   defp build_context(conn) do

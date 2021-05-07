@@ -1,4 +1,4 @@
-defmodule BloodbathWeb.Middleware.AuthorizedAny do
+defmodule BloodbathWeb.Graphql.Middleware.AuthorizedAny do
   @behaviour Absinthe.Middleware
 
   def call(resolution = %{context: %{myself: _}}, _config) do
@@ -11,6 +11,6 @@ defmodule BloodbathWeb.Middleware.AuthorizedAny do
   end
 
   defp not_authorized_error do
-    %{message: "Not authorized, you're not signed-in"}
+    %{message: "Unauthorized. You're not signed-in"}
   end
 end

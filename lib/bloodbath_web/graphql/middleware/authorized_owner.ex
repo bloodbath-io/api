@@ -1,4 +1,4 @@
-defmodule BloodbathWeb.Middleware.AuthorizedOwner do
+defmodule BloodbathWeb.Graphql.Middleware.AuthorizedOwner do
   @behaviour Absinthe.Middleware
 
   def call(resolution = %{context: %{myself: %{ is_owner: true }}}, _config) do
@@ -11,6 +11,6 @@ defmodule BloodbathWeb.Middleware.AuthorizedOwner do
   end
 
   defp not_authorized_error do
-    %{message: "Not authorized, you're not a owner"}
+    %{message: "Unauthorized. Your API key isn't valid."}
   end
 end
