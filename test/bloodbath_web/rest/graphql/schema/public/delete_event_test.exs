@@ -1,4 +1,4 @@
-defmodule BloodbathWeb.Schema.RemoveEventTest do
+defmodule BloodbathWeb.Schema.DeleteEventTest do
   use BloodbathWeb.ConnCase, async: true
   alias Bloodbath.Factory.{
     EventFactory,

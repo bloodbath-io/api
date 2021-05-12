@@ -1,4 +1,4 @@
-defmodule Bloodbath.Schema.Public.RemoveEvent do
+defmodule Bloodbath.Schema.Public.DeleteEvent do
   import Ecto.Query, warn: false
   use Absinthe.Schema.Notation
   alias Bloodbath.Repo

@@ -16,8 +16,8 @@ defmodule Bloodbath.Schema do
   import_types Bloodbath.Schema.Public.GetEvent
   import_types Bloodbath.Schema.Public.ListEvents
   import_types Bloodbath.Schema.Public.CreateEvent
-  import_types Bloodbath.Schema.Public.RemoveEvent
-  import_types Bloodbath.Schema.Public.EditMyAccount
+  import_types Bloodbath.Schema.Public.DeleteEvent
+  import_types Bloodbath.Schema.Dashbaord.EditMyAccount
 
   query do
     import_fields :public_list_events

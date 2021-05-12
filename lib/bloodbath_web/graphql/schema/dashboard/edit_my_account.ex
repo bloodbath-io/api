@@ -1,4 +1,4 @@
-defmodule Bloodbath.Schema.Public.EditMyAccount do
+defmodule Bloodbath.Schema.Dashbaord.EditMyAccount do
   use Absinthe.Schema.Notation
   alias Crudry.Middlewares.TranslateErrors
 
