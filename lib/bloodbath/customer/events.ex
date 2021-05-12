@@ -36,7 +36,12 @@ defmodule Bloodbath.Customer.Events do
   end
 
   def delete(person, id) do
-    event = Event |> where(id: ^id) |> where(organization_id: ^person.organization_id) |> Repo.one()
+    query = from event in Event,
+            where: event.organization_id == ^person.organization_id,
+            where: is_nil(event.dispatched_at)
+
+    event = Repo.one(query)
+
     case event do
       %Event{} -> Repo.delete(event)
       _ -> {:error, "event not found"}

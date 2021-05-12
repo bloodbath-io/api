@@ -11,7 +11,7 @@ defmodule Bloodbath.Customer.Event do
     belongs_to :organization, Bloodbath.Customer.Organization
     field :scheduled_for, :utc_datetime
     field :enqueued_at, :utc_datetime
-    field :processed_at, :utc_datetime
+    field :dispatched_at, :utc_datetime
     field :origin, :string
     field :headers, :string
     field :payload, :string
@@ -30,7 +30,7 @@ defmodule Bloodbath.Customer.Event do
 
   def update_changeset(space, attrs) do
     space
-    |> cast(attrs, [:enqueued_at, :processed_at])
+    |> cast(attrs, [:enqueued_at, :dispatched_at])
     |> cast_assoc(:person)
     |> cast_assoc(:organization)
   end

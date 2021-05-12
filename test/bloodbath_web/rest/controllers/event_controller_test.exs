@@ -48,7 +48,7 @@ defmodule BloodbathWeb.EventControllerTest do
       #   "headers" => "{}",
       #   "origin" => "rest_api",
       #   "payload" => "{test: true}",
-      #   "processed_at" => nil,
+      #   "dispatched_at" => nil,
       #   "scheduled_for" => "2021-05-09T00:04:34Z"
       # }
 

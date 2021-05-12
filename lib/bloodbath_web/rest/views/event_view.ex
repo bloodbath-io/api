@@ -23,7 +23,7 @@ defmodule BloodbathWeb.EventView do
       endpoint: event.endpoint,
       scheduled_for: event.scheduled_for,
       enqueued_at: event.enqueued_at,
-      processed_at: event.processed_at
+      dispatched_at: event.dispatched_at
     }
   end
 end
