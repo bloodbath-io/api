@@ -28,7 +28,7 @@ defmodule BloodbathWeb.EventController do
   end
 
   def delete(conn, %{"id" => id}) do
-    event = Events.get(id)
+    event = Events.get!(id)
 
     with {:ok, %Event{}} <- Events.delete(event) do
       send_resp(conn, :no_content, "")

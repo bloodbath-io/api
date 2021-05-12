@@ -12,6 +12,7 @@ defmodule Bloodbath.Schema do
   import_types Bloodbath.Schema.Connect.Signin
   import_types Bloodbath.Schema.Connect.Signup
 
+  import_types Bloodbath.Schema.Dashboard.GetPing
   import_types Bloodbath.Schema.Dashboard.GetEvent
   import_types Bloodbath.Schema.Dashboard.ListEvents
   import_types Bloodbath.Schema.Dashboard.CreateEvent
@@ -21,6 +22,7 @@ defmodule Bloodbath.Schema do
   query do
     import_fields :dashboard_list_events
     import_fields :dashboard_get_event
+    import_fields :dashboard_get_ping
   end
 
   mutation do

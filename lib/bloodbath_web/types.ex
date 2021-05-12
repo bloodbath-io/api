@@ -20,6 +20,10 @@ defmodule Bloodbath.Schema.Types do
     field :organization, :dashboard_organization
   end
 
+  object :dashboard_ping do
+    field :received_at, :datetime
+  end
+
   object :dashboard_event do
     field :id, :uuid
     field :scheduled_for, :datetime

@@ -18,20 +18,20 @@ defmodule BloodbathWeb.ErrorView do
   # def translate_errors(changeset) do
   #   Ecto.Changeset.traverse_errors(changeset, &translate_error/1)
   # end
-  def render_detail({message, values}) do
+  def render_with({message, values}) do
     Enum.reduce values, message, fn {k, v}, acc ->
       String.replace(acc, "%{#{k}}", to_string(v))
     end
   end
 
-  def render_detail(message) do
+  def render_with(message) do
     message
   end
 
   def render("error.json", %{changeset: changeset}) do
     errors = Enum.map(changeset.errors, fn {field, detail} ->
       %{
-        "#{field}": render_detail(detail)
+        "#{field}": render_with(detail)
       }
     end)
 

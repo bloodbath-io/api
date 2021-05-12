@@ -26,6 +26,7 @@ defmodule BloodbathWeb.Router do
     pipe_through :rest_authenticated
     pipe_through :rest_authorized_owner
     resources "/events", EventController, except: [:new, :edit, :update]
+    get "/ping", PingController, :index
   end
 
   scope "/" do
