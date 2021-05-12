@@ -1,8 +1,8 @@
 defmodule BloodbathWeb.EventController do
   use BloodbathWeb, :controller
 
-  alias Bloodbath.Customer.Event
-  alias Bloodbath.Customer.Events
+  alias Bloodbath.CustomerEventsManagement.Event
+  alias Bloodbath.CustomerEventsManagement.Events
 
   action_fallback BloodbathWeb.FallbackController
 

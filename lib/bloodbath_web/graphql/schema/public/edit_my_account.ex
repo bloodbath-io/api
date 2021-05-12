@@ -17,7 +17,7 @@ defmodule Bloodbath.Schema.Public.EditMyAccount do
   end
 
   def resolve(_parent, args, %{ context: %{ myself: myself }}) do
-    Bloodbath.Customer.People.update(myself, args)
+    Bloodbath.AccountManagement.People.update(myself, args)
   end
 
   def resolve(_parent, _args, _resolution) do

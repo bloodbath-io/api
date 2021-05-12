@@ -3,7 +3,7 @@ defmodule Bloodbath.Schema.Public.RemoveEvent do
   use Absinthe.Schema.Notation
   alias Bloodbath.Repo
   alias Crudry.Middlewares.TranslateErrors
-  alias Bloodbath.Customer.Event
+  alias Bloodbath.CustomerEventsManagement.Event
 
   object :public_remove_event do
     @desc "Remove an event from the organization"
@@ -17,7 +17,7 @@ defmodule Bloodbath.Schema.Public.RemoveEvent do
   end
 
   def resolve(_parent, %{ id: id }, %{ context: %{ myself: myself }}) do
-    Bloodbath.Customer.Events.delete(myself, id)
+    Bloodbath.CustomerEventsManagement.Events.delete(myself, id)
   end
 
   def resolve(_parent, _args, _resolution) do

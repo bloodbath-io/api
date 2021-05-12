@@ -3,7 +3,7 @@ defmodule Bloodbath.Schema.Public.GetEvent do
   use Absinthe.Schema.Notation
   alias Bloodbath.Repo
   alias Crudry.Middlewares.TranslateErrors
-  alias Bloodbath.Customer.Event
+  alias Bloodbath.CustomerEventsManagement.Event
 
   object :public_get_event do
     @desc "Get a specific event"
@@ -17,7 +17,7 @@ defmodule Bloodbath.Schema.Public.GetEvent do
   end
 
   def resolve(_parent, %{id: id}, %{ context: %{ myself: myself }}) do
-    {:ok, Bloodbath.Customer.Events.get(myself, id)}
+    {:ok, Bloodbath.CustomerEventsManagement.Events.get(myself, id)}
   end
 
   def resolve(_parent, _args, _resolution) do

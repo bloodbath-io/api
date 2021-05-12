@@ -1,7 +1,7 @@
 defmodule BloodbathWeb.Schema.SignupTest do
   use BloodbathWeb.ConnCase, async: true
   use Bloodbath.HelpersCase
-  alias Bloodbath.Customer.{
+  alias Bloodbath.AccountManagement.{
     Person,
     Organization
   }

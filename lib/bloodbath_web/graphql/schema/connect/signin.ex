@@ -3,7 +3,7 @@ defmodule Bloodbath.Schema.Connect.Signin do
   alias Crudry.Middlewares.TranslateErrors
   import Comeonin.Bcrypt, only: [checkpw: 2]
   alias Bloodbath.Repo
-  alias Bloodbath.Customer.Person
+  alias Bloodbath.AccountManagement.Person
 
   object :connect_signin do
     @desc "Signin to the dashboard"

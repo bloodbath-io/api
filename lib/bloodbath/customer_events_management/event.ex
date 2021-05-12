@@ -1,4 +1,4 @@
-defmodule Bloodbath.Customer.Event do
+defmodule Bloodbath.CustomerEventsManagement.Event do
   import Ecto.Changeset
   import Ecto.Query, warn: false
   use Ecto.Schema
@@ -7,8 +7,8 @@ defmodule Bloodbath.Customer.Event do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "events" do
-    belongs_to :person, Bloodbath.Customer.Person
-    belongs_to :organization, Bloodbath.Customer.Organization
+    belongs_to :person, Bloodbath.AccountManagement.Person
+    belongs_to :organization, Bloodbath.AccountManagement.Organization
     field :scheduled_for, :utc_datetime
     field :enqueued_at, :utc_datetime
     field :dispatched_at, :utc_datetime

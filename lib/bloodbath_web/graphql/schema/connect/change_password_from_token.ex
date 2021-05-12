@@ -14,7 +14,7 @@ defmodule Bloodbath.Schema.Connect.ChangePasswordFromToken do
   end
 
   def resolve(_parent, %{ token: token, new_password: new_password }, _resolution) do
-    Bloodbath.Customer.PeoplePasswordTokens.confirm_new_password(token, new_password)
+    Bloodbath.AccountManagement.PeoplePasswordTokens.confirm_new_password(token, new_password)
   end
 
   def resolve(_parent, _args, _resolution) do

@@ -5,7 +5,7 @@ defmodule BloodbathWeb.Pipeline.Authenticated do
   import Ecto.Query, only: [where: 2]
 
   alias Bloodbath.Repo
-  alias Bloodbath.Customer.Person
+  alias Bloodbath.AccountManagement.Person
 
   def init(opts), do: opts
 

@@ -1,4 +1,4 @@
-defmodule Bloodbath.Customer.Person do
+defmodule Bloodbath.AccountManagement.Person do
   import Ecto.Query, warn: false
   use Ecto.Schema
   import Ecto.Changeset
@@ -6,8 +6,8 @@ defmodule Bloodbath.Customer.Person do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "people" do
-    belongs_to :organization, Bloodbath.Customer.Organization
-    has_many :events, Bloodbath.Customer.Event
+    belongs_to :organization, Bloodbath.AccountManagement.Organization
+    has_many :events, Bloodbath.CustomerEventsManagement.Event
     field :email, :string
     field :password, :string, virtual: true
     field :encrypted_password, :string
@@ -43,7 +43,7 @@ defmodule Bloodbath.Customer.Person do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{is_owner: true}} ->
         email = Map.get(changeset.changes, :email)
-        query = from person in Bloodbath.Customer.Person, where: person.email == ^email, where: person.is_owner == true
+        query = from person in Bloodbath.AccountManagement.Person, where: person.email == ^email, where: person.is_owner == true
 
         case Bloodbath.Repo.exists?(query) == false do
           true -> changeset

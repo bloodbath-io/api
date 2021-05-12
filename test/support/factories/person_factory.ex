@@ -3,7 +3,7 @@ defmodule Bloodbath.Factory.PersonFactory do
   alias Bloodbath.Factory.OrganizationFactory
 
   def person_factory do
-    %Bloodbath.Customer.Person{
+    %Bloodbath.AccountManagement.Person{
       organization: OrganizationFactory.build(:organization),
       email: Faker.Internet.email(),
       first_name: Faker.Person.first_name(),
@@ -16,7 +16,7 @@ defmodule Bloodbath.Factory.PersonFactory do
   end
 
   def people_password_token_factory do
-    %Bloodbath.Customer.PeoplePasswordToken{
+    %Bloodbath.AccountManagement.PeoplePasswordToken{
       person: build(:person),
       token: "random-token"
     }

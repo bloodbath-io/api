@@ -1,9 +1,12 @@
-defmodule Bloodbath.Customer.Events do
+defmodule Bloodbath.CustomerEventsManagement.Events do
   import Ecto.Query, warn: false
   alias Bloodbath.Repo
 
-  alias Bloodbath.Customer.{
+  alias Bloodbath.CustomerEventsManagement.{
     Event,
+  }
+
+  alias Bloodbath.AccountManagement.{
     Organization
   }
 

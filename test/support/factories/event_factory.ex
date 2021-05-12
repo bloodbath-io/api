@@ -7,7 +7,7 @@ defmodule Bloodbath.Factory.EventFactory do
   def event_factory do
     person = PersonFactory.build(:person, is_owner: true)
 
-    %Bloodbath.Customer.Event{
+    %Bloodbath.CustomerEventsManagement.Event{
       scheduled_for: Timex.shift(DateTime.utc_now(), days: 1, hours: 1),
       headers: "{}",
       payload: "{}",

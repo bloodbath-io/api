@@ -1,4 +1,4 @@
-defmodule Bloodbath.Customer.Emails do
+defmodule Bloodbath.AccountManagement.Emails do
   import Bamboo.Email
 
   def request_new_password(email, token) do
