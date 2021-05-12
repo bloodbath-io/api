@@ -1,13 +1,13 @@
 defmodule BloodbathWeb.EventController do
   use BloodbathWeb, :controller
 
-  alias Bloodbath.Core.Event
-  alias Bloodbath.Core.Events
+  alias Bloodbath.Customer.Event
+  alias Bloodbath.Customer.Events
 
   action_fallback BloodbathWeb.FallbackController
 
   def index(conn, _params) do
-    events = Events.list()
+    events = Events.list(conn |> myself())
     render(conn, "index.json", events: events)
   end
 
@@ -23,14 +23,12 @@ defmodule BloodbathWeb.EventController do
   end
 
   def show(conn, %{"id" => id}) do
-    event = Events.get!(id)
+    event = Events.get!(conn |> myself, id)
     render(conn, "show.json", event: event)
   end
 
   def delete(conn, %{"id" => id}) do
-    event = Events.get!(id)
-
-    with {:ok, %Event{}} <- Events.delete(event) do
+    with {:ok, %Event{}} <- Events.delete(conn |> myself, id) do
       send_resp(conn, :no_content, "")
     end
   end

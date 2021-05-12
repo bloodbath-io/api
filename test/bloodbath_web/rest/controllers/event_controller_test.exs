@@ -6,7 +6,7 @@ defmodule BloodbathWeb.EventControllerTest do
     EventFactory
   }
 
-  alias Bloodbath.Core.{
+  alias Bloodbath.Customer.{
     Event,
     Events
   }

@@ -1,10 +1,13 @@
-defmodule Bloodbath.Schema.Dashboard.GetEvent do
+defmodule Bloodbath.Schema.Public.GetEvent do
+  import Ecto.Query, warn: false
   use Absinthe.Schema.Notation
+  alias Bloodbath.Repo
   alias Crudry.Middlewares.TranslateErrors
+  alias Bloodbath.Customer.Event
 
-  object :dashboard_get_event do
+  object :public_get_event do
     @desc "Get a specific event"
-    field :get_event, :dashboard_event do
+    field :get_event, :public_event do
       arg :id, non_null(:uuid)
 
       middleware BloodbathWeb.Graphql.Middleware.AuthorizedOwner
@@ -13,8 +16,8 @@ defmodule Bloodbath.Schema.Dashboard.GetEvent do
     end
   end
 
-  def resolve(_parent, %{id: id}, _resolution) do
-    {:ok, Bloodbath.Core.Events.get(id)}
+  def resolve(_parent, %{id: id}, %{ context: %{ myself: myself }}) do
+    {:ok, Bloodbath.Customer.Events.get(myself, id)}
   end
 
   def resolve(_parent, _args, _resolution) do

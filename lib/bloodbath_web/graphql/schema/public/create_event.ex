@@ -1,10 +1,10 @@
-defmodule Bloodbath.Schema.Dashboard.CreateEvent do
+defmodule Bloodbath.Schema.Public.CreateEvent do
   use Absinthe.Schema.Notation
   alias Crudry.Middlewares.TranslateErrors
 
-  object :dashboard_create_event do
+  object :public_create_event do
     @desc "Create a new event"
-    field :create_event, :dashboard_event do
+    field :create_event, :public_event do
       arg :payload, non_null(:string)
       arg :headers, non_null(:string)
       arg :endpoint, non_null(:string)
@@ -18,7 +18,7 @@ defmodule Bloodbath.Schema.Dashboard.CreateEvent do
 
   def resolve(_parent, args, %{ context: %{ myself: myself }}) do
     parameters = Map.merge(args, %{origin: "graphql_api"})
-    Bloodbath.Core.Events.create(myself, parameters)
+    Bloodbath.Customer.Events.create(myself, parameters)
   end
 
   def resolve(_parent, _args, _resolution) do

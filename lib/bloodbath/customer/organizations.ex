@@ -1,8 +1,8 @@
-defmodule Bloodbath.Core.Organizations do
+defmodule Bloodbath.Customer.Organizations do
 
   import Ecto.Query, warn: false
   alias Bloodbath.Repo
-  alias Bloodbath.Core.Organization
+  alias Bloodbath.Customer.Organization
 
   def list, do: Repo.all(Organization)
   def get(id), do: Repo.get(Organization, id)

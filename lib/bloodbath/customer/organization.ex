@@ -1,4 +1,4 @@
-defmodule Bloodbath.Core.Organization do
+defmodule Bloodbath.Customer.Organization do
   import Ecto.Query, only: [from: 2]
   use Ecto.Schema
   import Ecto.Changeset
@@ -6,8 +6,8 @@ defmodule Bloodbath.Core.Organization do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "organizations" do
-    has_many :events, Bloodbath.Core.Event
-    has_many :people, Bloodbath.Core.Person
+    has_many :events, Bloodbath.Customer.Event
+    has_many :people, Bloodbath.Customer.Person
     field :name, :string
     field :slug, :string
     field :api_key, :string
@@ -38,7 +38,7 @@ defmodule Bloodbath.Core.Organization do
     %{slug: _} ->
       changeset
     _ ->
-      put_change(changeset, :slug, Bloodbath.Core.Organization.Helper.slug_with(changeset.changes, 0, options))
+      put_change(changeset, :slug, Bloodbath.Customer.Organization.Helper.slug_with(changeset.changes, 0, options))
     end
   end
 
@@ -53,7 +53,7 @@ defmodule Bloodbath.Core.Organization do
   end
 end
 
-defmodule Bloodbath.Core.Organization.Helper do
+defmodule Bloodbath.Customer.Organization.Helper do
   import Ecto.Query, warn: false
 
   def slug_with(params = %{name: name}, iteration \\ 0, options = %{}) do
@@ -66,13 +66,13 @@ defmodule Bloodbath.Core.Organization.Helper do
     ignore = options[:ignore]
 
     query = if ignore do
-      from organization in Bloodbath.Core.Organization, where: organization.slug == ^end_slug and organization.slug != ^ignore
+      from organization in Bloodbath.Customer.Organization, where: organization.slug == ^end_slug and organization.slug != ^ignore
     else
-      from organization in Bloodbath.Core.Organization, where: organization.slug == ^end_slug
+      from organization in Bloodbath.Customer.Organization, where: organization.slug == ^end_slug
     end
 
     if Bloodbath.Repo.exists?(query) do
-      Bloodbath.Core.Organization.Helper.slug_with(params, iteration+1, options)
+      Bloodbath.Customer.Organization.Helper.slug_with(params, iteration+1, options)
     else
       end_slug
     end

@@ -4,7 +4,7 @@ defmodule BloodbathWeb.Schema.CreateEventTest do
     PersonFactory,
   }
   use Bloodbath.HelpersCase
-  alias Bloodbath.Core.Event
+  alias Bloodbath.Customer.Event
 
   describe "create_event" do
     setup do

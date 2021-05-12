@@ -1,9 +1,9 @@
-defmodule Bloodbath.Core.PeoplePasswordTokens do
+defmodule Bloodbath.Customer.PeoplePasswordTokens do
   import Ecto.Query, warn: false
   alias Bloodbath.Mailer
   alias Bloodbath.Repo
 
-  alias Bloodbath.Core.{
+  alias Bloodbath.Customer.{
     Person,
     PeoplePasswordToken
   }
@@ -16,7 +16,7 @@ defmodule Bloodbath.Core.PeoplePasswordTokens do
         |> PeoplePasswordToken.changeset(%{})
         |> Ecto.Changeset.put_assoc(:person, person)
         |> Repo.insert()
-        Bloodbath.Core.Emails.request_new_password(email, token)
+        Bloodbath.Customer.Emails.request_new_password(email, token)
         |> Mailer.deliver_now()
         {:ok, person}
       _ ->

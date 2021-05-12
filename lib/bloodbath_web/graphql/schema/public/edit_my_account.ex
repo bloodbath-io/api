@@ -1,10 +1,10 @@
-defmodule Bloodbath.Schema.Dashboard.EditMyAccount do
+defmodule Bloodbath.Schema.Public.EditMyAccount do
   use Absinthe.Schema.Notation
   alias Crudry.Middlewares.TranslateErrors
 
-  object :dashboard_edit_my_account do
+  object :public_edit_my_account do
     @desc "Edit my account"
-    field :edit_my_account, :dashboard_person do
+    field :edit_my_account, :public_person do
       arg :first_name, :string
       arg :last_name, :string
       arg :email, :string
@@ -17,7 +17,7 @@ defmodule Bloodbath.Schema.Dashboard.EditMyAccount do
   end
 
   def resolve(_parent, args, %{ context: %{ myself: myself }}) do
-    Bloodbath.Core.People.update(myself, args)
+    Bloodbath.Customer.People.update(myself, args)
   end
 
   def resolve(_parent, _args, _resolution) do

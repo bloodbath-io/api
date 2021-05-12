@@ -13,7 +13,7 @@ defmodule Bloodbath.Schema.Connect.ForgotMyPassword do
   end
 
   def resolve(_parent, %{ email: email }, _resolution) do
-    Bloodbath.Core.PeoplePasswordTokens.request_new_password_by_email(email)
+    Bloodbath.Customer.PeoplePasswordTokens.request_new_password_by_email(email)
   end
 
   def resolve(_parent, _args, _resolution) do

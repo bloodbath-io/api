@@ -1,4 +1,4 @@
-defmodule Bloodbath.Core.PeoplePasswordToken do
+defmodule Bloodbath.Customer.PeoplePasswordToken do
   import Ecto.Query, warn: false
   use Ecto.Schema
   import Ecto.Changeset
@@ -6,7 +6,7 @@ defmodule Bloodbath.Core.PeoplePasswordToken do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "people_password_tokens" do
-    belongs_to :person, Bloodbath.Core.Person
+    belongs_to :person, Bloodbath.Customer.Person
     field :token, :string
 
     timestamps()

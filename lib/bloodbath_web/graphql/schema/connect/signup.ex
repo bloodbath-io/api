@@ -22,6 +22,6 @@ defmodule Bloodbath.Schema.Connect.Signup do
   end
 
   def resolve(_parent, args, _resolution) do
-    Bloodbath.Core.People.create_owner(args)
+    Bloodbath.Customer.People.create_owner(args)
   end
 end

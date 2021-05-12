@@ -8,33 +8,33 @@ defmodule Bloodbath.Schema.Types do
     field :email, :string
     field :password, :string
     field :api_key, :string
-    field :organization, :dashboard_organization
+    field :organization, :public_organization
     field :password_recovery_token, :string
   end
 
-  object :dashboard_person do
+  object :public_person do
     field :id, :uuid
     field :first_name, :string
     field :last_name, :string
     field :email, :string
-    field :organization, :dashboard_organization
+    field :organization, :public_organization
   end
 
-  object :dashboard_ping do
+  object :public_ping do
     field :received_at, :datetime
   end
 
-  object :dashboard_event do
+  object :public_event do
     field :id, :uuid
     field :scheduled_for, :datetime
     field :payload, :string
     field :headers, :string
     field :endpoint, :string
-    field :person, :dashboard_person
-    field :organization, :dashboard_organization
+    field :person, :public_person
+    field :organization, :public_organization
   end
 
-  object :dashboard_organization do
+  object :public_organization do
     field :id, :uuid
     field :name, :string
     field :slug, :string

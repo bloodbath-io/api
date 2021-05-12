@@ -1,9 +1,9 @@
-defmodule Bloodbath.Core.PeopleTest do
+defmodule Bloodbath.Customer.PeopleTest do
   use Bloodbath.DataCase
   alias Bloodbath.Factory.PersonFactory
 
   describe "people" do
-    alias Bloodbath.Core.People
+    alias Bloodbath.Customer.People
 
     test "list/0 returns all people" do
       person = PersonFactory.insert(:person)

@@ -1,10 +1,10 @@
-defmodule Bloodbath.Schema.Dashboard.GetPing do
+defmodule Bloodbath.Schema.Public.GetPing do
   use Absinthe.Schema.Notation
   alias Crudry.Middlewares.TranslateErrors
 
-  object :dashboard_get_ping do
+  object :public_get_ping do
     @desc "Get a ping"
-    field :ping, :dashboard_ping do
+    field :ping, :public_ping do
       middleware BloodbathWeb.Graphql.Middleware.AuthorizedOwner
       resolve fn _parent, _args, _resolution ->
         {:ok, %{received_at: Timex.now()}}

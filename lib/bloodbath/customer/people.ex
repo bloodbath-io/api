@@ -1,9 +1,9 @@
-defmodule Bloodbath.Core.People do
+defmodule Bloodbath.Customer.People do
   import Ecto.Query, warn: false
   alias Bloodbath.Repo
   alias Ecto.Multi
 
-  alias Bloodbath.Core.{
+  alias Bloodbath.Customer.{
     Person,
     Organization
   }
