@@ -9,7 +9,7 @@ defmodule Bloodbath.PullAndEnqueue do
   }
 
   @interval 30 * 1000 # every 30 seconds
-  @buffer_to_dispatch 5
+  @buffer_to_dispatch 1
   @pull_events_from_the_next 1 # minutes
 
   def start_link(_opts) do
@@ -50,7 +50,7 @@ defmodule Bloodbath.PullAndEnqueue do
 
   defp enqueue(event) do
     attributes = %{enqueued_at: Timex.now}
-    # Event.update_changeset(event, attributes) <- TODO REMOVE THAT ONCE IT WORKS
+    Event.update_changeset(event, attributes)
 
     dispatch_time = DateTime.diff(event.scheduled_for, Timex.now()) - @buffer_to_dispatch
     dispatch_in = if dispatch_time < 0 do

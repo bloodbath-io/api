@@ -27,9 +27,13 @@ defmodule Bloodbath.Schema.Types do
   object :public_event do
     field :id, :uuid
     field :scheduled_for, :datetime
+    field :dispatched_at, :datetime
+    field :locked_at, :datetime
+    field :enqueued_at, :datetime
     field :payload, :string
     field :headers, :string
     field :endpoint, :string
+    field :method, :string
     field :person, :public_person
     field :organization, :public_organization
   end

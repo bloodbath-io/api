@@ -6,9 +6,11 @@ defmodule Bloodbath.Repo.Migrations.CreateEvents do
       add :id, :binary_id, primary_key: true
       add :scheduled_for, :utc_datetime, null: false
       add :enqueued_at, :utc_datetime, null: true
+      add :locked_at, :utc_datetime, null: true
       add :dispatched_at, :utc_datetime, null: true
 
       add :origin, :string, null: false
+      add :method, :string, null: false
       add :headers, :string, null: false
       add :payload, :string, null: false
       add :endpoint, :string, null: false

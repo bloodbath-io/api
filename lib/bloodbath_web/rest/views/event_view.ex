@@ -20,9 +20,11 @@ defmodule BloodbathWeb.EventView do
       origin: event.origin,
       headers: event.headers,
       payload: event.payload,
+      method: event.method,
       endpoint: event.endpoint,
       scheduled_for: event.scheduled_for,
       enqueued_at: event.enqueued_at,
+      locked_at: event.locked_at,
       dispatched_at: event.dispatched_at
     }
   end

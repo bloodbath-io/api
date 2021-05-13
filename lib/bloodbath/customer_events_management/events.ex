@@ -41,7 +41,7 @@ defmodule Bloodbath.CustomerEventsManagement.Events do
   def delete(person, id) do
     query = from event in Event,
             where: event.organization_id == ^person.organization_id,
-            where: is_nil(event.dispatched_at)
+            where: is_nil(event.locked_at)
 
     event = Repo.one(query)
 
