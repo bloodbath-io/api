@@ -49,8 +49,9 @@ defmodule Bloodbath.PullAndEnqueue do
   end
 
   defp enqueue(event) do
-    attributes = %{enqueued_at: Timex.now}
-    Event.update_changeset(event, attributes)
+    event
+    |> Event.update_changeset(%{enqueued_at: Timex.now})
+    |> Repo.update()
 
     dispatch_time = DateTime.diff(event.scheduled_for, Timex.now()) - @buffer_to_dispatch
     dispatch_in = if dispatch_time < 0 do

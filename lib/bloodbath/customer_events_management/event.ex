@@ -22,16 +22,16 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     timestamps()
   end
 
-  def create_changeset(booking, attrs) do
-    booking
-    |> cast(attrs, [:scheduled_for, :origin, :headers, :payload, :endpoint])
+  def create_changeset(event, attrs) do
+    event
+    |> cast(attrs, [:scheduled_for, :origin, :method, :headers, :payload, :endpoint])
     |> cast_assoc(:person)
     |> cast_assoc(:organization)
-    |> validate_required([:scheduled_for, :origin, :headers, :payload, :endpoint])
+    |> validate_required([:scheduled_for, :origin, :method, :headers, :payload, :endpoint])
   end
 
-  def update_changeset(space, attrs) do
-    space
+  def update_changeset(event, attrs) do
+    event
     |> cast(attrs, [:enqueued_at, :locked_at, :dispatched_at])
     |> cast_assoc(:person)
     |> cast_assoc(:organization)
