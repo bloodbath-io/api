@@ -34,6 +34,7 @@ defmodule BloodbathWeb.EventControllerTest do
         payload: "{test: true}",
         headers: "{}",
         endpoint: "https://test.com",
+        method: "get",
         scheduled_for: "2021-05-09 00:04:34.025409Z"
       })
 

@@ -13,6 +13,7 @@ defmodule Bloodbath.Factory.EventFactory do
       payload: "{}",
       endpoint: "https://test.com/yes",
       person: person,
+      method: "get",
       origin: "graphql_api",
       organization: person.organization
     }
