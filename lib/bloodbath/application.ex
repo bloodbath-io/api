@@ -14,9 +14,11 @@ defmodule Bloodbath.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Bloodbath.PubSub},
       # Start the Endpoint (http/https)
-      BloodbathWeb.Endpoint
+      BloodbathWeb.Endpoint,
       # Start a worker by calling: Bloodbath.Worker.start_link(arg)
       # {Bloodbath.Worker, arg}
+      # Pull events
+      Bloodbath.PullAndEnqueue
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

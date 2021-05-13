@@ -59,6 +59,7 @@ defmodule Bloodbath.MixProject do
       {:file_info, "~> 0.0.4"}, # csv processing
       {:arc, "~> 0.11.0"}, # file upload library
       {:arc_ecto, "~> 0.11.3"} # file upload library linked to ecto
+      # {:oban, "~> 2.6.1"} # workers
     ]
   end
 
