@@ -52,7 +52,7 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
       Poison.decode!(attrs.headers)
       changeset
     rescue
-      Poison.ParseError -> add_error(changeset, :headers, "format isn't valid, it should be a JSON. Please check https://www.notion.so/loschcode/What-format-use-for-the-headers-d84e63e2d8ab482cab0d60e55a3e1581 for more information.")
+      Poison.ParseError -> add_error(changeset, :headers, "format isn't valid, it should be a JSON. Please check XXX for more information.")
     end
   end
 end
