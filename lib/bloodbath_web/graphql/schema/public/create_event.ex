@@ -5,7 +5,7 @@ defmodule Bloodbath.Schema.Public.CreateEvent do
   object :public_create_event do
     @desc "Create a new event"
     field :create_event, :public_event do
-      arg :payload, non_null(:string)
+      arg :payload, :string
       arg :headers, non_null(:string)
       arg :method, non_null(:string)
       arg :endpoint, non_null(:string)

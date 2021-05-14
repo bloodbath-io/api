@@ -27,7 +27,8 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     |> cast(attrs, [:scheduled_for, :origin, :method, :headers, :payload, :endpoint])
     |> cast_assoc(:person)
     |> cast_assoc(:organization)
-    |> validate_required([:scheduled_for, :origin, :method, :headers, :payload, :endpoint])
+    |> validate_required([:scheduled_for, :origin, :method, :headers, :endpoint])
+    |> payload_checks(attrs)
   end
 
   def update_changeset(event, attrs) do
@@ -45,4 +46,12 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
   #       booking.end_at >= ^from and booking.end_at <= ^to
   #     )
   # end
+
+  defp payload_checks(changeset, attrs) do
+    if attrs.method in ["get", "delete"] && Map.has_key?(attrs, :payload) do
+      add_error(changeset, :payload, "can't be set using the #{attrs.method} method")
+    else
+      changeset
+    end
+  end
 end
