@@ -33,15 +33,22 @@ defmodule Bloodbath.LockAndDispatchEvent do
 
       HTTPoison.start
 
-      options = %{stream_to: self()}
+      options = [
+        stream_to: self(),
+        async: :once,
+        timeout: 50_000,
+        recv_timeout: 50_000
+      ]
+
       arguments = [
         event.endpoint,
-        serialize_payload(event.payload),
+        event.payload,
         serialize_headers(event.headers),
-        options
+        # options
       ] |> Enum.reject(&is_nil/1)
 
       method = event.method |> String.to_atom
+
       # turns async, we could also use #spawn
       # to avoid locking the process
       HTTPoison |> apply(method, arguments)
@@ -67,12 +74,13 @@ defmodule Bloodbath.LockAndDispatchEvent do
     Repo.update_all(query, set: [locked_at: Timex.now()])
   end
 
-  defp serialize_payload(payload) when is_nil(payload), do: nil
-  defp serialize_payload(payload) do
-    Poison.decode!(payload)
-  end
+  # defp serialize_payload(payload) when is_nil(payload), do: nil
+  # defp serialize_payload(payload) do
+  #   payload
+  # end
 
+  defp serialize_headers(headers) when is_nil(headers), do: []
   defp serialize_headers(headers) do
-    Poison.decode!(headers) |> Enum.map(fn {key, value} -> [key, value] end)
+    Poison.decode!(headers)
   end
 end
