@@ -14,7 +14,7 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     field :locked_at, :utc_datetime
     field :dispatched_at, :utc_datetime
     field :method, Ecto.Enum, values: [:get, :post, :put, :patch, :delete]
-    field :origin, :string
+    field :origin, Ecto.Enum, values: [:graphql_api, :rest_api]
     field :headers, :string
     field :payload, :string
     field :endpoint, :string

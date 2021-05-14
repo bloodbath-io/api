@@ -18,7 +18,7 @@ defmodule Bloodbath.Schema.Public.CreateEvent do
   end
 
   def resolve(_parent, args, %{ context: %{ myself: myself }}) do
-    parameters = Map.merge(args, %{origin: "graphql_api"})
+    parameters = Map.merge(args, %{origin: :graphql_api})
     Bloodbath.CustomerEventsManagement.Events.create(myself, parameters)
   end
 

@@ -19,7 +19,6 @@ defmodule Bloodbath.CustomerEventsManagement.Events do
   end
 
   def list(person) do
-    require IEx; IEx.pry
     Event |> where(organization_id: ^person.organization_id) |> Repo.all() |> Repo.preload([:person, :organization])
   end
 

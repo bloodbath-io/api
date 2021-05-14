@@ -14,7 +14,7 @@ defmodule Bloodbath.Factory.EventFactory do
       endpoint: "https://test.com/yes",
       person: person,
       method: "get",
-      origin: "graphql_api",
+      origin: :graphql_api,
       organization: person.organization
     }
   end
