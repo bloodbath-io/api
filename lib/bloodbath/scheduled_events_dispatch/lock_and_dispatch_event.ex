@@ -1,4 +1,4 @@
-defmodule Bloodbath.DispatchEvent do
+defmodule Bloodbath.LockAndDispatchEvent do
   use Task
   import Ecto.Query, warn: false
 
@@ -14,11 +14,11 @@ defmodule Bloodbath.DispatchEvent do
   end
 
   def run(%{event_id: event_id}) do
-    set_lock(event_id)
+    event_id |> set_lock
     event = Event |> Repo.get(event_id)
 
     case event do
-      %Event{} -> process(event)
+      %Event{} -> event |> process
       _ -> {:error, "event not found"}
     end
   end
@@ -27,25 +27,23 @@ defmodule Bloodbath.DispatchEvent do
     if Timex.before?(Timex.now, event.scheduled_for) do
       IO.puts("On hold")
       :timer.sleep @check_every
-      process(event)
+      event |> process
     else
       IO.puts("About to dispatch #{event.id}")
 
       HTTPoison.start
 
-      arguments = [event.endpoint, payload_of(event), headers_of(event)]
+      options = %{stream_to: self()}
+      arguments = [event.endpoint, payload_of(event), headers_of(event), options]
       method = event.method |> String.to_atom
       # turns async, we could also use #spawn
       # to avoid locking the process
-      options = %{stream_to: self}
-      apply(HTTPoison, method, arguments, options)
+      HTTPoison |> apply(method, arguments)
 
       IO.puts("#{event.id} was dispatched")
 
-      set_dispatch(event)
+      event |> set_dispatch
     end
-
-    {:ok}
   end
 
   def set_dispatch(event) do
@@ -70,7 +68,6 @@ defmodule Bloodbath.DispatchEvent do
   end
 
   defp headers_of(event) do
-    headers_map = Poison.decode!(event.headers)
-    headers_map |> Enum.map(fn {key, value} -> [key, value] end)
+    Poison.decode!(event.headers) |> Enum.map(fn {key, value} -> [key, value] end)
   end
 end

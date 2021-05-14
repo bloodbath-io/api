@@ -9,7 +9,7 @@ defmodule Bloodbath.PullAndEnqueue do
   }
 
   @interval 30 * 1000 # every 30 seconds
-  @buffer_to_dispatch 1
+  @buffer_lock 5 # this will lock it in advance
   @pull_events_from_the_next 1 # minutes
 
   def start_link(_opts) do
@@ -53,14 +53,18 @@ defmodule Bloodbath.PullAndEnqueue do
     |> Event.update_changeset(%{enqueued_at: Timex.now})
     |> Repo.update()
 
-    dispatch_time = DateTime.diff(event.scheduled_for, Timex.now()) - @buffer_to_dispatch
-    dispatch_in = if dispatch_time < 0 do
+    dispatch_time = DateTime.diff(event.scheduled_for, Timex.now()) - @buffer_lock
+    countdown = if dispatch_time < 0 do
       0
     else
       dispatch_time
     end
 
-    {:ok, pid} = Bloodbath.DispatchEvent.start_link(%{event_id: event.id})
-    Process.send_after(pid, :dispatch, dispatch_in)
+    event |> start_dispatch_in(countdown)
+  end
+
+  defp start_dispatch_in(event, countdown) do
+    {:ok, pid} = Bloodbath.LockAndDispatchEvent.start_link(%{event_id: event.id})
+    Process.send_after(pid, :dispatch, countdown)
   end
 end
