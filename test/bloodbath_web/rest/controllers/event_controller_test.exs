@@ -34,26 +34,29 @@ defmodule BloodbathWeb.EventControllerTest do
         payload: "{test: true}",
         headers: "{}",
         endpoint: "https://test.com",
-        method: "get",
-        scheduled_for: "2021-05-09 00:04:34.025409Z"
+        method: "post",
+        scheduled_for: Timex.now |> Timex.shift(minutes: 1)
       })
 
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
       conn = get(conn, Routes.event_path(conn, :show, id))
-      # event = Event |> first() | Repo.one() <- THIS CRASHES
-      # matching = %{
-      #   "id" => event.id,
-      #   "endpoint" => "https://test.com",
-      #   "enqueued_at" => nil,
-      #   "headers" => "{}",
-      #   "origin" => "rest_api",
-      #   "payload" => "{test: true}",
-      #   "dispatched_at" => nil,
-      #   "scheduled_for" => "2021-05-09T00:04:34Z"
-      # }
+      event = Event |> first() |> Repo.one()
 
-      # assert matching == json_response(conn, 200)["data"]
+      matching = %{
+        "id" => event.id,
+        "endpoint" => "https://test.com",
+        "enqueued_at" => "#{event.enqueued_at |> DateTime.to_iso8601}",
+        "headers" => "{}",
+        "method" => "post",
+        "origin" => "rest_api",
+        "payload" => "{test: true}",
+        "dispatched_at" => nil,
+        "scheduled_for" => "#{event.scheduled_for |> DateTime.to_iso8601}",
+        "locked_at" => "#{event.locked_at |> DateTime.to_iso8601}"
+      }
+
+      assert matching == json_response(conn, 200)["data"]
     end
 
   end

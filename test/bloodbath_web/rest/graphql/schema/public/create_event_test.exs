@@ -53,10 +53,10 @@ defmodule BloodbathWeb.Schema.CreateEventTest do
 
     def variables() do
       %{
-        payload: "{test: true}",
-        headers: "{}",
+        payload: "any payload",
+        headers: "{\"test\": \"well\"}",
         endpoint: "https://test.com",
-        method: "get",
+        method: "post",
         scheduled_for: "2021-05-09 00:04:34.025409Z"
       }
     end

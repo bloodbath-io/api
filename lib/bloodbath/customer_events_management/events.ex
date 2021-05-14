@@ -25,17 +25,21 @@ defmodule Bloodbath.CustomerEventsManagement.Events do
   def create(person, params) do
     organization = Organization |> Repo.get(person.organization_id)
 
-    with {:ok, %Event{} = event} <- %Event{}
+    create_event = %Event{}
     |> Event.create_changeset(params)
     |> Ecto.Changeset.put_assoc(:organization, organization)
     |> Ecto.Changeset.put_assoc(:person, person)
-    |> Repo.insert() do
+    |> Repo.insert()
+
+    with {:ok, %Event{} = event} <- create_event do
       # if we should enqueue it immediatly
       # and not wait for the loop
       if Timex.before?(event.scheduled_for, Bloodbath.ScheduledEventsDispatch.PullAndEnqueue.in_the_next()) do
         Bloodbath.ScheduledEventsDispatch.PullAndEnqueue.enqueue(event)
       end
       {:ok, event}
+    else
+      error -> error
     end
   end
 

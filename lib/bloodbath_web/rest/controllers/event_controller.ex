@@ -12,13 +12,15 @@ defmodule BloodbathWeb.EventController do
   end
 
   def create(conn, params) do
-    attributes = params |> Map.merge(%{"origin" => "rest_api"})
-
-    with {:ok, %Event{} = event} <- Events.create(conn |> myself, attributes) do
+    attributes = params |> Map.merge(%{"origin" => "rest_api"}) |> strings_to_atoms
+    create_event = Events.create(conn |> myself, attributes)
+    with {:ok, %Event{} = event} <- create_event do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.event_path(conn, :show, event))
       |> render("show.json", event: event)
+    else
+      error -> error
     end
   end
 
@@ -35,5 +37,9 @@ defmodule BloodbathWeb.EventController do
 
   def myself(conn) do
     conn.assigns[:rest][:context][:myself]
+  end
+
+  def strings_to_atoms(string_key_map) do
+    for {key, value} <- string_key_map, into: %{}, do: {String.to_atom(key), value}
   end
 end
