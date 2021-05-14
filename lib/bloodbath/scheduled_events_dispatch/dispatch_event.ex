@@ -24,23 +24,25 @@ defmodule Bloodbath.DispatchEvent do
   end
 
   def process(event) do
-    if Timex.now > event.scheduled_for do
+    if Timex.before?(Timex.now, event.scheduled_for) do
+      IO.puts("On hold")
       :timer.sleep @check_every
       process(event)
     else
-      IO.puts("PROCESSING EVENT #{event.id}")
+      IO.puts("About to dispatch #{event.id}")
 
-      # POST
-      # GET
-      # PUT
-      # PATCH
-      # DELETE
+      HTTPoison.start
 
-      # HTTPoison.start
-      # HTTPoison.patch(url, body, headers, options)
-      # HTTPoison.post "http://httparrot.herokuapp.com/post", "{\"body\": \"test\"}", [{"Content-Type", "application/json"}]
+      arguments = [event.endpoint, payload_of(event), headers_of(event)]
+      method = event.method |> String.to_atom
+      # turns async, we could also use #spawn
+      # to avoid locking the process
+      options = %{stream_to: self}
+      apply(HTTPoison, method, arguments, options)
 
-      # set_dispatched(event)
+      IO.puts("#{event.id} was dispatched")
+
+      set_dispatch(event)
     end
 
     {:ok}
@@ -58,6 +60,17 @@ defmodule Bloodbath.DispatchEvent do
     query = from event in Event,
     where: event.id == ^event_id
 
-    Repo.update_all(Event, set: [locked_at: Timex.now()])
+    Repo.update_all(query, set: [locked_at: Timex.now()])
+  end
+
+  # TODO: everything below should be abstracted elsewhere
+  # as we want to use it within the event validation itself
+  defp payload_of(event) do
+    Poison.decode!(event.payload)
+  end
+
+  defp headers_of(event) do
+    headers_map = Poison.decode!(event.headers)
+    headers_map |> Enum.map(fn {key, value} -> [key, value] end)
   end
 end
