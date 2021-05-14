@@ -31,14 +31,14 @@ defmodule BloodbathWeb.Schema.CreateEventTest do
     defp query() do
       """
       mutation createEvent(
-        $payload: String!
+        $body: String!
         $headers: String!
         $endpoint: String!
         $method: String!
         $scheduledFor:  DateTime!
       ) {
         createEvent(
-          payload: $payload
+          body: $body
           headers: $headers
           endpoint: $endpoint
           method: $method
@@ -53,7 +53,7 @@ defmodule BloodbathWeb.Schema.CreateEventTest do
 
     def variables() do
       %{
-        payload: "any payload",
+        body: "any body",
         headers: "{\"test\": \"well\"}",
         endpoint: "https://test.com",
         method: "post",

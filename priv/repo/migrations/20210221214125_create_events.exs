@@ -12,7 +12,7 @@ defmodule Bloodbath.Repo.Migrations.CreateEvents do
       add :origin, :string, null: false
       add :method, :string, null: false
       add :headers, :string, null: false
-      add :payload, :string, null: true
+      add :body, :string, null: true
       add :endpoint, :string, null: false
 
       add :person_id, references(:people, on_delete: :delete_all, type: :binary_id), null: false

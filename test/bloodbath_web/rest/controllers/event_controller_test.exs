@@ -31,7 +31,7 @@ defmodule BloodbathWeb.EventControllerTest do
   describe "create event" do
     test "renders event when data is valid", %{conn: conn} do
       conn = post(conn, Routes.event_path(conn, :create), %{
-        payload: "{test: true}",
+        body: "{test: true}",
         headers: "{}",
         endpoint: "https://test.com",
         method: "post",
@@ -50,7 +50,7 @@ defmodule BloodbathWeb.EventControllerTest do
         "headers" => "{}",
         "method" => "post",
         "origin" => "rest_api",
-        "payload" => "{test: true}",
+        "body" => "{test: true}",
         "dispatched_at" => nil,
         "scheduled_for" => "#{event.scheduled_for |> DateTime.to_iso8601}",
         "locked_at" => "#{event.locked_at |> DateTime.to_iso8601}"

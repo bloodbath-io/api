@@ -30,7 +30,7 @@ defmodule Bloodbath.Schema.Types do
     field :dispatched_at, :datetime
     field :locked_at, :datetime
     field :enqueued_at, :datetime
-    field :payload, :string
+    field :body, :string
     field :headers, :string
     field :endpoint, :string
     field :method, :string

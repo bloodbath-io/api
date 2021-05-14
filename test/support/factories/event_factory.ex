@@ -10,7 +10,7 @@ defmodule Bloodbath.Factory.EventFactory do
     %Bloodbath.CustomerEventsManagement.Event{
       scheduled_for: Timex.shift(DateTime.utc_now(), days: 1, hours: 1),
       headers: "{}",
-      payload: "{}",
+      body: "any body",
       endpoint: "https://test.com/yes",
       person: person,
       method: "get",

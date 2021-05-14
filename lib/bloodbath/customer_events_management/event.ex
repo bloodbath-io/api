@@ -16,7 +16,7 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     field :method, Ecto.Enum, values: [:get, :post, :put, :patch, :delete]
     field :origin, Ecto.Enum, values: [:graphql_api, :rest_api]
     field :headers, :string
-    field :payload, :string
+    field :body, :string
     field :endpoint, :string
 
     timestamps()
@@ -24,11 +24,11 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
 
   def create_changeset(event, attrs) do
     event
-    |> cast(attrs, [:scheduled_for, :origin, :method, :headers, :payload, :endpoint])
+    |> cast(attrs, [:scheduled_for, :origin, :method, :headers, :body, :endpoint])
     |> cast_assoc(:person)
     |> cast_assoc(:organization)
     |> validate_required([:scheduled_for, :origin, :method, :headers, :endpoint])
-    |> check_methods_with_payload(attrs)
+    |> check_methods_with_body(attrs)
     |> check_format_for_headers(attrs)
   end
 
@@ -39,9 +39,9 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     |> cast_assoc(:organization)
   end
 
-  defp check_methods_with_payload(changeset, attrs) do
-    if attrs.method in ["get", "delete"] && Map.has_key?(attrs, :payload) do
-      add_error(changeset, :payload, "can't be set using the #{attrs.method} method")
+  defp check_methods_with_body(changeset, attrs) do
+    if attrs.method in ["get", "delete"] && Map.has_key?(attrs, :body) do
+      add_error(changeset, :body, "can't be set using the #{attrs.method} method")
     else
       changeset
     end
