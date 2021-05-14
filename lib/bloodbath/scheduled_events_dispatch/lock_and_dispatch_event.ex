@@ -74,11 +74,6 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
     Repo.update_all(query, set: [locked_at: Timex.now()])
   end
 
-  # defp serialize_payload(payload) when is_nil(payload), do: nil
-  # defp serialize_payload(payload) do
-  #   payload
-  # end
-
   defp serialize_headers(headers) when is_nil(headers), do: []
   defp serialize_headers(headers) do
     Poison.decode!(headers)

@@ -18,7 +18,7 @@ defmodule Bloodbath.Application do
       # Start a worker by calling: Bloodbath.Worker.start_link(arg)
       # {Bloodbath.Worker, arg}
       # Pull events
-      Bloodbath.PullAndEnqueue
+      Bloodbath.ScheduledEventsDispatch.PullAndEnqueue
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
