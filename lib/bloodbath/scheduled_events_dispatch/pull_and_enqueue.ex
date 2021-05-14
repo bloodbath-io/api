@@ -1,4 +1,4 @@
-defmodule Bloodbath.PullAndEnqueue do
+defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
   import Ecto.Query, warn: false
   use GenServer
   use Timex
@@ -44,11 +44,11 @@ defmodule Bloodbath.PullAndEnqueue do
     events |> Enum.each(&enqueue/1)
   end
 
-  defp in_the_next do
+  def in_the_next do
     Timex.now() |> Timex.shift(minutes: @pull_events_from_the_next)
   end
 
-  defp enqueue(event) do
+  def enqueue(event) do
     event
     |> Event.update_changeset(%{enqueued_at: Timex.now})
     |> Repo.update()
@@ -64,7 +64,7 @@ defmodule Bloodbath.PullAndEnqueue do
   end
 
   defp start_dispatch_in(event, countdown) do
-    {:ok, pid} = Bloodbath.LockAndDispatchEvent.start_link(%{event_id: event.id})
+    {:ok, pid} = Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent.start_link(%{event_id: event.id})
     Process.send_after(pid, :dispatch, countdown)
   end
 end

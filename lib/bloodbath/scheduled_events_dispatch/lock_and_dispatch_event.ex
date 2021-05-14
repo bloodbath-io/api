@@ -1,4 +1,4 @@
-defmodule Bloodbath.LockAndDispatchEvent do
+defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
   use Task
   import Ecto.Query, warn: false
 

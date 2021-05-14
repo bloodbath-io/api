@@ -38,15 +38,6 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     |> cast_assoc(:organization)
   end
 
-  # def range(query, from, to) do
-  #   from booking in query,
-  #   where: (
-  #       booking.scheduled_for >= ^from and booking.scheduled_for <= ^to
-  #     ) or (
-  #       booking.end_at >= ^from and booking.end_at <= ^to
-  #     )
-  # end
-
   defp payload_checks(changeset, attrs) do
     if attrs.method in ["get", "delete"] && Map.has_key?(attrs, :payload) do
       add_error(changeset, :payload, "can't be set using the #{attrs.method} method")
