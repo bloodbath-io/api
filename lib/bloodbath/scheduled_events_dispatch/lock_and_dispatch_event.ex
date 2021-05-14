@@ -47,11 +47,9 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
         # options
       ] |> Enum.reject(&is_nil/1)
 
-      method = event.method |> String.to_atom
-
       # turns async, we could also use #spawn
       # to avoid locking the process
-      HTTPoison |> apply(method, arguments)
+      HTTPoison |> apply(event.method, arguments)
 
       IO.puts("#{event.id} was dispatched")
 

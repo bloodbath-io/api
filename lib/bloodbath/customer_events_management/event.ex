@@ -13,8 +13,7 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     field :enqueued_at, :utc_datetime
     field :locked_at, :utc_datetime
     field :dispatched_at, :utc_datetime
-    field :method, :string
-    # field :method, Ecto.Enum, values: [:get, :post, :put, :patch, :delete]
+    field :method, Ecto.Enum, values: [:get, :post, :put, :patch, :delete]
     field :origin, :string
     field :headers, :string
     field :payload, :string
