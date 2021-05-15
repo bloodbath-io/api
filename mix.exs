@@ -33,6 +33,8 @@ defmodule Bloodbath.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:sentry, "8.0.0"}, # sentry
+      {:hackney, "~> 1.8"}, # related to sentry
       {:phoenix, "~> 1.5.7"}, # phoenix core
       {:phoenix_ecto, "~> 4.1"}, # phoenix core
       {:ecto_sql, "~> 3.4"}, # database
