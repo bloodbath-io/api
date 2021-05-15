@@ -1,4 +1,4 @@
-defmodule Bloodbath.Schema.Public.GetPing do
+defmodule Bloodbath.GraphQL.Schema.Public.GetPing do
   use Absinthe.Schema.Notation
   alias Crudry.Middlewares.TranslateErrors
 

@@ -1,4 +1,4 @@
-defmodule Bloodbath.Schema.Types do
+defmodule Bloodbath.GraphQL.Schema.Types do
   use Absinthe.Schema.Notation
 
   object :connect_person do

@@ -1,4 +1,4 @@
-defmodule Bloodbath.Schema.Scalars.Uuid do
+defmodule Bloodbath.GraphQL.Schema.Scalars.Uuid do
   use Absinthe.Schema.Notation
 
   alias Ecto.UUID

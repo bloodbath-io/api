@@ -32,16 +32,22 @@ defmodule BloodbathWeb.Router do
   scope "/" do
     pipe_through :graphql
     pipe_through :graphql_authenticated
-    forward "/graphql", Absinthe.Plug.GraphiQL, schema: Bloodbath.Schema
+
+    # we limit the access to the
+    # full introspection to dev only
+    # for this schema
+    if Mix.env == :dev do
+      get "/graphql/full", Absinthe.Plug.GraphiQL, schema: Bloodbath.GraphQL.Schema
+    end
+
+    post "/graphql/full", Absinthe.Plug.GraphiQL, schema: Bloodbath.GraphQL.Schema
+
+    # this will be the public schema
+    # it can be accessed in production too
+    get "/graphql", Absinthe.Plug.GraphiQL, schema: Bloodbath.GraphQL.PublicSchema
+    post "/graphql", Absinthe.Plug.GraphiQL, schema: Bloodbath.GraphQL.PublicSchema
   end
 
-  # Enables LiveDashboard only for development
-  #
-  # If you want to use the LiveDashboard in production, you should put
-  # it behind authentication and allow only admins to access it.
-  # If your application does not have an admins-only section yet,
-  # you can use Plug.BasicAuth to set up some basic authentication
-  # as long as you are also using SSL (which you should anyway).
   if Mix.env() in [:dev, :test] do
     import Phoenix.LiveDashboard.Router
 

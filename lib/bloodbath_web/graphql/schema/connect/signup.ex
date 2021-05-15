@@ -1,4 +1,4 @@
-defmodule Bloodbath.Schema.Connect.Signup do
+defmodule Bloodbath.GraphQL.Schema.Connect.Signup do
   use Absinthe.Schema.Notation
   alias Crudry.Middlewares.TranslateErrors
 

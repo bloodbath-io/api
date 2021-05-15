@@ -1,4 +1,4 @@
-defmodule Bloodbath.Schema.Connect.ForgotMyPassword do
+defmodule Bloodbath.GraphQL.Schema.Connect.ForgotMyPassword do
   use Absinthe.Schema.Notation
   alias Crudry.Middlewares.TranslateErrors
 

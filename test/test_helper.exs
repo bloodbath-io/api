@@ -2,4 +2,4 @@
 ExUnit.start()
 Faker.start()
 Ecto.Adapters.SQL.Sandbox.mode(Bloodbath.Repo, :manual)
-Absinthe.Test.prime(Bloodbath.Schema)
+Absinthe.Test.prime(Bloodbath.GraphQL.Schema)

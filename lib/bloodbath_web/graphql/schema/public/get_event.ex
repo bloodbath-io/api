@@ -1,4 +1,4 @@
-defmodule Bloodbath.Schema.Public.GetEvent do
+defmodule Bloodbath.GraphQL.Schema.Public.GetEvent do
   import Ecto.Query, warn: false
   use Absinthe.Schema.Notation
   alias Bloodbath.Repo

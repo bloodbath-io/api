@@ -1,4 +1,4 @@
-defmodule Bloodbath.Schema.Connect.Signin do
+defmodule Bloodbath.GraphQL.Schema.Connect.Signin do
   use Absinthe.Schema.Notation
   alias Crudry.Middlewares.TranslateErrors
   import Comeonin.Bcrypt, only: [checkpw: 2]

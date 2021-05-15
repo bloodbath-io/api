@@ -1,4 +1,4 @@
-defmodule Bloodbath.Schema.Public.ListEvents do
+defmodule Bloodbath.GraphQL.Schema.Public.ListEvents do
   use Absinthe.Schema.Notation
   alias Crudry.Middlewares.TranslateErrors
 

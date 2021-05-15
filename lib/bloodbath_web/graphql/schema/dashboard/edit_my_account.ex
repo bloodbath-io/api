@@ -1,8 +1,8 @@
-defmodule Bloodbath.Schema.Dashbaord.EditMyAccount do
+defmodule Bloodbath.GraphQL.Schema.Dashboard.EditMyAccount do
   use Absinthe.Schema.Notation
   alias Crudry.Middlewares.TranslateErrors
 
-  object :public_edit_my_account do
+  object :dashboard_edit_my_account do
     @desc "Edit my account"
     field :edit_my_account, :public_person do
       arg :first_name, :string

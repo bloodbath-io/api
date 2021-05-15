@@ -1,4 +1,4 @@
-defmodule Bloodbath.Schema.Scalars.Json do
+defmodule Bloodbath.GraphQL.Schema.Scalars.Json do
   use Absinthe.Schema.Notation
 
   scalar :json do
