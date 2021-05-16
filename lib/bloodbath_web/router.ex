@@ -2,7 +2,7 @@ defmodule BloodbathWeb.Router do
   use BloodbathWeb, :router
 
   pipeline :graphql do
-    plug CORSPlug
+    plug CORSPlug, origin: "*"
   end
 
   pipeline :rest do
