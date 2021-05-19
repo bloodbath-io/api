@@ -17,8 +17,8 @@ defmodule Bloodbath.AccountManagement.Person do
     field :is_owner, :boolean, default: false
     field :last_name, :string
     field :api_key, :string
-
-    timestamps()
+    field :inserted_at, :utc_datetime
+    field :updated_at, :utc_datetime
   end
 
   def create_changeset(person, attrs) do

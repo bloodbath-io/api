@@ -2,7 +2,7 @@ defmodule BloodbathWeb.Router do
   use BloodbathWeb, :router
 
   pipeline :graphql do
-    plug CORSPlug, origin: "*"
+    plug CORSPlug
   end
 
   pipeline :rest do
@@ -41,11 +41,13 @@ defmodule BloodbathWeb.Router do
     end
 
     post "/graphql/full", Absinthe.Plug.GraphiQL, schema: Bloodbath.GraphQL.Schema
+    options "/graphql/full", Absinthe.Plug.GraphiQL, schema: Bloodbath.GraphQL.Schema
 
     # this will be the public schema
     # it can be accessed in production too
     get "/graphql", Absinthe.Plug.GraphiQL, schema: Bloodbath.GraphQL.PublicSchema
     post "/graphql", Absinthe.Plug.GraphiQL, schema: Bloodbath.GraphQL.PublicSchema
+    options "/graphql", Absinthe.Plug.GraphiQL, schema: Bloodbath.GraphQL.PublicSchema
   end
 
   if Mix.env() in [:dev, :test] do

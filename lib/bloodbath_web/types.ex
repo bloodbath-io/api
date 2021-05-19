@@ -10,6 +10,7 @@ defmodule Bloodbath.GraphQL.Schema.Types do
     field :api_key, :string
     field :organization, :public_organization
     field :password_recovery_token, :string
+    field :inserted_at, :datetime
   end
 
   object :public_person do
