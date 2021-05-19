@@ -19,7 +19,7 @@ defmodule Bloodbath.CustomerEventsManagement.Events do
   end
 
   def list(person) do
-    Event |> where(organization_id: ^person.organization_id) |> Repo.all() |> Repo.preload([:person, :organization])
+    Event |> where(organization_id: ^person.organization_id) |> order_by(desc: :inserted_at) |> Repo.all() |> Repo.preload([:person, :organization])
   end
 
   def create(person, params) do
