@@ -45,6 +45,7 @@ defmodule Bloodbath.CustomerEventsManagement.Events do
 
   def delete(person, id) do
     query = from event in Event,
+            where: event.id == ^id,
             where: event.organization_id == ^person.organization_id,
             where: is_nil(event.locked_at)
 
@@ -52,7 +53,7 @@ defmodule Bloodbath.CustomerEventsManagement.Events do
 
     case event do
       %Event{} -> Repo.delete(event)
-      _ -> {:error, "event not found"}
+      _ -> {:error, "Event can't be removed"}
     end
   end
 end
