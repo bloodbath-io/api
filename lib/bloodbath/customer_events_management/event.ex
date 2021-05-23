@@ -19,7 +19,7 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     field :body, :string
     field :endpoint, :string
 
-    timestamps()
+    timestamps([type: :utc_datetime_usec])
   end
 
   def create_changeset(event, attrs) do

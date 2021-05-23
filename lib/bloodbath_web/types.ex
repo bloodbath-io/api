@@ -37,6 +37,8 @@ defmodule Bloodbath.GraphQL.Schema.Types do
     field :method, :string
     field :person, :public_person
     field :organization, :public_organization
+    field :inserted_at, :datetime
+    field :updated_at, :datetime
   end
 
   object :public_organization do

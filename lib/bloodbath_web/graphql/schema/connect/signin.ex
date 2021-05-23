@@ -21,8 +21,8 @@ defmodule Bloodbath.GraphQL.Schema.Connect.Signin do
 
     cond do
       person && checkpw(password, person.encrypted_password) -> {:ok, person}
-      person -> {:error, "Incorrect signin credentials"}
-      true -> {:error, "Person not found"}
+      person -> {:error, "Invalid email / password combination"}
+      true -> {:error, "Invalid email / password combination"}
     end
   end
 
