@@ -30,6 +30,7 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     |> validate_required([:scheduled_for, :origin, :method, :headers, :endpoint])
     |> check_methods_with_body(attrs)
     |> check_format_for_headers(attrs)
+    |> check_scheduled_for_in_the_past(attrs)
   end
 
   def update_changeset(event, attrs) do
@@ -53,6 +54,14 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
       changeset
     rescue
       Poison.ParseError -> add_error(changeset, :headers, "format isn't valid, it should be a JSON. Please check https://www.notion.so/loschcode/What-s-the-correct-format-to-build-headers-b1507f32ed3f4bd0abfe5ea6f896c9fe for more information.")
+    end
+  end
+
+  defp check_scheduled_for_in_the_past(changeset, attrs) do
+    if attrs.scheduled_for < Timex.now() do
+      add_error(changeset, :scheduled_for, "can't be set in the past")
+    else
+      changeset
     end
   end
 end
