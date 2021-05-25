@@ -25,8 +25,19 @@ defmodule Bloodbath.CustomerEventsManagement.Events do
   def schedule(person, params) do
     organization = Organization |> Repo.get(person.organization_id)
 
-    schedule_event = %Event{}
-    |> Event.create_changeset(params)
+    # because headers can be received in string format (cURL) or in tuple (libraries)
+    # we normalize it before going further (this can be extended to other params if need be)
+    # TODO : put that in top of create_changeset inside event.ex instead of here
+    # it can be altered before the rest
+    normalized_params = case params do
+      %{ headers: %{} } ->
+        encoded_headers = Poison.encode!(params.headers)
+        params |> Map.merge(%{headers: encoded_headers})
+      _ ->
+        params
+    end
+
+    schedule_event = %Event{} |> Event.create_changeset(normalized_params)
     |> Ecto.Changeset.put_assoc(:organization, organization)
     |> Ecto.Changeset.put_assoc(:person, person)
     |> Repo.insert()

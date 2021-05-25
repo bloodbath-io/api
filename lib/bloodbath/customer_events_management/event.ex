@@ -23,14 +23,23 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
   end
 
   def create_changeset(event, attrs) do
-    event
+
+    basic_validation = event
     |> cast(attrs, [:scheduled_for, :origin, :method, :headers, :body, :endpoint])
+    |> validate_required([:scheduled_for, :origin, :method, :headers, :endpoint])
     |> cast_assoc(:person)
     |> cast_assoc(:organization)
-    |> validate_required([:scheduled_for, :origin, :method, :headers, :endpoint])
-    |> check_methods_with_body(attrs)
-    |> check_format_for_headers(attrs)
-    |> check_scheduled_for_in_the_past(attrs)
+
+
+    require IEx; IEx.pry
+    if basic_validation.valid? do
+      basic_validation
+      |> check_methods_with_body(attrs)
+      |> check_and_adapt_format_for_headers(attrs)
+      |> check_scheduled_for_in_the_past(attrs)
+    else
+      basic_validation
+    end
   end
 
   def update_changeset(event, attrs) do
@@ -48,7 +57,7 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     end
   end
 
-  defp check_format_for_headers(changeset, attrs) do
+  defp check_and_adapt_format_for_headers(changeset, attrs) do
     try do
       Poison.decode!(attrs.headers)
       changeset
@@ -58,7 +67,9 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
   end
 
   defp check_scheduled_for_in_the_past(changeset, attrs) do
-    if attrs.scheduled_for < Timex.now() do
+    {:ok, scheduled_for, _} = attrs.scheduled_for |> DateTime.from_iso8601()
+
+    if scheduled_for |> Timex.before?(Timex.now) do
       add_error(changeset, :scheduled_for, "can't be set in the past")
     else
       changeset
