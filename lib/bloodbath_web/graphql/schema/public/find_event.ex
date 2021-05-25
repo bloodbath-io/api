@@ -17,7 +17,7 @@ defmodule Bloodbath.GraphQL.Schema.Public.FindEvent do
   end
 
   def resolve(_parent, %{id: id}, %{ context: %{ myself: myself }}) do
-    {:ok, Bloodbath.CustomerEventsManagement.Events.get(myself, id)}
+    {:ok, Bloodbath.CustomerEventsManagement.Events.find(myself, id)}
   end
 
   def resolve(_parent, _args, _resolution) do

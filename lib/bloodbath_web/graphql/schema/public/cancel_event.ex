@@ -17,7 +17,7 @@ defmodule Bloodbath.GraphQL.Schema.Public.CancelEvent do
   end
 
   def resolve(_parent, %{ id: id }, %{ context: %{ myself: myself }}) do
-    Bloodbath.CustomerEventsManagement.Events.delete(myself, id)
+    Bloodbath.CustomerEventsManagement.Events.cancel(myself, id)
   end
 
   def resolve(_parent, _args, _resolution) do

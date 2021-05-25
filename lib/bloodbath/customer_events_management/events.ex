@@ -10,11 +10,11 @@ defmodule Bloodbath.CustomerEventsManagement.Events do
     Organization
   }
 
-  def get!(person, id) do
+  def find!(person, id) do
     Event |> where(id: ^id) |> where(organization_id: ^person.organization_id) |> Repo.one!() |> Repo.preload([:person, :organization])
   end
 
-  def get(person, id) do
+  def find(person, id) do
     Event |> where(id: ^id) |> where(organization_id: ^person.organization_id) |> Repo.one() |> Repo.preload([:person, :organization])
   end
 
@@ -22,7 +22,7 @@ defmodule Bloodbath.CustomerEventsManagement.Events do
     Event |> where(organization_id: ^person.organization_id) |> order_by(desc: :inserted_at) |> Repo.all() |> Repo.preload([:person, :organization])
   end
 
-  def create(person, params) do
+  def schedule(person, params) do
     organization = Organization |> Repo.get(person.organization_id)
 
     schedule_event = %Event{}
@@ -43,7 +43,7 @@ defmodule Bloodbath.CustomerEventsManagement.Events do
     end
   end
 
-  def delete(person, id) do
+  def cancel(person, id) do
     query = from event in Event,
             where: event.id == ^id,
             where: event.organization_id == ^person.organization_id,

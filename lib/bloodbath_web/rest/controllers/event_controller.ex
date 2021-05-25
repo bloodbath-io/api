@@ -13,7 +13,7 @@ defmodule BloodbathWeb.EventController do
 
   def create(conn, params) do
     attributes = params |> Map.merge(%{"origin" => "rest_api"}) |> strings_to_atoms
-    schedule_event = Events.create(conn |> myself, attributes)
+    schedule_event = Events.schedule(conn |> myself, attributes)
     with {:ok, %Event{} = event} <- schedule_event do
       conn
       |> put_status(:created)
@@ -25,12 +25,12 @@ defmodule BloodbathWeb.EventController do
   end
 
   def show(conn, %{"id" => id}) do
-    event = Events.get!(conn |> myself, id)
+    event = Events.find!(conn |> myself, id)
     render(conn, "show.json", event: event)
   end
 
   def delete(conn, %{"id" => id}) do
-    with {:ok, %Event{}} <- Events.delete(conn |> myself, id) do
+    with {:ok, %Event{}} <- Events.cancel(conn |> myself, id) do
       send_resp(conn, :no_content, "")
     end
   end
