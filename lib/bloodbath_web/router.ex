@@ -45,9 +45,9 @@ defmodule BloodbathWeb.Router do
 
     # this will be the public schema
     # it can be accessed in production too
-    get "/graphql", Absinthe.Plug.GraphiQL, schema: Bloodbath.GraphQL.PublicSchema
-    post "/graphql", Absinthe.Plug.GraphiQL, schema: Bloodbath.GraphQL.PublicSchema
-    options "/graphql", Absinthe.Plug.GraphiQL, schema: Bloodbath.GraphQL.PublicSchema
+    get "/graphql/full", Absinthe.Plug.GraphiQL, schema: Bloodbath.GraphQL.PublicSchema
+    post "/graphql/full", Absinthe.Plug.GraphiQL, schema: Bloodbath.GraphQL.PublicSchema
+    options "/graphql/full", Absinthe.Plug.GraphiQL, schema: Bloodbath.GraphQL.PublicSchema
   end
 
   if Mix.env() in [:dev, :test] do

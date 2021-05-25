@@ -30,13 +30,15 @@ defmodule BloodbathWeb.EventControllerTest do
 
   describe "create event" do
     test "renders event when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.event_path(conn, :create), %{
+      body = %{
         body: "{test: true}",
         headers: "{}",
         endpoint: "https://test.com",
         method: "post",
-        scheduled_for: Timex.now |> Timex.shift(minutes: 1)
-      })
+        scheduled_for: Timex.now |> Timex.shift(days: 1, hours: 1) |> DateTime.to_iso8601
+      }
+
+      conn = post(conn, Routes.event_path(conn, :create), body)
 
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
@@ -46,15 +48,17 @@ defmodule BloodbathWeb.EventControllerTest do
       matching = %{
         "id" => event.id,
         "endpoint" => "https://test.com",
-        "enqueued_at" => "#{event.enqueued_at |> DateTime.to_iso8601}",
+        "enqueued_at" => nil,
         "headers" => "{}",
         "method" => "post",
         "origin" => "rest_api",
         "body" => "{test: true}",
         "dispatched_at" => nil,
         "scheduled_for" => "#{event.scheduled_for |> DateTime.to_iso8601}",
-        "locked_at" => "#{event.locked_at |> DateTime.to_iso8601}"
+        "locked_at" => nil
       }
+
+      require IEx; IEx.pry
 
       assert matching == json_response(conn, 200)["data"]
     end

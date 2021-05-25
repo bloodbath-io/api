@@ -57,7 +57,7 @@ defmodule BloodbathWeb.Schema.ScheduleEventTest do
         headers: "{\"test\": \"well\"}",
         endpoint: "https://test.com",
         method: "post",
-        scheduled_for: "2021-05-09 00:04:34.025409Z"
+        scheduled_for: Timex.now |> Timex.shift(days: 1, hours: 1) |> DateTime.to_iso8601
       }
     end
   end

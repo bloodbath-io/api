@@ -9,7 +9,7 @@ defmodule Bloodbath.HelpersCase do
         end_payload = payload |> Map.merge(%{variables: formatted_variables, file: file})
 
         conn |> put_req_header("content-type", "multipart/form-data")
-             |> post("/graphql", end_payload)
+             |> post("/graphql/full", end_payload)
              |> assert_response(status)
       end
 
@@ -18,13 +18,13 @@ defmodule Bloodbath.HelpersCase do
         end_payload = payload |> Map.merge(%{variables: formatted_variables})
 
         conn
-        |> post("/graphql", end_payload)
+        |> post("/graphql/full", end_payload)
         |> assert_response(status)
       end
 
       defp graphql_query(conn, payload, status) do
         conn
-        |> post("/graphql", payload)
+        |> post("/graphql/full", payload)
         |> assert_response(status)
       end
 
