@@ -58,8 +58,6 @@ defmodule BloodbathWeb.EventControllerTest do
         "locked_at" => nil
       }
 
-      require IEx; IEx.pry
-
       assert matching == json_response(conn, 200)["data"]
     end
 
