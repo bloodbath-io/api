@@ -1,10 +1,10 @@
-defmodule Bloodbath.GraphQL.Schema.Public.CreateEvent do
+defmodule Bloodbath.GraphQL.Schema.Public.ScheduleEvent do
   use Absinthe.Schema.Notation
   alias Crudry.Middlewares.TranslateErrors
 
-  object :public_create_event do
+  object :public_schedule_event do
     @desc "Create a new event"
-    field :create_event, :public_event do
+    field :schedule_event, :public_event do
       arg :body, :string
       arg :headers, non_null(:string)
       arg :method, non_null(:string)

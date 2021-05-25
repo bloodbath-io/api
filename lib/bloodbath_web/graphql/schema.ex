@@ -15,15 +15,15 @@ defmodule Bloodbath.GraphQL.Schema do
   import_types Bloodbath.GraphQL.Schema.Connect.Signup
 
   import_types Bloodbath.GraphQL.Schema.Public.GetPing
-  import_types Bloodbath.GraphQL.Schema.Public.GetEvent
+  import_types Bloodbath.GraphQL.Schema.Public.FindEvent
   import_types Bloodbath.GraphQL.Schema.Public.ListEvents
-  import_types Bloodbath.GraphQL.Schema.Public.CreateEvent
-  import_types Bloodbath.GraphQL.Schema.Public.DeleteEvent
+  import_types Bloodbath.GraphQL.Schema.Public.ScheduleEvent
+  import_types Bloodbath.GraphQL.Schema.Public.CancelEvent
   import_types Bloodbath.GraphQL.Schema.Dashboard.EditMyAccount
 
   query do
     import_fields :public_list_events
-    import_fields :public_get_event
+    import_fields :public_find_event
     import_fields :public_get_ping
   end
 
@@ -33,8 +33,8 @@ defmodule Bloodbath.GraphQL.Schema do
     import_fields :connect_change_password_from_token
     import_fields :connect_forgot_my_password
     import_fields :dashboard_edit_my_account
-    import_fields :public_create_event
-    import_fields :public_remove_event
+    import_fields :public_schedule_event
+    import_fields :public_cancel_event
   end
 end
 
@@ -50,19 +50,19 @@ defmodule Bloodbath.GraphQL.PublicSchema do
   import_types Bloodbath.GraphQL.Schema.Types
 
   import_types Bloodbath.GraphQL.Schema.Public.GetPing
-  import_types Bloodbath.GraphQL.Schema.Public.GetEvent
+  import_types Bloodbath.GraphQL.Schema.Public.FindEvent
   import_types Bloodbath.GraphQL.Schema.Public.ListEvents
-  import_types Bloodbath.GraphQL.Schema.Public.CreateEvent
-  import_types Bloodbath.GraphQL.Schema.Public.DeleteEvent
+  import_types Bloodbath.GraphQL.Schema.Public.ScheduleEvent
+  import_types Bloodbath.GraphQL.Schema.Public.CancelEvent
 
   query do
     import_fields :public_list_events
-    import_fields :public_get_event
+    import_fields :public_find_event
     import_fields :public_get_ping
   end
 
   mutation do
-    import_fields :public_create_event
-    import_fields :public_remove_event
+    import_fields :public_schedule_event
+    import_fields :public_cancel_event
   end
 end

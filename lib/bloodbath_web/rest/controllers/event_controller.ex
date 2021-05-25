@@ -13,8 +13,8 @@ defmodule BloodbathWeb.EventController do
 
   def create(conn, params) do
     attributes = params |> Map.merge(%{"origin" => "rest_api"}) |> strings_to_atoms
-    create_event = Events.create(conn |> myself, attributes)
-    with {:ok, %Event{} = event} <- create_event do
+    schedule_event = Events.create(conn |> myself, attributes)
+    with {:ok, %Event{} = event} <- schedule_event do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.event_path(conn, :show, event))

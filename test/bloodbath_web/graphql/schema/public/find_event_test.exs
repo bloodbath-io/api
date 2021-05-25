@@ -1,4 +1,4 @@
-defmodule BloodbathWeb.Schema.GetEventTest do
+defmodule BloodbathWeb.Schema.FindEventTest do
   use BloodbathWeb.ConnCase, async: true
   alias Bloodbath.Factory.{
     PersonFactory,
@@ -7,7 +7,7 @@ defmodule BloodbathWeb.Schema.GetEventTest do
   }
   use Bloodbath.HelpersCase
 
-  describe "get_event" do
+  describe "find_event" do
     setup do
       organization = OrganizationFactory.insert(:organization)
       myself = PersonFactory.insert(:person, is_owner: true, organization: organization)
@@ -28,7 +28,7 @@ defmodule BloodbathWeb.Schema.GetEventTest do
       auth_conn = conn |> authorize(myself)
 
       response = graphql_query(auth_conn, %{query: query(), variables: event |> variables()}, :success)
-      assert response == %{"data" => %{"getEvent" => %{"id" => "#{event.id}"}}}
+      assert response == %{"data" => %{"findEvent" => %{"id" => "#{event.id}"}}}
     end
 
     defp query() do
@@ -36,7 +36,7 @@ defmodule BloodbathWeb.Schema.GetEventTest do
       query(
         $id: UUID4!
       ) {
-        getEvent(id: $id) {
+        findEvent(id: $id) {
           id
         }
       }

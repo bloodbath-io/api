@@ -1,4 +1,4 @@
-defmodule BloodbathWeb.Schema.CreateEventTest do
+defmodule BloodbathWeb.Schema.ScheduleEventTest do
   use BloodbathWeb.ConnCase, async: true
   alias Bloodbath.Factory.{
     PersonFactory,
@@ -6,7 +6,7 @@ defmodule BloodbathWeb.Schema.CreateEventTest do
   use Bloodbath.HelpersCase
   alias Bloodbath.CustomerEventsManagement.Event
 
-  describe "create_event" do
+  describe "schedule_event" do
     setup do
       [
         myself: PersonFactory.insert(:person, is_owner: true),
@@ -24,20 +24,20 @@ defmodule BloodbathWeb.Schema.CreateEventTest do
       response = graphql_query(auth_conn, %{query: query(), variables: variables()}, :success)
 
       created_event = Event |> first() |> Repo.one()
-      assert response == %{"data" => %{"createEvent" => %{"id" => created_event.id}}}
+      assert response == %{"data" => %{"scheduleEvent" => %{"id" => created_event.id}}}
     end
 
 
     defp query() do
       """
-      mutation createEvent(
+      mutation scheduleEvent(
         $body: String!
         $headers: String!
         $endpoint: String!
         $method: String!
         $scheduledFor:  DateTime!
       ) {
-        createEvent(
+        scheduleEvent(
           body: $body
           headers: $headers
           endpoint: $endpoint

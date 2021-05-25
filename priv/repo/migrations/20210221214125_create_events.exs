@@ -1,4 +1,4 @@
-defmodule Bloodbath.Repo.Migrations.CreateEvents do
+defmodule Bloodbath.Repo.Migrations.ScheduleEvents do
   use Ecto.Migration
 
   def change do

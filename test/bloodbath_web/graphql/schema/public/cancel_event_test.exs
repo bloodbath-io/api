@@ -1,4 +1,4 @@
-defmodule BloodbathWeb.Schema.DeleteEventTest do
+defmodule BloodbathWeb.Schema.CancelEventTest do
   use BloodbathWeb.ConnCase, async: true
   alias Bloodbath.Factory.{
     EventFactory,
@@ -24,15 +24,15 @@ defmodule BloodbathWeb.Schema.DeleteEventTest do
     test "with authentication", %{conn: conn, myself: myself, event: event} do
       auth_conn = conn |> authorize(myself)
       response = graphql_query(auth_conn, %{query: query(), variables: %{id: event.id}}, :success)
-      assert response == %{"data" => %{"removeEvent" => %{"id" => event.id}}}
+      assert response == %{"data" => %{"cancelEvent" => %{"id" => event.id}}}
     end
 
     defp query() do
       """
-      mutation removeEvent(
+      mutation cancelEvent(
         $id: UUID4!
       ) {
-        removeEvent(
+        cancelEvent(
           id: $id
         ) {
           id

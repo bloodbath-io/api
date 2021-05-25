@@ -1,13 +1,13 @@
-defmodule Bloodbath.GraphQL.Schema.Public.DeleteEvent do
+defmodule Bloodbath.GraphQL.Schema.Public.FindEvent do
   import Ecto.Query, warn: false
   use Absinthe.Schema.Notation
   alias Bloodbath.Repo
   alias Crudry.Middlewares.TranslateErrors
   alias Bloodbath.CustomerEventsManagement.Event
 
-  object :public_remove_event do
-    @desc "Remove an event from the organization"
-    field :remove_event, :public_event do
+  object :public_find_event do
+    @desc "Get a specific event"
+    field :find_event, :public_event do
       arg :id, non_null(:uuid)
 
       middleware BloodbathWeb.Graphql.Middleware.AuthorizedOwner
@@ -16,8 +16,8 @@ defmodule Bloodbath.GraphQL.Schema.Public.DeleteEvent do
     end
   end
 
-  def resolve(_parent, %{ id: id }, %{ context: %{ myself: myself }}) do
-    Bloodbath.CustomerEventsManagement.Events.delete(myself, id)
+  def resolve(_parent, %{id: id}, %{ context: %{ myself: myself }}) do
+    {:ok, Bloodbath.CustomerEventsManagement.Events.get(myself, id)}
   end
 
   def resolve(_parent, _args, _resolution) do
