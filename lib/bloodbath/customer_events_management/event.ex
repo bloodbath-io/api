@@ -23,11 +23,6 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
   end
 
   def create_changeset(event, attrs) do
-    # "2021-05-26T17:27:36-05:00" -> from DateTime.now.to_s (ISO 8601)
-    # "2021-05-26 00:27:23 +0200" -> from 1.days.ago.to_s
-
-    # TODO also: ADD TESTS ON THE BACKEND FOR THIS, IT'S QUITE AN IMPORTANT PIECE
-    # ALSO ADD TESTS FOR THE DIFFERENT HEADERS FORMAT IF POSSIBLE
     normalized_attributes = attrs
     |> normalize_headers
     |> normalize_scheduled_for

@@ -7,8 +7,7 @@ defmodule BloodbathWeb.EventControllerTest do
   }
 
   alias Bloodbath.CustomerEventsManagement.{
-    Event,
-    Events
+    Event
   }
 
   setup %{conn: conn} do
@@ -58,9 +57,23 @@ defmodule BloodbathWeb.EventControllerTest do
         "locked_at" => nil
       }
 
-      assert matching == json_response(conn, 200)["data"]
+      assert matching === json_response(conn, 200)["data"]
     end
 
+    test "with different scheduled_for date formats", %{conn: conn} do
+      body = %{
+        body: "{test: true}",
+        headers: "{}",
+        endpoint: "https://test.com",
+        method: "post",
+      }
+
+      post(conn, Routes.event_path(conn, :create), body |> Map.merge(%{ scheduled_for: "2030-05-26T17:27:36-05:00" }))
+      post(conn, Routes.event_path(conn, :create), body |> Map.merge(%{ scheduled_for: "2030-05-26 00:27:23 +0200" }))
+
+      events_count = Repo.aggregate(Event, :count, :id)
+      assert events_count === 2
+    end
   end
 
   describe "delete event" do

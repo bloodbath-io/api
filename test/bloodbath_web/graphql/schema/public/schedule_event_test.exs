@@ -14,18 +14,17 @@ defmodule BloodbathWeb.Schema.ScheduleEventTest do
     end
 
     test "without authentication", %{conn: conn} do
-      response = graphql_query(conn, %{query: query(), variables: variables()}, :success)
+      response = graphql_query(conn, %{query: query(), variables: variables(%{ scheduled_for: nil })}, :success)
       assert Map.has_key?(response, "errors")
     end
 
     test "with authentication", %{conn: conn, myself: myself} do
       auth_conn = conn |> authorize(myself)
-      response = graphql_query(auth_conn, %{query: query(), variables: variables()}, :success)
+      response = graphql_query(auth_conn, %{query: query(), variables: variables(%{ scheduled_for: nil })}, :success)
 
       created_event = Event |> first() |> Repo.one()
       assert response == %{"data" => %{"scheduleEvent" => %{"id" => created_event.id}}}
     end
-
 
     defp query() do
       """
@@ -50,13 +49,13 @@ defmodule BloodbathWeb.Schema.ScheduleEventTest do
       """
     end
 
-    def variables() do
+    def variables(%{ scheduled_for: scheduled_for }) do
       %{
         body: "any body",
         headers: "{\"test\": \"well\"}",
         endpoint: "https://test.com",
         method: "post",
-        scheduled_for: Timex.now |> Timex.shift(days: 1, hours: 1) |> DateTime.to_iso8601
+        scheduled_for: scheduled_for || Timex.now |> Timex.shift(days: 1, hours: 1) |> DateTime.to_iso8601
       }
     end
   end
