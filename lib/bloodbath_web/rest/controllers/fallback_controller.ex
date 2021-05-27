@@ -14,4 +14,11 @@ defmodule BloodbathWeb.FallbackController do
     |> put_view(BloodbathWeb.ErrorView)
     |> render(:"404")
   end
+
+  def call(conn, {:error, error}) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(BloodbathWeb.ErrorView)
+    |> render("error.json", error: error)
+  end
 end

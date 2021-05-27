@@ -15,17 +15,8 @@
 defmodule BloodbathWeb.ErrorView do
   use BloodbathWeb, :view
 
-  # def translate_errors(changeset) do
-  #   Ecto.Changeset.traverse_errors(changeset, &translate_error/1)
-  # end
-  def render_with({message, values}) do
-    Enum.reduce values, message, fn {k, v}, acc ->
-      String.replace(acc, "%{#{k}}", to_string(v))
-    end
-  end
-
-  def render_with(message) do
-    message
+  def render("error.json", %{error: error}) do
+    %{errors: [error]}
   end
 
   def render("error.json", %{changeset: changeset}) do
@@ -62,5 +53,15 @@ defmodule BloodbathWeb.ErrorView do
   # template is found, let's render it as 500
   def template_not_found(_template, assigns) do
     render "500.json", assigns
+  end
+
+  defp render_with({message, values}) do
+    Enum.reduce values, message, fn {k, v}, acc ->
+      String.replace(acc, "%{#{k}}", to_string(v))
+    end
+  end
+
+  defp render_with(message) do
+    message
   end
 end
