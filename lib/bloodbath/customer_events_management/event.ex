@@ -64,9 +64,10 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
   defp normalize_headers(attrs), do: attrs
 
   # dates can come in various formats through the API
+  defp normalize_scheduled_for(attrs = %{ scheduled_for: %DateTime{} }), do: attrs
   defp normalize_scheduled_for(attrs = %{ scheduled_for: scheduled_for }) when is_binary(scheduled_for) do
     {:ok, encoded_scheduled_for} = DateTimeParser.parse(scheduled_for, to_utc: true)
-    attrs |> Map.merge(%{scheduled_for: encoded_scheduled_for |> DateTime.to_iso8601})
+    attrs |> Map.merge(%{scheduled_for: encoded_scheduled_for})
   end
   defp normalize_scheduled_for(attrs), do: attrs
 
@@ -87,7 +88,8 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     end
   end
 
-  defp check_scheduled_for_in_the_past(changeset, attrs) do
+  defp check_scheduled_for_in_the_past(changeset, %{ scheduled_for: %DateTime{} }), do: changeset
+  defp check_scheduled_for_in_the_past(changeset, attrs = %{ scheduled_for: _ }) do
     {:ok, scheduled_for, _} = attrs.scheduled_for |> DateTime.from_iso8601()
 
     if scheduled_for |> Timex.before?(Timex.now) do
