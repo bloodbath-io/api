@@ -20,7 +20,6 @@ defmodule BloodbathWeb.Schema.ScheduleEventTest do
 
     test "with authentication", %{conn: conn, myself: myself} do
       auth_conn = conn |> authorize(myself)
-
       response = graphql_query(auth_conn, %{query: query(), variables: variables()}, :success)
 
       created_event = Event |> first() |> Repo.one()

@@ -26,21 +26,11 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     # "2021-05-26T17:27:36-05:00" -> from DateTime.now.to_s (ISO 8601)
     # "2021-05-26 00:27:23 +0200" -> from 1.days.ago.to_s
 
-    # TODO: use https://github.com/taxjar/date_time_parser if it's a string
-    # if it's already a date just let it pass through
-    # this for all date fields
-
-
     # TODO also: ADD TESTS ON THE BACKEND FOR THIS, IT'S QUITE AN IMPORTANT PIECE
     # ALSO ADD TESTS FOR THE DIFFERENT HEADERS FORMAT IF POSSIBLE
-    # DateTime.from_iso8601("2021-05-26T17:27:36-05:00") # -> ok
-    # DateTime.from_unix("2021-05-26 00:27:23 +0200")
-    # DateTime.from_iso8601(attrs.scheduled_for)
-    # DateTimeParser.parse_datetime(~s|"Mar 1, 2018 7:39:53 AM PST"|, to_utc: true)
     normalized_attributes = attrs
     |> normalize_headers
     |> normalize_scheduled_for
-    require IEx; IEx.pry
 
     basic_validation = event
     |> cast(normalized_attributes, [:scheduled_for, :origin, :method, :headers, :body, :endpoint])
@@ -74,7 +64,7 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
   defp normalize_headers(attrs), do: attrs
 
   # dates can come in various formats through the API
-  defp normalize_scheduled_for(attrs = %{ scheduled_for: scheduled_for}) when is_binary(scheduled_for) do
+  defp normalize_scheduled_for(attrs = %{ scheduled_for: scheduled_for }) when is_binary(scheduled_for) do
     {:ok, encoded_scheduled_for} = DateTimeParser.parse(scheduled_for, to_utc: true)
     attrs |> Map.merge(%{scheduled_for: encoded_scheduled_for |> DateTime.to_iso8601})
   end
