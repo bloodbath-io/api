@@ -42,7 +42,7 @@ defmodule BloodbathWeb.ErrorView do
   end
 
   def render("404.json", _assigns) do
-    %{errors: ["Page not found"]}
+    %{errors: ["Not found"]}
   end
 
   def render("500.json", _assigns) do
