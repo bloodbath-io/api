@@ -23,20 +23,36 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
   end
 
   def create_changeset(event, attrs) do
+    # "2021-05-26T17:27:36-05:00" -> from DateTime.now.to_s (ISO 8601)
+    # "2021-05-26 00:27:23 +0200" -> from 1.days.ago.to_s
+
+    # TODO: use https://github.com/taxjar/date_time_parser if it's a string
+    # if it's already a date just let it pass through
+    # this for all date fields
+
+
+    # TODO also: ADD TESTS ON THE BACKEND FOR THIS, IT'S QUITE AN IMPORTANT PIECE
+    # ALSO ADD TESTS FOR THE DIFFERENT HEADERS FORMAT IF POSSIBLE
+    # DateTime.from_iso8601("2021-05-26T17:27:36-05:00") # -> ok
+    # DateTime.from_unix("2021-05-26 00:27:23 +0200")
+    # DateTime.from_iso8601(attrs.scheduled_for)
+    # DateTimeParser.parse_datetime(~s|"Mar 1, 2018 7:39:53 AM PST"|, to_utc: true)
+    normalized_attributes = attrs
+    |> normalize_headers
+    |> normalize_scheduled_for
+    require IEx; IEx.pry
 
     basic_validation = event
-    |> cast(attrs, [:scheduled_for, :origin, :method, :headers, :body, :endpoint])
+    |> cast(normalized_attributes, [:scheduled_for, :origin, :method, :headers, :body, :endpoint])
     |> validate_required([:scheduled_for, :origin, :method, :headers, :endpoint])
     |> cast_assoc(:person)
     |> cast_assoc(:organization)
 
-
-    require IEx; IEx.pry
     if basic_validation.valid? do
       basic_validation
-      |> check_methods_with_body(attrs)
-      |> check_and_adapt_format_for_headers(attrs)
-      |> check_scheduled_for_in_the_past(attrs)
+      |> check_methods_with_body(normalized_attributes)
+      |> check_and_adapt_format_for_headers(normalized_attributes)
+      |> check_scheduled_for_in_the_past(normalized_attributes)
     else
       basic_validation
     end
@@ -48,6 +64,21 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     |> cast_assoc(:person)
     |> cast_assoc(:organization)
   end
+
+  # because headers can be received in string format (cURL) or in tuple (libraries)
+  # we normalize it before going further (this can be extended to other params if need be)
+  defp normalize_headers(attrs = %{ headers: headers }) when is_map(headers) do
+    encoded_headers = Poison.encode!(headers)
+    attrs |> Map.merge(%{headers: encoded_headers})
+  end
+  defp normalize_headers(attrs), do: attrs
+
+  # dates can come in various formats through the API
+  defp normalize_scheduled_for(attrs = %{ scheduled_for: scheduled_for}) when is_binary(scheduled_for) do
+    {:ok, encoded_scheduled_for} = DateTimeParser.parse(scheduled_for, to_utc: true)
+    attrs |> Map.merge(%{scheduled_for: encoded_scheduled_for |> DateTime.to_iso8601})
+  end
+  defp normalize_scheduled_for(attrs), do: attrs
 
   defp check_methods_with_body(changeset, attrs) do
     if attrs.method in ["get", "delete"] && Map.has_key?(attrs, :body) do

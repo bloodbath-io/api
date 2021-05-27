@@ -61,7 +61,8 @@ defmodule Bloodbath.MixProject do
       {:file_info, "~> 0.0.4"}, # csv processing
       {:arc, "~> 0.11.0"}, # file upload library
       {:arc_ecto, "~> 0.11.3"}, # file upload library linked to ecto
-      {:httpoison, "~> 1.8"} # send http payload
+      {:httpoison, "~> 1.8"}, # send http payload
+      {:date_time_parser, "~> 1.1.1"} # parse string datetime into real time
     ]
   end
 
