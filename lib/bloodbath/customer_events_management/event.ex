@@ -38,6 +38,8 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
       |> check_methods_with_body(normalized_attributes)
       |> check_and_adapt_format_for_headers(normalized_attributes)
       |> check_scheduled_for_in_the_past(normalized_attributes)
+      |> check_body_size(normalized_attributes)
+      |> check_headers_size(normalized_attributes)
     else
       basic_validation
     end
@@ -80,6 +82,25 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
       changeset
     rescue
       Poison.ParseError -> add_error(changeset, :headers, "format isn't valid, it should be a JSON. Please check https://www.notion.so/loschcode/What-s-the-correct-format-to-build-headers-b1507f32ed3f4bd0abfe5ea6f896c9fe for more information.")
+    end
+  end
+
+  # 50KB is the hard limit on most HTTP servers
+  def check_headers_size(changeset, attrs) do
+    if byte_size(attrs.headers) > 50_000 do
+      add_error(changeset, :headers, "can't be more than 50KB. Please check https://www.notion.so/loschcode/What-are-the-maximum-body-and-headers-size-803289e02fd848b29121665ec7208d5d for more information.")
+    else
+      changeset
+    end
+  end
+
+  # 1MB is large enough for any body texts
+  # if customers need more we can arrange some system through S3
+  def check_body_size(changeset, attrs) do
+    if byte_size(attrs.body) > 1_000_000 do
+      add_error(changeset, :body, "can't be more than 1MB. Please check https://www.notion.so/loschcode/What-are-the-maximum-body-and-headers-size-803289e02fd848b29121665ec7208d5d for more information.")
+    else
+      changeset
     end
   end
 
