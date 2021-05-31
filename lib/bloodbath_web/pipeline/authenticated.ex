@@ -35,7 +35,7 @@ defmodule BloodbathWeb.Pipeline.Authenticated do
     |> where(api_key: ^api_key)
     |> Repo.one()
     |> case do
-      nil -> {:error, "Your API key isn't valid. Please read https://www.notion.so/Acquire-your-API-Key-3b4adbbcc7f948d0a5c52d165a963ae4 for more information"}
+      nil -> {:error, "Your API key isn't valid. Please read https://docs.bloodbath.io/Acquire-your-API-Key-3b4adbbcc7f948d0a5c52d165a963ae4 for more information"}
       person -> {:ok, person}
     end
   end

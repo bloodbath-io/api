@@ -81,14 +81,14 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
       Poison.decode!(attrs.headers)
       changeset
     rescue
-      Poison.ParseError -> add_error(changeset, :headers, "format isn't valid, it should be a JSON. Please check https://www.notion.so/loschcode/What-s-the-correct-format-to-build-headers-b1507f32ed3f4bd0abfe5ea6f896c9fe for more information.")
+      Poison.ParseError -> add_error(changeset, :headers, "format isn't valid, it should be a JSON. Please check https://docs.bloodbath.io/loschcode/What-s-the-correct-format-to-build-headers-b1507f32ed3f4bd0abfe5ea6f896c9fe for more information.")
     end
   end
 
   # 50KB is the hard limit on most HTTP servers
   def check_headers_size(changeset, attrs) do
     if byte_size(attrs.headers) > 50_000 do
-      add_error(changeset, :headers, "can't be more than 50KB. Please check https://www.notion.so/loschcode/What-are-the-maximum-body-and-headers-size-803289e02fd848b29121665ec7208d5d for more information.")
+      add_error(changeset, :headers, "can't be more than 50KB. Please check https://docs.bloodbath.io/loschcode/What-are-the-maximum-body-and-headers-size-803289e02fd848b29121665ec7208d5d for more information.")
     else
       changeset
     end
@@ -98,7 +98,7 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
   # if customers need more we can arrange some system through S3
   def check_body_size(changeset, attrs) do
     if byte_size(attrs.body) > 1_000_000 do
-      add_error(changeset, :body, "can't be more than 1MB. Please check https://www.notion.so/loschcode/What-are-the-maximum-body-and-headers-size-803289e02fd848b29121665ec7208d5d for more information.")
+      add_error(changeset, :body, "can't be more than 1MB. Please check https://docs.bloodbath.io/loschcode/What-are-the-maximum-body-and-headers-size-803289e02fd848b29121665ec7208d5d for more information.")
     else
       changeset
     end
