@@ -25,7 +25,7 @@ defmodule Bloodbath.CustomerEventsManagement.Events do
   def schedule(person, params) do
     organization = Organization |> Repo.get(person.organization_id)
 
-    schedule_event = %Event{} |> Event.create_changeset(params)
+    schedule_event = %Event{} |> Event.create_changeset(params, %{ organization_id: organization.id })
     |> Ecto.Changeset.put_assoc(:organization, organization)
     |> Ecto.Changeset.put_assoc(:person, person)
     |> Repo.insert()

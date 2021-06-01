@@ -4,6 +4,12 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
   use Ecto.Schema
   alias Bloodbath.Repo
 
+  alias Bloodbath.CustomerEventsManagement.{
+    Event,
+  }
+
+  @events_hard_limit 5_000
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "events" do
@@ -22,7 +28,7 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     timestamps([type: :utc_datetime_usec])
   end
 
-  def create_changeset(event, attrs) do
+  def create_changeset(event, attrs, context = %{ organization_id: organization_id }) do
     normalized_attributes = attrs
     |> normalize_headers
     |> normalize_scheduled_for
@@ -40,6 +46,8 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
       |> check_scheduled_for_in_the_past(normalized_attributes)
       |> check_body_size(normalized_attributes)
       |> check_headers_size(normalized_attributes)
+      # limit rates validations
+      |> check_scheduled_events_limit(organization_id)
     else
       basic_validation
     end
@@ -113,5 +121,21 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     else
       changeset
     end
+  end
+
+  defp check_scheduled_events_limit(changeset, organization_id) do
+    if scheduled_events_for(organization_id) > @events_hard_limit do
+      add_error(changeset, :scheduled_for, "too many events were already created for your account. Please contact our support.")
+    else
+      changeset
+    end
+  end
+
+  def scheduled_events_for(organization_id) do
+    query = from event in Event,
+    where: event.organization_id == ^organization_id
+    # where: event.scheduled_for >= ^Timex.now -> we don't base on time anymore
+
+    query |> Repo.aggregate(:count, :id)
   end
 end
