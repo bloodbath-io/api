@@ -112,15 +112,21 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     end
   end
 
-  defp check_scheduled_for_in_the_past(changeset, %{ scheduled_for: %DateTime{} }), do: changeset
+  # defp check_scheduled_for_in_the_past(changeset, %{ scheduled_for: %DateTime{} }), do: changeset
   defp check_scheduled_for_in_the_past(changeset, attrs = %{ scheduled_for: _ }) do
-    {:ok, scheduled_for, _} = attrs.scheduled_for |> DateTime.from_iso8601()
+    scheduled_for = sanitize_format_of(attrs.scheduled_for)
 
     if scheduled_for |> Timex.before?(Timex.now) do
       add_error(changeset, :scheduled_for, "can't be set in the past")
     else
       changeset
     end
+  end
+
+  defp sanitize_format_of(date = %DateTime{}), do: date
+  defp sanitize_format_of(date) do
+    {:ok, datetime, _} = date |> DateTime.from_iso8601()
+    datetime
   end
 
   defp check_scheduled_events_limit(changeset, organization_id) do
