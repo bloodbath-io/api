@@ -17,16 +17,17 @@ defmodule Bloodbath.AccountManagement.Person do
     field :is_owner, :boolean, default: false
     field :last_name, :string
     field :api_key, :string
+    field :last_known_ip, :string
 
     timestamps([type: :utc_datetime_usec])
   end
 
   def create_changeset(person, attrs) do
     person
-    |> cast(attrs, [:email, :password, :first_name, :last_name, :is_owner, :type, :origin, :api_key])
+    |> cast(attrs, [:email, :password, :first_name, :last_name, :is_owner, :type, :origin, :api_key, :last_known_ip])
     |> cast_assoc(:organization)
     |> put_api_key()
-    |> validate_required([:email, :first_name, :last_name, :api_key, :type, :origin])
+    |> validate_required([:email, :first_name, :last_name, :api_key, :type, :origin, :last_known_ip])
     |> unique_constraint(:email, name: :people_organization_id_email_index)
     |> validate_unique_admin()
     |> put_encrypted_password()

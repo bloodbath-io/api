@@ -21,8 +21,8 @@ defmodule Bloodbath.GraphQL.Schema.Connect.Signup do
     field :slug, :string
   end
 
-  def resolve(_parent, args, _resolution) do
-    case Bloodbath.AccountManagement.People.create_owner(args) do
+  def resolve(_parent, args, %{context: context}) do
+    case Bloodbath.AccountManagement.People.create_owner(args, context) do
       {:ok, person} ->
         Bloodbath.TrackingHandler.Events.signup(person)
         {:ok, person}

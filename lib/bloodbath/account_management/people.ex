@@ -16,7 +16,7 @@ defmodule Bloodbath.AccountManagement.People do
     Person |> Repo.get(id)
   end
 
-  def create_owner(params = %{ organization: organization_params } \\ %{}) do
+  def create_owner(params = %{ organization: organization_params } \\ %{}, _context = %{remote_ip: remote_ip}) do
     organization_changeset = %Organization{}
     |> Organization.create_changeset(organization_params)
 
@@ -25,7 +25,8 @@ defmodule Bloodbath.AccountManagement.People do
     person_characteristics = %{
       is_owner: true,
       type: "TeamMember",
-      origin: "native"
+      origin: "native",
+      last_known_ip: remote_ip |> :inet_parse.ntoa |> to_string()
     }
 
     multi = Multi.new

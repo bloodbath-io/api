@@ -28,11 +28,11 @@ defmodule Bloodbath.TrackingHandler.Services.Mixpanel do
     })
   end
 
-  def set_profile(distinct_id, dataset \\ %{}) do
+  def set_profile(distinct_id, ip, dataset \\ %{}) do
     "https://api.mixpanel.com/engage#profile-set"
     |> dispatch_payload(%{
       "$distinct_id": distinct_id,
-      "$ip": "123.123.123.123",
+      "$ip": ip,
       "$set": dataset,
       "$token": @project_token
     })
