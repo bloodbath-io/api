@@ -6,7 +6,7 @@ defmodule Bloodbath.TrackingHandler.Events do
 
   defmacro dispatch(do: yield) do
     quote do
-      if Mix.env() == :prod do
+      if dispatch?() do
         unquote(yield)
       end
     end
@@ -19,5 +19,9 @@ defmodule Bloodbath.TrackingHandler.Events do
       # Mixpanel.create_identity(person.id)
       Mixpanel.set_profile(person.id, %{email: person.email, first_name: person.first_name, last_name: person.last_name})
     end
+  end
+
+  defp dispatch? do
+    Mix.env() == :prod
   end
 end
