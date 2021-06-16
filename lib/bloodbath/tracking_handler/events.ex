@@ -1,6 +1,11 @@
 defmodule Bloodbath.TrackingHandler.Events do
-  alias Bloodbath.TrackingHandler.Services.Mixpanel
+  alias Bloodbath.TrackingHandler.Services.{
+    Mixpanel,
+    Slack
+  }
+
   def signup(person) do
+    Slack.send_message("New sign-up #{person.email}")
     Mixpanel.track_event(person.id, "Sign up")
     # Mixpanel.create_identity(person.id)
     Mixpanel.set_profile(person.id, %{email: person.email, first_name: person.first_name, last_name: person.last_name})

@@ -42,7 +42,7 @@ defmodule Bloodbath.TrackingHandler.Services.Mixpanel do
     data = payload |> Poison.encode!
     encoded_data = %{
       data: data,
-      verbose: "1"
+      verbose: "1" # to have all details output if there's an error
     } |> URI.encode_query()
 
     HTTPoison.post(
@@ -52,5 +52,3 @@ defmodule Bloodbath.TrackingHandler.Services.Mixpanel do
     )
   end
 end
-
-# Bloodbath.TrackingHandler.Mixpanel.track_event("Random event", "fake-identity-id")
