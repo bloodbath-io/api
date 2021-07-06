@@ -71,7 +71,11 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
   # dates can come in various formats through the API
   defp normalize_scheduled_for(attrs = %{ scheduled_for: %DateTime{} }), do: attrs
   defp normalize_scheduled_for(attrs = %{ scheduled_for: scheduled_for }) when is_binary(scheduled_for) do
-    {:ok, encoded_scheduled_for} = DateTimeParser.parse(scheduled_for, to_utc: true)
+    encoded_scheduled_for = case DateTimeParser.parse(scheduled_for, to_utc: true) do
+      {:ok, result} -> result
+      {:error, _} -> scheduled_for
+    end
+
     attrs |> Map.merge(%{scheduled_for: encoded_scheduled_for})
   end
   defp normalize_scheduled_for(attrs), do: attrs
