@@ -31,10 +31,11 @@ defmodule BloodbathWeb.EventController do
 
   def delete(conn, %{"id" => id}) do
     with {:ok, %Event{}} <- Events.cancel(conn |> myself, id) do
-      send_resp(conn, :no_content, "")
+      render(conn, "delete.json", %{})
     end
   end
 
+  @spec myself(atom | %{:assigns => nil | maybe_improper_list | map, optional(any) => any}) :: any
   def myself(conn) do
     conn.assigns[:rest][:context][:myself]
   end

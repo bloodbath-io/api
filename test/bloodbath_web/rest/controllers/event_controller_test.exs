@@ -80,7 +80,7 @@ defmodule BloodbathWeb.EventControllerTest do
     test "deletes chosen event", %{conn: conn, myself: myself, organization: organization} do
       event = EventFactory.insert(:event, person: myself, organization: organization)
       conn = delete(conn, Routes.event_path(conn, :delete, event))
-      assert response(conn, 204)
+      assert nil === json_response(conn, 200)["data"]
 
       assert_error_sent 404, fn ->
         get(conn, Routes.event_path(conn, :show, event))

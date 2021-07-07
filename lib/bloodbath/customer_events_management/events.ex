@@ -52,7 +52,7 @@ defmodule Bloodbath.CustomerEventsManagement.Events do
 
     case event do
       %Event{} -> Repo.delete(event)
-      _ -> {:error, "Event can't be removed. Are you sure it exist?"}
+      _ -> {:error, "Event can't be removed. Are you sure it exists?"}
     end
   end
 end

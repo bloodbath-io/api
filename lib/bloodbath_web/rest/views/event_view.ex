@@ -28,4 +28,10 @@ defmodule BloodbathWeb.EventView do
       dispatched_at: event.dispatched_at
     }
   end
+
+  def render("delete.json", %{}) do
+    %{
+      data: nil
+    }
+  end
 end
