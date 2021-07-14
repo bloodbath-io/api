@@ -71,12 +71,13 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
   # dates can come in various formats through the API
   defp normalize_scheduled_for(attrs = %{ scheduled_for: %DateTime{} }), do: attrs
   defp normalize_scheduled_for(attrs = %{ scheduled_for: scheduled_for }) when is_binary(scheduled_for) do
-    from_unix_timestamp = case scheduled_for |> Integer.parse do
-      {unix_timestamp, ""} ->
-        {:ok, converted_data} = unix_timestamp |> DateTime.from_unix(:millisecond)
-        converted_data
-      :error -> scheduled_for
-    end
+    from_unix_timestamp = scheduled_for
+    # case scheduled_for |> Integer.parse do
+    #   {unix_timestamp, ""} ->
+    #     {:ok, converted_data} = unix_timestamp |> DateTime.from_unix(:millisecond)
+    #     converted_data
+    #   :error -> scheduled_for
+    # end
 
     from_datetime_string = case DateTimeParser.parse(scheduled_for, to_utc: true) do
       {:ok, date_time} -> date_time
