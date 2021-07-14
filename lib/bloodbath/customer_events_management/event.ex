@@ -144,7 +144,7 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
   end
 
   defp convert_from_unix_timestamp(timestamp) do
-    case timestamp |> DateTime.from_unix(:millisecond) do
+    case timestamp |> DateTime.from_unix(:second) do
       {:ok, unix_timestamp} -> unix_timestamp
       _ -> false
     end
