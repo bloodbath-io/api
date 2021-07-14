@@ -70,9 +70,11 @@ defmodule BloodbathWeb.EventControllerTest do
 
       post(conn, Routes.event_path(conn, :create), body |> Map.merge(%{ scheduled_for: "2030-05-26T17:27:36-05:00" }))
       post(conn, Routes.event_path(conn, :create), body |> Map.merge(%{ scheduled_for: "2030-05-26 00:27:23 +0200" }))
+      post(conn, Routes.event_path(conn, :create), body |> Map.merge(%{ scheduled_for: "2626270038000" }))
+      post(conn, Routes.event_path(conn, :create), body |> Map.merge(%{ scheduled_for: 2626270038000 }))
 
       events_count = Repo.aggregate(Event, :count, :id)
-      assert events_count === 2
+      assert events_count === 4
     end
   end
 
