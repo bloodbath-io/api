@@ -70,11 +70,12 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
 
   # dates can come in various formats through the API
   defp normalize_scheduled_for(attrs = %{ scheduled_for: %DateTime{} }), do: attrs
+  defp normalize_scheduled_for(attrs = %{ scheduled_for: scheduled_for }) when is_integer(scheduled_for) do
+    attrs |> Map.merge(%{scheduled_for: scheduled_for |> convert_from_unix_timestamp})
+  end
   defp normalize_scheduled_for(attrs = %{ scheduled_for: scheduled_for }) when is_binary(scheduled_for) do
     from_unix_timestamp = case scheduled_for |> Integer.parse do
-      {unix_timestamp, ""} ->
-        {:ok, converted_data} = unix_timestamp |> DateTime.from_unix(:millisecond)
-        converted_data
+      {unix_timestamp, ""} -> unix_timestamp |> convert_from_unix_timestamp
       # doesn't necessarily
       # output an error when parsing it
       _ -> scheduled_for
@@ -139,6 +140,13 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
       add_error(changeset, :scheduled_for, "can't be set in the past")
     else
       changeset
+    end
+  end
+
+  defp convert_from_unix_timestamp(timestamp) do
+    case timestamp |> DateTime.from_unix(:millisecond) do
+      {:ok, unix_timestamp} -> unix_timestamp
+      _ -> false
     end
   end
 
