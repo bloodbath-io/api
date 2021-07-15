@@ -150,11 +150,12 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     end
   end
 
-  defp sanitize_format_of(date = %DateTime{}), do: date
-  defp sanitize_format_of(date) do
+  # defp sanitize_format_of(date = %DateTime{}), do: date
+  defp sanitize_format_of(date) when is_binary(date) do
     {:ok, datetime, _} = date |> DateTime.from_iso8601()
     datetime
   end
+  defp sanitize_format_of(date), do: date
 
   defp check_scheduled_events_limit(changeset, organization_id) do
     if scheduled_events_for(organization_id) > @events_hard_limit do
