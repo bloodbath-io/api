@@ -133,10 +133,10 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
   # 1MB is large enough for any body texts
   # if customers need more we can arrange some system through S3
   def check_body_size(changeset, attrs) do
-    if byte_size(attrs.body) > 1_000_000 do
-      add_error(changeset, :body, "can't be more than 1MB. Please check https://docs.bloodbath.io/loschcode/What-are-the-maximum-body-and-headers-size-803289e02fd848b29121665ec7208d5d for more information.")
-    else
-      changeset
+    cond do
+      Map.has_key?(attrs, :body) === false -> changeset
+      byte_size(attrs.body) > 1_000_000 -> add_error(changeset, :body, "can't be more than 1MB. Please check https://docs.bloodbath.io/loschcode/What-are-the-maximum-body-and-headers-size-803289e02fd848b29121665ec7208d5d for more information.")
+      true -> changeset
     end
   end
 

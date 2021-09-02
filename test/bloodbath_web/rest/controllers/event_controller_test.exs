@@ -17,7 +17,11 @@ defmodule BloodbathWeb.EventControllerTest do
     |> put_req_header("accept", "application/json")
     |> put_req_header("authorization", "Bearer #{myself.api_key}")
 
-    {:ok, conn: authorized_conn, myself: myself, organization: myself.organization}
+    utils = %{
+      valid_scheduled_for: Timex.now |> Timex.shift(days: 1, hours: 1) |> DateTime.to_iso8601
+    }
+
+    {:ok, conn: authorized_conn, myself: myself, organization: myself.organization, utils: utils}
   end
 
   describe "index" do
@@ -28,13 +32,13 @@ defmodule BloodbathWeb.EventControllerTest do
   end
 
   describe "create event" do
-    test "renders event when data is valid", %{conn: conn} do
+    test "renders event when data is valid", %{conn: conn, utils: utils} do
       body = %{
         body: "{test: true}",
         headers: "{}",
         endpoint: "https://test.com",
         method: "post",
-        scheduled_for: Timex.now |> Timex.shift(days: 1, hours: 1) |> DateTime.to_iso8601
+        scheduled_for: utils.valid_scheduled_for
       }
 
       conn = post(conn, Routes.event_path(conn, :create), body)
@@ -60,18 +64,41 @@ defmodule BloodbathWeb.EventControllerTest do
       assert matching === json_response(conn, 200)["data"]
     end
 
-    test "with different body and headers formats", %{conn: conn} do
+    test "without body", %{conn: conn, utils: utils} do
       body = %{
-        body: %{"test" => true}, # tuple
-        headers: %{}, # tuple
+        headers: "{}",
         endpoint: "https://test.com",
         method: "post",
-        scheduled_for: Timex.now |> Timex.shift(days: 1, hours: 1) |> DateTime.to_iso8601
+        scheduled_for: utils.valid_scheduled_for
       }
 
-      post(conn, Routes.event_path(conn, :create), body)
-      events_count = Repo.aggregate(Event, :count, :id)
-      assert events_count === 1
+      response = post(conn, Routes.event_path(conn, :create), body)
+      assert response.status === 201
+    end
+
+    test "without headers", %{conn: conn, utils: utils} do
+      body = %{
+        body: "{test: true}",
+        endpoint: "https://test.com",
+        method: "post",
+        scheduled_for: utils.valid_scheduled_for
+      }
+
+      response = post(conn, Routes.event_path(conn, :create), body)
+      assert response.status === 422
+    end
+
+    test "with different body and headers formats", %{conn: conn, utils: utils} do
+      body = %{
+        body: %{"test" => true}, # map
+        headers: %{}, # map
+        endpoint: "https://test.com",
+        method: "post",
+        scheduled_for: utils.valid_scheduled_for
+      }
+
+      response = post(conn, Routes.event_path(conn, :create), body)
+      assert response.status === 201
     end
 
     test "with different scheduled_for date formats", %{conn: conn} do
