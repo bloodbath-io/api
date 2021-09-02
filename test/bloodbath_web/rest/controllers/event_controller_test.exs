@@ -60,6 +60,20 @@ defmodule BloodbathWeb.EventControllerTest do
       assert matching === json_response(conn, 200)["data"]
     end
 
+    test "with different body and headers formats", %{conn: conn} do
+      body = %{
+        body: %{"test" => true}, # tuple
+        headers: %{}, # tuple
+        endpoint: "https://test.com",
+        method: "post",
+        scheduled_for: Timex.now |> Timex.shift(days: 1, hours: 1) |> DateTime.to_iso8601
+      }
+
+      post(conn, Routes.event_path(conn, :create), body)
+      events_count = Repo.aggregate(Event, :count, :id)
+      assert events_count === 1
+    end
+
     test "with different scheduled_for date formats", %{conn: conn} do
       body = %{
         body: "{test: true}",
