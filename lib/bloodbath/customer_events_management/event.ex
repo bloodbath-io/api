@@ -31,10 +31,10 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
   def create_changeset(event, attrs, context = %{ organization_id: organization_id }) do
     normalized_attributes = attrs
     |> normalize_headers
+    |> normalize_body
     |> normalize_scheduled_for
 
-    basic_validation = event
-    |> cast(normalized_attributes, [:scheduled_for, :origin, :method, :headers, :body, :endpoint])
+    basic_validation = event |> cast(normalized_attributes, [:scheduled_for, :origin, :method, :headers, :body, :endpoint])
     |> validate_required([:scheduled_for, :origin, :method, :headers, :endpoint])
     |> cast_assoc(:person)
     |> cast_assoc(:organization)
@@ -67,6 +67,14 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     attrs |> Map.merge(%{headers: encoded_headers})
   end
   defp normalize_headers(attrs), do: attrs
+
+  # because body can be received in string format (cURL) or in tuple (libraries)
+  # we normalize it before going further (this can be extended to other params if need be)
+  defp normalize_body(attrs = %{ body: body }) when is_map(body) do
+    encoded_body = Poison.encode!(body)
+    attrs |> Map.merge(%{body: encoded_body})
+  end
+  defp normalize_body(attrs), do: attrs
 
   # dates can come in various formats through the API
   defp normalize_scheduled_for(attrs = %{ scheduled_for: %DateTime{} }), do: attrs
