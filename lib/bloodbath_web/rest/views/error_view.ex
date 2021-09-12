@@ -30,7 +30,7 @@ defmodule BloodbathWeb.ErrorView do
   end
 
   def render("400.json", %{ conn: %Plug.Conn{ assigns: %{ reason: %Plug.Parsers.ParseError{} }}}) do
-    %{errors: ["Format error. It seems your request body or/and headers were malformatted while sending it to Bloodbath API. Your payload must be written in JSON. Please read https://docs.bloodbath.io/loschcode/Wrong-format-when-sending-my-body-over-the-REST-API-a3ec73c19f944f2d9ea91a2b7222a149 for more information."]}
+    %{errors: ["Format error. It seems your request body or/and headers were malformatted while sending it to Bloodbath API. Your payload must be written in JSON. Please read https://bloodbath.notion.site/Wrong-format-when-sending-my-body-over-the-REST-API-a3ec73c19f944f2d9ea91a2b7222a149 for more information."]}
   end
 
   def render("400.json", _assigns) do
