@@ -1,4 +1,5 @@
 defmodule Bloodbath.CustomerEventsManagement.Events do
+  require Logger
   import Ecto.Query, warn: false
   alias Bloodbath.Repo
 
@@ -34,7 +35,11 @@ defmodule Bloodbath.CustomerEventsManagement.Events do
       # if we should enqueue it immediatly
       # and not wait for the loop
       if Timex.before?(event.scheduled_for, Bloodbath.ScheduledEventsDispatch.PullAndEnqueue.in_the_next()) do
-        Bloodbath.ScheduledEventsDispatch.PullAndEnqueue.enqueue(event)
+        Logger.debug(%{resource: event.id, event: "Not waiting to enqueue"})
+
+        spawn(fn ->
+          Bloodbath.ScheduledEventsDispatch.PullAndEnqueue.enqueue(event)
+        end)
       end
       {:ok, event}
     else

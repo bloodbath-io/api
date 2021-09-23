@@ -20,7 +20,7 @@ defmodule Bloodbath.MixProject do
   def application do
     [
       mod: {Bloodbath.Application, []},
-      extra_applications: [:iex, :logger, :runtime_tools, :absinthe_plug]
+      extra_applications: [:iex, :logger, :runtime_tools, :absinthe_plug, :logger_file_backend]
     ]
   end
 
@@ -62,7 +62,8 @@ defmodule Bloodbath.MixProject do
       {:arc, "~> 0.11.0"}, # file upload library
       {:arc_ecto, "~> 0.11.3"}, # file upload library linked to ecto
       {:httpoison, "~> 1.8"}, # send http payload
-      {:date_time_parser, "~> 1.1.1"} # parse string datetime into real time
+      {:date_time_parser, "~> 1.1.1"}, # parse string datetime into real time
+      {:logger_file_backend, "~> 0.0.12"} # log to file (in development also)
     ]
   end
 
