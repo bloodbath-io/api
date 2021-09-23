@@ -1,4 +1,5 @@
 defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
+  require Logger
   import Ecto.Query, warn: false
   use GenServer
   use Timex
@@ -39,9 +40,10 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
 
     events = Repo.all(query)
 
-    IO.puts "Events pulled: #{events |> length}"
-
-    events |> Enum.each(&enqueue/1)
+    Logger.debug(%{count: length(events) ,event: "Events pulled"})
+    tasks = events |> Enum.map(&enqueue/1)
+    # Task.await_many(tasks)
+    Logger.debug(%{count: length(events),event: "All tasks finished"})
   end
 
   def in_the_next do
@@ -49,6 +51,8 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
   end
 
   def enqueue(event) do
+    Logger.debug(%{resource: event.id, event: "Enqueued"})
+
     event
     |> Event.update_changeset(%{enqueued_at: Timex.now})
     |> Repo.update()
@@ -60,11 +64,20 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
       dispatch_time
     end
 
+    Logger.debug(%{resource: event.id, event: "Will be dispatched in #{countdown}"})
+
     event |> start_dispatch_in(countdown)
   end
 
   defp start_dispatch_in(event, countdown) do
+    Logger.debug(%{resource: event.id, event: "Will start link for the event"})
     {:ok, pid} = Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent.start_link(%{event_id: event.id})
+    # Task.async(fn ->
+    #   :timer.sleep(countdown)
+    #   Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent.run(%{event_id: event.id})
+    # end)
+    Logger.debug(%{resource: event.id, event: "Pid of process received"})
     Process.send_after(pid, :dispatch, countdown)
+    Logger.debug(%{resource: event.id, event: "Send after has been scheduled with the Pid on countdown #{countdown}"})
   end
 end

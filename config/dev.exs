@@ -7,7 +7,7 @@ config :bloodbath, Bloodbath.Repo,
   database: "bloodbath_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
-  pool_size: 10,
+  pool_size: 120,
   timeout: 100_100_000,
   connect_timeout: 100_100_000
 
@@ -49,7 +49,13 @@ config :bloodbath, BloodbathWeb.Endpoint,
 # different ports.
 
 # Do not include metadata nor timestamps in development logs
-config :logger, :console, format: "[$level] $message\n"
+# config :logger, :console,
+#   format: "[$level] $message\n",
+
+config :logger, backends: [:console, {LoggerFileBackend, :debug}]
+config :logger, :debug,
+  path: "logs/debug.log",
+  level: :debug
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.

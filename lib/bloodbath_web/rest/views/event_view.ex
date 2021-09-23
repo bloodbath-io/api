@@ -1,4 +1,5 @@
 defmodule BloodbathWeb.EventView do
+  require Logger
   use BloodbathWeb, :view
   alias BloodbathWeb.EventView
 
@@ -15,6 +16,8 @@ defmodule BloodbathWeb.EventView do
   end
 
   def render("event.json", %{event: event}) do
+    Logger.debug(%{resource: event.id, event: "About to render event (and give response to sender)"})
+
     %{
       id: event.id,
       origin: event.origin,
