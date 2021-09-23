@@ -53,9 +53,9 @@ config :bloodbath, BloodbathWeb.Endpoint,
 #   format: "[$level] $message\n",
 
 config :logger, backends: [:console, {LoggerFileBackend, :debug}]
-config :logger, :debug,
-  path: "logs/debug.log",
-  level: :debug
+# config :logger, :debug,
+#   path: "logs/debug.log",
+#   level: :debug
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
