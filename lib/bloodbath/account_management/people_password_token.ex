@@ -3,8 +3,8 @@ defmodule Bloodbath.AccountManagement.PeoplePasswordToken do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key {:id, :binary_id, autogenerate: true}
-  @foreign_key_type :binary_id
+  @primary_key {:id, Ecto.UUID, autogenerate: true}
+  @foreign_key_type Ecto.UUID
   schema "people_password_tokens" do
     belongs_to :person, Bloodbath.AccountManagement.Person
     field :token, :string

@@ -39,3 +39,16 @@ curl -X POST -F query="mutation { importTeamFromCsv(file: \"csv\") { id } }" -F 
 ```
 mix arc.g avatar
 ```
+
+## Dokku essentials
+
+```
+dokku postgres:expose bloodbath # expose database port to access it from any computer
+```
+
+## SQL checks
+
+```
+-- check the difference / error rate in terms of second on what was planned
+select avg(DATE_PART('second', scheduled_for::date) - DATE_PART('second', dispatched_at::date)) as avg_seconds from events
+```

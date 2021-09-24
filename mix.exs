@@ -45,6 +45,7 @@ defmodule Bloodbath.MixProject do
       {:gettext, "~> 0.11"}, # internalization
       {:plug_cowboy, "~> 2.0"}, # web server
       {:absinthe, "~> 1.4"}, # graphql
+      {:absinthe_relay, "~> 1.5.1"}, # relay for graphql pagination
       {:absinthe_plug, "~> 1.4"}, # graphql
       {:crudry, "~> 2.3.1"}, # error handling
       {:poison, "~> 4.0.1", override: true}, # json decoder

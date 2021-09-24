@@ -3,8 +3,8 @@ defmodule Bloodbath.AccountManagement.Person do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key {:id, :binary_id, autogenerate: true}
-  @foreign_key_type :binary_id
+  @primary_key {:id, Ecto.UUID, autogenerate: true}
+  @foreign_key_type Ecto.UUID
   schema "people" do
     belongs_to :organization, Bloodbath.AccountManagement.Organization
     has_many :events, Bloodbath.CustomerEventsManagement.Event

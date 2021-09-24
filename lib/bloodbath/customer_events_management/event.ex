@@ -10,8 +10,8 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
 
   @events_hard_limit 5_000
 
-  @primary_key {:id, :binary_id, autogenerate: true}
-  @foreign_key_type :binary_id
+  @primary_key {:id, Ecto.UUID, autogenerate: true}
+  @foreign_key_type Ecto.UUID
   schema "events" do
     belongs_to :person, Bloodbath.AccountManagement.Person
     belongs_to :organization, Bloodbath.AccountManagement.Organization

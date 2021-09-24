@@ -29,3 +29,6 @@ bloodbath-*.tar
 
 # all uploaded files
 /uploads/
+
+# all logs
+/logs/
