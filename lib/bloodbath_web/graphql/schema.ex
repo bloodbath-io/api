@@ -5,7 +5,6 @@ defmodule Bloodbath.GraphQL.Schema do
   alias Bloodbath.CustomerEventsManagement.{
     Event,
   }
-  alias Crudry.Middlewares.TranslateErrors
 
   import_types Absinthe.Plug.Types
   import_types Absinthe.Type.Custom
@@ -91,12 +90,27 @@ defmodule Bloodbath.GraphQL.PublicSchema do
   connection node_type: :event
 
   query do
-    import_fields :public_list_events
-    import_fields :public_find_event
+    # import_fields :public_list_events
+    # import_fields :public_find_event
     import_fields :public_get_ping
+
+    # the following thing will create the root node query
+    # which's a practical way to get any record from any type
+    # see https://dev.to/zth/the-magic-of-the-node-interface-4le1
+    # for more information
+    node field do
+      middleware BloodbathWeb.Graphql.Middleware.AuthorizedOwner
+
+      resolve fn
+        %{type: :event, id: id}, %{ context: %{ myself: myself } } ->
+          {:ok, Events.find(myself, id)}
+      end
+    end
 
     connection field :events, node_type: :event do
       middleware BloodbathWeb.Graphql.Middleware.AuthorizedOwner
+      # arg :order, type: :sort_order, default_value: :asc
+
       resolve fn arguments, %{ context: %{ myself: myself }} ->
         Absinthe.Relay.Connection.from_query(
           Events.list_query(myself, arguments),
