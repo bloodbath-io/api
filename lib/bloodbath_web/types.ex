@@ -41,23 +41,6 @@ defmodule Bloodbath.GraphQL.Schema.Types do
     field :updated_at, :datetime
   end
 
-  # relay
-  # object :public_event_connection do
-  #   field :id, :uuid
-  #   field :scheduled_for, :datetime
-  #   field :dispatched_at, :datetime
-  #   field :locked_at, :datetime
-  #   field :enqueued_at, :datetime
-  #   field :body, :string
-  #   field :headers, :string
-  #   field :endpoint, :string
-  #   field :method, :string
-  #   field :person, :public_person
-  #   field :organization, :public_organization
-  #   field :inserted_at, :datetime
-  #   field :updated_at, :datetime
-  # end
-
   object :public_organization do
     field :id, :uuid
     field :name, :string

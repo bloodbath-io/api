@@ -97,20 +97,14 @@ defmodule Bloodbath.GraphQL.PublicSchema do
 
     connection field :events, node_type: :event do
       middleware BloodbathWeb.Graphql.Middleware.AuthorizedOwner
-      resolve fn pagination_args, %{ context: %{ myself: myself }} ->
-        Absinthe.Relay.Connection.from_list(
-          # TODO: optimize the query itself too
-          Bloodbath.CustomerEventsManagement.Events.list(myself), pagination_args
+      resolve fn arguments, %{ context: %{ myself: myself }} ->
+        Absinthe.Relay.Connection.from_query(
+          Events.list_query(myself, arguments),
+          &Bloodbath.Repo.all/1,
+          arguments
         )
       end
-      # middleware TranslateErrors
     end
-
-    # node field id_type: :uuid do
-    #   resolve fn
-    #     %{type: :event, id: id}, _ -> Events.find(%{id: id}, %{})
-    #   end
-    # end
   end
 
   mutation do
