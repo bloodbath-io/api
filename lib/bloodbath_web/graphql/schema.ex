@@ -2,6 +2,7 @@
 # and queries
 defmodule Bloodbath.GraphQL.Schema do
   use Absinthe.Schema
+  use Absinthe.Relay.Schema, :modern
   alias Bloodbath.CustomerEventsManagement.{
     Event,
   }
@@ -24,7 +25,69 @@ defmodule Bloodbath.GraphQL.Schema do
   import_types Bloodbath.GraphQL.Schema.Public.CancelEvent
   import_types Bloodbath.GraphQL.Schema.Dashboard.EditMyAccount
 
+  alias Bloodbath.CustomerEventsManagement.{
+    Event,
+    Events
+  }
+
+  node interface do
+    resolve_type fn
+      %Event{}, _ -> :event
+      _, _ -> nil
+    end
+  end
+
+  node object :event do
+    # field :id, :uuid
+    field :scheduled_for, :datetime
+    field :dispatched_at, :datetime
+    field :locked_at, :datetime
+    field :enqueued_at, :datetime
+    field :body, :string
+    field :headers, :string
+    field :endpoint, :string
+    field :method, :string
+    field :person, :public_person
+    field :organization, :public_organization
+    field :inserted_at, :datetime
+    field :updated_at, :datetime
+  end
+
+  connection node_type: :event
+
   query do
+
+    # import_fields :public_list_events
+    # import_fields :public_find_event
+    import_fields :public_get_ping
+
+    # TODO: abstract all this and spread
+    # it to the private graphql schema
+
+    # the following thing will create the root node query
+    # which's a practical way to get any record from any type
+    # see https://dev.to/zth/the-magic-of-the-node-interface-4le1
+    # for more information
+    node field do
+      middleware BloodbathWeb.Graphql.Middleware.AuthorizedOwner
+
+      resolve fn
+        %{type: :event, id: id}, %{ context: %{ myself: myself } } -> {:ok, Events.find(myself, id)}
+      end
+    end
+
+    connection field :events, node_type: :event do
+      middleware BloodbathWeb.Graphql.Middleware.AuthorizedOwner
+
+      resolve fn arguments, %{ context: %{ myself: myself }} ->
+        Absinthe.Relay.Connection.from_query(
+          Events.list_query(myself, arguments),
+          &Bloodbath.Repo.all/1,
+          arguments
+        )
+      end
+    end
+
     import_fields :public_list_events
     import_fields :public_find_event
     import_fields :public_get_ping
@@ -45,7 +108,6 @@ end
 # the public introspection
 defmodule Bloodbath.GraphQL.PublicSchema do
   use Absinthe.Schema
-  use Absinthe.Relay.Schema, :modern
 
   import_types Absinthe.Plug.Types
   import_types Absinthe.Type.Custom
@@ -59,66 +121,7 @@ defmodule Bloodbath.GraphQL.PublicSchema do
   import_types Bloodbath.GraphQL.Schema.Public.ScheduleEvent
   import_types Bloodbath.GraphQL.Schema.Public.CancelEvent
 
-
-  alias Bloodbath.CustomerEventsManagement.{
-    Event,
-    Events
-  }
-
-  node interface id_type: :uuid do
-    resolve_type fn
-      %Event{}, _ -> :event
-      _, _ -> nil
-    end
-  end
-
-  node object :event, id_type: :uuid do
-    field :scheduled_for, :datetime
-    field :dispatched_at, :datetime
-    field :locked_at, :datetime
-    field :enqueued_at, :datetime
-    field :body, :string
-    field :headers, :string
-    field :endpoint, :string
-    field :method, :string
-    field :person, :public_person
-    field :organization, :public_organization
-    field :inserted_at, :datetime
-    field :updated_at, :datetime
-  end
-
-  connection node_type: :event
-
   query do
-    # import_fields :public_list_events
-    # import_fields :public_find_event
-    import_fields :public_get_ping
-
-    # the following thing will create the root node query
-    # which's a practical way to get any record from any type
-    # see https://dev.to/zth/the-magic-of-the-node-interface-4le1
-    # for more information
-    node field do
-      middleware BloodbathWeb.Graphql.Middleware.AuthorizedOwner
-
-      resolve fn
-        %{type: :event, id: id}, %{ context: %{ myself: myself } } ->
-          {:ok, Events.find(myself, id)}
-      end
-    end
-
-    connection field :events, node_type: :event do
-      middleware BloodbathWeb.Graphql.Middleware.AuthorizedOwner
-      # arg :order, type: :sort_order, default_value: :asc
-
-      resolve fn arguments, %{ context: %{ myself: myself }} ->
-        Absinthe.Relay.Connection.from_query(
-          Events.list_query(myself, arguments),
-          &Bloodbath.Repo.all/1,
-          arguments
-        )
-      end
-    end
   end
 
   mutation do
