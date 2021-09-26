@@ -49,6 +49,7 @@ config :bloodbath, BloodbathWeb.Endpoint,
 # different ports.
 
 # Do not include metadata nor timestamps in development logs
+<<<<<<< HEAD
 config :logger, :console,
   format: "[$level] $message\n"
 
@@ -56,6 +57,15 @@ config :logger, :console,
 # # config :logger, :debug,
 # #   path: "logs/debug.log",
 # #   level: :debug
+=======
+# config :logger, :console,
+#   format: "[$level] $message\n",
+
+config :logger, backends: [:console, {LoggerFileBackend, :debug}]
+# config :logger, :debug,
+#   path: "logs/debug.log",
+#   level: :debug
+>>>>>>> 86768efc0ee24e5642ea336e24807147ecc54a42
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
