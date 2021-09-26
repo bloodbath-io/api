@@ -38,7 +38,11 @@ defmodule Bloodbath.GraphQL.Schema do
   end
 
   node object :event do
-    # field :id, :uuid
+    # we output the event id because the id
+    # will be the one from the node
+    field :event_id, :string, resolve: fn _arguments, resource ->
+      {:ok, resource.source.id}
+    end
     field :scheduled_for, :datetime
     field :dispatched_at, :datetime
     field :locked_at, :datetime
