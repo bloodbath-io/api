@@ -24,7 +24,7 @@ defmodule BloodbathWeb.Schema.CancelEventTest do
     test "with authentication", %{conn: conn, myself: myself, event: event} do
       auth_conn = conn |> authorize(myself)
       response = graphql_query(auth_conn, %{query: query(), variables: %{id: event.id}}, :success)
-      assert response == %{"data" => %{"cancelEvent" => %{"id" => event.id}}}
+      assert response == %{"data" => %{"cancelEvent" => %{"eventId" => event.id}}}
     end
 
     defp query() do
@@ -35,7 +35,7 @@ defmodule BloodbathWeb.Schema.CancelEventTest do
         cancelEvent(
           id: $id
         ) {
-          id
+          eventId
         }
       }
       """

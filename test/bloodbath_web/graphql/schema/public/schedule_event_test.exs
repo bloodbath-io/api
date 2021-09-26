@@ -23,7 +23,7 @@ defmodule BloodbathWeb.Schema.ScheduleEventTest do
       response = graphql_query(auth_conn, %{query: query(), variables: variables(%{ scheduled_for: nil })}, :success)
 
       created_event = Event |> first() |> Repo.one()
-      assert response == %{"data" => %{"scheduleEvent" => %{"id" => created_event.id}}}
+      assert response == %{"data" => %{"scheduleEvent" => %{"eventId" => created_event.id}}}
     end
 
     defp query() do
@@ -42,7 +42,7 @@ defmodule BloodbathWeb.Schema.ScheduleEventTest do
           method: $method
           scheduledFor: $scheduledFor
         ) {
-          id
+          eventId
         }
       }
 

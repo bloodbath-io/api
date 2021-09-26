@@ -31,10 +31,7 @@ defmodule BloodbathWeb.Schema.ListEventsTest do
       response = graphql_query(auth_conn, %{query: query()}, :success)
       assert response == %{
         "data" => %{
-          "listEvents" =>
-          [
-            %{"id" => "#{event.id}", "person" => %{"id" => myself.id}, "organization" => %{"id" => organization.id}}
-          ]
+          "listEvents" => %{ "edges" => [%{ "node" => %{"eventId" => "#{event.id}"} }] }
         }
       }
     end
@@ -43,13 +40,11 @@ defmodule BloodbathWeb.Schema.ListEventsTest do
     defp query do
       """
       query listEvents {
-        listEvents {
-          id
-          person {
-            id
-          }
-          organization {
-            id
+        listEvents(first: 5) {
+          edges {
+            node {
+              eventId
+            }
           }
         }
       }

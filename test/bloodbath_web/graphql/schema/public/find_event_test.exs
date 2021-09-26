@@ -28,7 +28,7 @@ defmodule BloodbathWeb.Schema.FindEventTest do
       auth_conn = conn |> authorize(myself)
 
       response = graphql_query(auth_conn, %{query: query(), variables: event |> variables()}, :success)
-      assert response == %{"data" => %{"findEvent" => %{"id" => "#{event.id}"}}}
+      assert response == %{"data" => %{"findEvent" => %{"eventId" => "#{event.id}"}}}
     end
 
     defp query() do
@@ -37,7 +37,7 @@ defmodule BloodbathWeb.Schema.FindEventTest do
         $id: UUID4!
       ) {
         findEvent(id: $id) {
-          id
+          eventId
         }
       }
       """
