@@ -3,9 +3,6 @@
 defmodule Bloodbath.GraphQL.Schema do
   use Absinthe.Schema
   use Absinthe.Relay.Schema, :modern
-  alias Bloodbath.CustomerEventsManagement.{
-    Event,
-  }
 
   import_types Absinthe.Plug.Types
   import_types Absinthe.Type.Custom
@@ -20,81 +17,24 @@ defmodule Bloodbath.GraphQL.Schema do
 
   import_types Bloodbath.GraphQL.Schema.Public.GetPing
   import_types Bloodbath.GraphQL.Schema.Public.FindEvent
-  import_types Bloodbath.GraphQL.Schema.Public.ListEvents
   import_types Bloodbath.GraphQL.Schema.Public.ScheduleEvent
   import_types Bloodbath.GraphQL.Schema.Public.CancelEvent
   import_types Bloodbath.GraphQL.Schema.Dashboard.EditMyAccount
 
-  alias Bloodbath.CustomerEventsManagement.{
-    Event,
-    Events
-  }
-
-  node interface do
-    resolve_type fn
-      %Event{}, _ -> :event
-      _, _ -> nil
-    end
-  end
-
-  node object :event do
-    # we output the event id because the id
-    # will be the one from the node
-    field :event_id, :string, resolve: fn _arguments, resource ->
-      {:ok, resource.source.id}
-    end
-    field :scheduled_for, :datetime
-    field :dispatched_at, :datetime
-    field :locked_at, :datetime
-    field :enqueued_at, :datetime
-    field :body, :string
-    field :headers, :string
-    field :endpoint, :string
-    field :method, :string
-    field :person, :public_person
-    field :organization, :public_organization
-    field :inserted_at, :datetime
-    field :updated_at, :datetime
-  end
-
-  connection node_type: :event
+  # declare the connections
+  connection node_type: :public_event
 
   query do
-
-    # import_fields :public_list_events
-    # import_fields :public_find_event
-    import_fields :public_get_ping
-
-    # TODO: abstract all this and spread
-    # it to the private graphql schema
-
-    # the following thing will create the root node query
-    # which's a practical way to get any record from any type
-    # see https://dev.to/zth/the-magic-of-the-node-interface-4le1
-    # for more information
     node field do
-      middleware BloodbathWeb.Graphql.Middleware.AuthorizedOwner
-
-      resolve fn
-        %{type: :event, id: id}, %{ context: %{ myself: myself } } -> {:ok, Events.find(myself, id)}
-      end
+      use Bloodbath.GraphQL.Schema.Public.Node
     end
 
-    connection field :events, node_type: :event do
-      middleware BloodbathWeb.Graphql.Middleware.AuthorizedOwner
-
-      resolve fn arguments, %{ context: %{ myself: myself }} ->
-        Absinthe.Relay.Connection.from_query(
-          Events.list_query(myself, arguments),
-          &Bloodbath.Repo.all/1,
-          arguments
-        )
-      end
-    end
-
-    import_fields :public_list_events
     import_fields :public_find_event
     import_fields :public_get_ping
+
+    # we have to use macro for those ones because relay
+    # doesn't accept import_types / import_fields
+    use Bloodbath.GraphQL.Schema.Public.ListEvents
   end
 
   mutation do
@@ -112,6 +52,7 @@ end
 # the public introspection
 defmodule Bloodbath.GraphQL.PublicSchema do
   use Absinthe.Schema
+  use Absinthe.Relay.Schema, :modern
 
   import_types Absinthe.Plug.Types
   import_types Absinthe.Type.Custom
@@ -121,11 +62,23 @@ defmodule Bloodbath.GraphQL.PublicSchema do
 
   import_types Bloodbath.GraphQL.Schema.Public.GetPing
   import_types Bloodbath.GraphQL.Schema.Public.FindEvent
-  import_types Bloodbath.GraphQL.Schema.Public.ListEvents
   import_types Bloodbath.GraphQL.Schema.Public.ScheduleEvent
   import_types Bloodbath.GraphQL.Schema.Public.CancelEvent
 
+  # declare the connections
+  connection node_type: :public_event
+
   query do
+    node field do
+      use Bloodbath.GraphQL.Schema.Public.Node
+    end
+
+    import_fields :public_find_event
+    import_fields :public_get_ping
+
+    # we have to use macro for those ones because relay
+    # doesn't accept import_types / import_fields
+    use Bloodbath.GraphQL.Schema.Public.ListEvents
   end
 
   mutation do

@@ -1,15 +1,17 @@
 defmodule Bloodbath.GraphQL.Schema.Public.ListEvents do
-  use Absinthe.Schema.Notation
-  alias Crudry.Middlewares.TranslateErrors
+  defmacro __using__([]) do
+    quote do
+      connection field :list_events, node_type: :public_event do
+        middleware BloodbathWeb.Graphql.Middleware.AuthorizedOwner
 
-  object :public_list_events do
-    @desc "Get a list of events"
-    field :list_events, list_of(:public_event) do
-      middleware BloodbathWeb.Graphql.Middleware.AuthorizedOwner
-      resolve fn _parent, _args, %{ context: %{ myself: myself }} ->
-        {:ok, Bloodbath.CustomerEventsManagement.Events.list(myself)}
+        resolve fn arguments, %{ context: %{ myself: myself }} ->
+          Absinthe.Relay.Connection.from_query(
+            Bloodbath.CustomerEventsManagement.Events.list_query(myself, arguments),
+            &Bloodbath.Repo.all/1,
+            arguments
+          )
+        end
       end
-      middleware TranslateErrors
     end
   end
 end

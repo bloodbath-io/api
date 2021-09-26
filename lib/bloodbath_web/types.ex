@@ -1,5 +1,18 @@
 defmodule Bloodbath.GraphQL.Schema.Types do
   use Absinthe.Schema.Notation
+  use Absinthe.Relay.Schema.Notation, :modern
+
+  # the node interface is at the root of the query type
+  # it's something provided by relay
+  # each model we want to use with relay should have
+  # its line in there to source the node
+  # this call should be declared before any `node object` one
+  node interface do
+    resolve_type fn
+      %Bloodbath.CustomerEventsManagement.Event{}, _ -> :public_event
+      _, _ -> nil
+    end
+  end
 
   object :connect_person do
     field :id, :uuid
@@ -25,8 +38,12 @@ defmodule Bloodbath.GraphQL.Schema.Types do
     field :received_at, :datetime
   end
 
-  object :public_event do
-    field :id, :uuid
+  node object :public_event do
+    # we output the event id because the id
+    # will be the one from the node
+    field :event_id, :string, resolve: fn _arguments, resource ->
+      {:ok, resource.source.id}
+    end
     field :scheduled_for, :datetime
     field :dispatched_at, :datetime
     field :locked_at, :datetime

@@ -13,7 +13,6 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
   @primary_key {:id, Ecto.UUID, autogenerate: true}
   @foreign_key_type Ecto.UUID
   schema "events" do
-    # field :identifier, :id, virtual: true
     belongs_to :person, Bloodbath.AccountManagement.Person
     belongs_to :organization, Bloodbath.AccountManagement.Organization
     field :scheduled_for, :utc_datetime
