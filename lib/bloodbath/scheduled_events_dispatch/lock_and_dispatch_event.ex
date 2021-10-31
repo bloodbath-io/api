@@ -40,25 +40,27 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
 
       HTTPoison.start
 
-      # options = [
-      #   stream_to: self(),
-      #   async: :once,
-      #   timeout: 50_000,
-      #   recv_timeout: 50_000
-      # ]
+      options = [
+        stream_to: self(),
+        async: :once,
+        timeout: 50_000, # time we keep connections alive
+        recv_timeout: 50_000 # very large timeout on response, normal one is 5_000
+        # max_connections: 100
+      ]
 
       arguments = [
         event.endpoint,
         event.body,
         serialize_headers(event.headers),
-        # options
+        options
       ] |> Enum.reject(&is_nil/1)
 
       spawn(fn ->
         Logger.debug(%{resource: event.id, event: "Within the closure, ready to be dispatched"})
         # turns async, we could also use #spawn
         # to avoid locking the process
-        HTTPoison |> apply(event.method, arguments)
+        response = HTTPoison |> apply(event.method, arguments)
+        Logger.debug(%{resource: event.id, event: "Response received", payload: response})
       end)
 
       Logger.debug(%{resource: event.id, event: "It was dispatched"})
