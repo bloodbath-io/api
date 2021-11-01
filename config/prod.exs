@@ -14,8 +14,8 @@ config :bloodbath, BloodbathWeb.Endpoint,
   http: [port: {:system, "PORT"}],
   force_ssl: [rewrite_on: [:x_forwarded_proto]]
 
-# Do not print debug messages in production
-config :logger, level: :info
+config :logger, :console,
+  format: "[$level] $message\n"
 
 config :sentry,
   dsn: "https://2f59427d96ee470fb5b2eb1401c0f148@o267044.ingest.sentry.io/5767189",
