@@ -6,10 +6,7 @@ config :bloodbath, Bloodbath.Repo,
   password: "postgres",
   database: "bloodbath_dev",
   hostname: "localhost",
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 120,
-  timeout: 100_100_000,
-  connect_timeout: 100_100_000
+  show_sensitive_data_on_connection_error: true
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
