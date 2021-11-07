@@ -6,6 +6,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
   alias Bloodbath.Repo
   alias Bloodbath.CustomerEventsManagement.{
     Event,
+    EventResponse
   }
 
   @check_every 100 # milliseconds
@@ -61,6 +62,8 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
         # to avoid locking the process
         response = HTTPoison |> apply(event.method, arguments)
         Logger.debug(%{resource: event.id, event: "Response received", payload: response})
+        event |> set_response
+        response |> insert_full_response(event)
       end)
 
       Logger.debug(%{resource: event.id, event: "It was dispatched"})
@@ -75,6 +78,39 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
     event
     |> Event.update_changeset(%{dispatched_at: Timex.now})
     |> Repo.update()
+  end
+
+  def set_response(event) do
+    Logger.debug(%{resource: event.id, event: "Updating response_received_at"})
+
+    event
+    |> Event.update_changeset(%{response_received_at: Timex.now})
+    |> Repo.update()
+  end
+
+  def insert_full_response({:ok, response}, event) do
+    attrs = %{
+      type: :ok,
+      body: response.body,
+      headers: Enum.into(response.headers, %{}),
+      request_url: response.request_url,
+      status_code: response.status_code
+    }
+
+    %EventResponse{} |> EventResponse.create_changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:event, event)
+    |> Repo.insert()
+  end
+
+  def insert_full_response({:error, response}, event) do
+    attrs = %{
+      type: :error,
+      reason: response.reason
+    }
+
+    %EventResponse{} |> EventResponse.create_changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:event, event)
+    |> Repo.insert()
   end
 
   # we don't want race conditions so we lock it straight through ID
