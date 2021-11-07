@@ -77,15 +77,14 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
 
     event
     |> Event.update_changeset(%{dispatched_at: Timex.now})
-    |> Repo.update()
+    |> Repo.update!()
   end
 
   def set_response(event) do
     Logger.debug(%{resource: event.id, event: "Updating response_received_at"})
 
-    event
-    |> Event.update_changeset(%{response_received_at: Timex.now})
-    |> Repo.update()
+    event |> Event.update_changeset(%{response_received_at: Timex.now})
+    |> Repo.update!()
   end
 
   def insert_full_response({:ok, response}, event) do

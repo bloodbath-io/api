@@ -19,6 +19,7 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     field :enqueued_at, :utc_datetime
     field :locked_at, :utc_datetime
     field :dispatched_at, :utc_datetime
+    field :response_received_at, :utc_datetime
     field :method, Ecto.Enum, values: [:get, :post, :put, :patch, :delete]
     field :origin, Ecto.Enum, values: [:graphql_api, :rest_api]
     field :headers, :string
@@ -55,7 +56,7 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
 
   def update_changeset(event, attrs) do
     event
-    |> cast(attrs, [:enqueued_at, :locked_at, :dispatched_at])
+    |> cast(attrs, [:enqueued_at, :locked_at, :dispatched_at, :response_received_at])
     |> cast_assoc(:person)
     |> cast_assoc(:organization)
   end
