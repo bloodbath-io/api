@@ -16,7 +16,6 @@ config :bloodbath, Bloodbath.Repo,
   url: database_url,
   # pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
   pool_size: 100,
-  pool_timeout: 60_000,
   timeout: 80_000,
   queue_target: 5_000,
   queue_interval: 10_000
