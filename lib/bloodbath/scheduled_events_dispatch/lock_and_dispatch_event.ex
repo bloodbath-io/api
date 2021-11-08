@@ -62,6 +62,9 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
         # to avoid locking the process
         response = HTTPoison |> apply(event.method, arguments)
         Logger.debug(%{resource: event.id, event: "Response received", payload: response})
+        # NOTE: this isn't going to work properly
+        # we should have an event stream to pipeline the response update in batch (kafka?)
+        # this spawns one connection each time it happens, and may delay the database connections
         event |> set_response
         response |> insert_full_response(event)
       end)
