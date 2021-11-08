@@ -109,7 +109,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
   def insert_full_response({:error, response}, event) do
     attrs = %{
       type: :error,
-      reason: response.reason
+      reason: Atom.to_string(response.reason)
     }
 
     Logger.debug(%{resource: event.id, event: "Error received, we will create an EventResponse for it", data: attrs})
