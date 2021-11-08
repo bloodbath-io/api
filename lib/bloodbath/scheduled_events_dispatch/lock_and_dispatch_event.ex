@@ -46,7 +46,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
         # async: :once,
         timeout: 30_000, # time we keep connections alive
         recv_timeout: 30_000 # very large timeout on response, normal one is 5_000
-        # max_connections: 100
+        # wfmax_connections: 100
       ]
 
       arguments = [
@@ -99,6 +99,8 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
       status_code: response.status_code
     }
 
+    Logger.debug(%{resource: event.id, event: "Ok received, we will create an EventResponse for it", data: attrs})
+
     %EventResponse{} |> EventResponse.create_changeset(attrs)
     |> Ecto.Changeset.put_assoc(:event, event)
     |> Repo.insert()
@@ -109,6 +111,8 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
       type: :error,
       reason: response.reason
     }
+
+    Logger.debug(%{resource: event.id, event: "Error received, we will create an EventResponse for it", data: attrs})
 
     %EventResponse{} |> EventResponse.create_changeset(attrs)
     |> Ecto.Changeset.put_assoc(:event, event)
