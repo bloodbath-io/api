@@ -3,10 +3,6 @@ version: '3'
 services:
   bloodbath-api:
     build: .
-    # volumes:
-    #   - type: bind
-    #     source: .
-    #     target: /app
     ports:
       - "4000:4000"
     environment:

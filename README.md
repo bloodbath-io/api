@@ -49,6 +49,18 @@ dokku postgres:expose bloodbath # expose database port to access it from any com
 ## SQL checks
 
 ```
--- check the difference / error rate in terms of second on what was planned
-select avg(DATE_PART('second', scheduled_for::date) - DATE_PART('second', dispatched_at::date)) as avg_seconds from events
+SELECT * FROM pg_stat_activity WHERE datname = 'bloodbath'
+
+select pg_terminate_backend(pid)
+from pg_stat_activity
+where state != 'active'
+
+alter system set idle_session_timeout='5min';
+
+
+SELECT * FROM events_responses WHERE type = 'ok'
+SELECT * FROM events WHERE response_received_at IS NOT NULL
+
+SELECT scheduled_for, dispatched_at, response_received_at, dispatched_at - scheduled_for AS dispatch_time, response_received_at - scheduled_for AS response_time FROM events
+
 ```
