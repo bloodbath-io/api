@@ -13,6 +13,13 @@ mix ecto.setup
 mix phx.server
 ```
 
+## Docker
+
+```
+docker-compose build
+docker-compose up
+```
+
 ## With REPL (IEx)
 This is the equivalent of binding.pry
 If you want to use it inside the code
