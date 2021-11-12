@@ -2,10 +2,11 @@ use Mix.Config
 
 # Configure your database
 config :bloodbath, Bloodbath.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "bloodbath_dev",
-  hostname: "localhost",
+  username: System.get_env("PGUSER"),
+  password: System.get_env("PGPASSWORD"),
+  database: System.get_env("PGDATABASE"),
+  port: System.get_env("PGPORT"),
+  hostname: System.get_env("PGHOST"),
   show_sensitive_data_on_connection_error: true
 
 # For development, we disable any cache and enable

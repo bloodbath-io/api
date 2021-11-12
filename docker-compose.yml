@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  bloodbath-api:
+    build: .
+    # volumes:
+    #   - type: bind
+    #     source: .
+    #     target: /app
+    ports:
+      - "4000:4000"
+    environment:
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: bloodbath
+      PGPORT: 5432
+      PGHOST: bloodbath-database
+    depends_on:
+      - bloodbath-database
+    command:
+      - ./entrypoint.sh
+  bloodbath-database:
+    # We use the predefined Postgres image
+    image: postgres:12.8
+    environment:
+      # Set user/password for Postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      # Set a path where Postgres should store the data
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+# Define the volumes
+volumes:
+  pgdata:
