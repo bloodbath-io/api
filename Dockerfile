@@ -11,6 +11,7 @@ WORKDIR /app
 ENV MIX_ENV=prod
 ENV PORT=4000
 ENV DATABASE_URL=postgresql://postgres:e95e770ead483835dfa738b086074b21@laurent.tech:22463/bloodbath
+ENV SECRET_KEY_BASE=UN5XrhCoYiMM/ALWhnUDgCvEOjAUI8vaZAKSu0Mq0mTDdfkJspaXj7uzqXeuuYQm
 
 # Install hex package manager
 # By using --force, we don’t need to type “Y” to confirm the installation
