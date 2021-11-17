@@ -71,3 +71,11 @@ SELECT * FROM events WHERE response_received_at IS NOT NULL
 SELECT scheduled_for, dispatched_at, response_received_at, dispatched_at - scheduled_for AS dispatch_time, response_received_at - scheduled_for AS response_time FROM events
 
 ```
+
+# Production
+
+## Connect to EC2
+
+```
+ssh -i ../aws/connect-to-bloodbath-in-ssh.pem ubuntu@108.129.41.141
+```
