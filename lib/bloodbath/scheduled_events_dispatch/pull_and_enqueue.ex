@@ -11,7 +11,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
 
   @interval 30 * 1000 # every 30 seconds
   @buffer_lock 5 # this will lock it in advance
-  @pull_events_from_the_next 1 # minutes
+  @pull_events_from_the_next 60 # seconds
 
   def start_link(_opts) do
     GenServer.start_link(__MODULE__, %{})
@@ -47,7 +47,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
   end
 
   def in_the_next do
-    Timex.now() |> Timex.shift(minutes: @pull_events_from_the_next)
+    Timex.now() |> Timex.shift(seconds: @pull_events_from_the_next)
   end
 
   def enqueue(event) do
