@@ -27,7 +27,7 @@ config :sentry,
   },
   included_environments: [:prod]
 
-config :bloodbath, BloodbathWeb.Endpoint#,
+# config :bloodbath, BloodbathWeb.Endpoint#,
       #  force_ssl: [hsts: true]
 
 import_config "prod.secret.exs"
