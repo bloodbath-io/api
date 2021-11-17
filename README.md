@@ -79,3 +79,9 @@ SELECT scheduled_for, dispatched_at, response_received_at, dispatched_at - sched
 ```
 ssh -i ../aws/connect-to-bloodbath-in-ssh.pem ubuntu@108.129.41.141
 ```
+
+## Troubleshooting
+
+### SSL not working / LetsEncrypt not working
+
+Disable the SSL on CloudFlare, it creates problems to access the endpoint in HTTP to activate the certificate itself.
