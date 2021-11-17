@@ -56,7 +56,11 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
         options
       ] |> Enum.reject(&is_nil/1)
 
-      spawn(fn ->
+      Logger.debug(%{resource: event.id, event: "It was dispatched"})
+
+      event |> set_dispatch
+
+      # spawn(fn ->
         Logger.debug(%{resource: event.id, event: "Within the closure, ready to be dispatched"})
         # turns async, we could also use #spawn
         # to avoid locking the process
@@ -67,11 +71,8 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
         # this spawns one connection each time it happens, and may delay the database connections
         # event |> set_response
         # response |> insert_full_response(event)
-      end)
+      # end)
 
-      Logger.debug(%{resource: event.id, event: "It was dispatched"})
-
-      event |> set_dispatch
     end
   end
 
