@@ -10,9 +10,9 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :bloodbath, BloodbathWeb.Endpoint,
-  url: [scheme: "http", host: "api.bloodbath.io", port: 80],
-  http: [port: {:system, "PORT"}]#,
-  # force_ssl: [rewrite_on: [:x_forwarded_proto]]
+  url: [scheme: "https", host: "api.bloodbath.io", port: 443],
+  http: [port: {:system, "PORT"}],
+  force_ssl: [rewrite_on: [:x_forwarded_proto]]
 
 config :logger, :console,
   format: "[$level] $message\n"
@@ -27,7 +27,7 @@ config :sentry,
   },
   included_environments: [:prod]
 
-# config :bloodbath, BloodbathWeb.Endpoint#,
-      #  force_ssl: [hsts: true]
+config :bloodbath, BloodbathWeb.Endpoint,
+       force_ssl: [hsts: true]
 
 import_config "prod.secret.exs"
