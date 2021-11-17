@@ -5,7 +5,7 @@ config :bloodbath, Bloodbath.Repo,
   username: System.get_env("PGUSER", "postgres"),
   password: System.get_env("PGPASSWORD", "postgres"),
   database: System.get_env("PGDATABASE", "bloodbath_dev"),
-  port: System.get_env("PGPORT", 5432),
+  port: System.get_env("PGPORT", "5432"),
   hostname: System.get_env("PGHOST", "localhost"),
   show_sensitive_data_on_connection_error: true
 
