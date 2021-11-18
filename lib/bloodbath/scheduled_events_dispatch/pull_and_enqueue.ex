@@ -9,9 +9,9 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
     Event,
   }
 
-  @interval 60 * 1000 # seconds
+  @interval 20 * 1000 # seconds
   @buffer_lock 5 # this will lock it in advance
-  @pull_events_from_the_next 150 # seconds
+  @pull_events_from_the_next 30 # seconds
 
   def start_link(_opts) do
     GenServer.start_link(__MODULE__, %{})
@@ -59,6 +59,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
     |> Event.update_changeset(%{enqueued_at: Timex.now})
     |> Repo.update()
 
+    Logger.debug(%{resource: event.id, event: "We will calculate the difference between `#{event.scheduled_for}` and `#{Timex.now()}` and hold back for a while before locking the event"})
     dispatch_time = DateTime.diff(event.scheduled_for, Timex.now()) - @buffer_lock
     countdown = if dispatch_time < 0 do
       0
