@@ -42,8 +42,8 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
       events = Repo.all(query)
 
       Logger.debug(%{count: length(events) ,event: "Events pulled"})
-      tasks = events |> Enum.map(&enqueue/1)
-      Task.await_many(tasks)
+      _tasks = events |> Enum.map(&enqueue/1)
+      # Task.await_many(tasks)
       Logger.debug(%{count: length(events),event: "All tasks finished"})
     end)
   end
