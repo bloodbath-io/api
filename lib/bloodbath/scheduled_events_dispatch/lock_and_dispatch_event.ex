@@ -18,7 +18,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
   def run(%{event_id: event_id}) do
     Logger.debug(%{resource: event_id, event: "Running inside process"})
 
-    event_id |> set_lock
+    event_id |> set_locked
     Logger.debug(%{resource: event_id, event: "Lock was set"})
     event = Event |> Repo.get(event_id)
     Logger.debug(%{resource: event_id, event: "Event get from repo"})
@@ -39,12 +39,12 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
     else
       Logger.debug(%{resource: event.id, event: "About to dispatch"})
 
-      if already_dispatched?(event.id) do
-        Logger.debug(%{resource: event.id, event: "Dispatch was canceled at the last minute. The event seem to have been already processed."})
-      else
+      # if already_dispatched?(event.id) do
+      #   Logger.debug(%{resource: event.id, event: "Dispatch was canceled at the last minute. The event seem to have been already processed."})
+      # else
         event |> dispatch
-        event |> set_as_dispatched
-      end
+        set_dispatched(event.id)
+      # end
     end
   end
 
@@ -97,7 +97,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
     event
   end
 
-  def set_as_dispatched(event_id) do
+  def set_dispatched(event_id) do
     Logger.debug(%{resource: event_id, event: "Updating dispatched_at"})
 
     query = from event in Event,
@@ -144,7 +144,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
 
   # we don't want race conditions so we lock it straight through ID
   # before getting it further in our logic
-  defp set_lock(event_id) do
+  defp set_locked(event_id) do
     query = from event in Event,
     where: event.id == ^event_id
 
