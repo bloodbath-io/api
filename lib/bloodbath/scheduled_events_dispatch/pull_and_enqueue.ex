@@ -10,7 +10,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
   }
 
   @interval 30 * 1000 # every 30 seconds
-  @buffer_lock 5 # this will lock it in advance
+  @buffer_lock 15 # this will lock it in advance
   @pull_events_from_the_next 60 # seconds
 
   def start_link(_opts) do
