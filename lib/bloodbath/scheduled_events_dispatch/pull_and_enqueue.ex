@@ -9,9 +9,9 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
     Event,
   }
 
-  @interval 30 * 1000 # every 30 seconds
-  @buffer_lock 15 # this will lock it in advance
-  @pull_events_from_the_next 60 # seconds
+  @interval 15 * 1000 # every 15 seconds
+  @buffer_lock 5 # this will lock it in advance
+  @pull_events_from_the_next 30 # seconds
 
   def start_link(_opts) do
     GenServer.start_link(__MODULE__, %{})
@@ -33,17 +33,19 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
   end
 
   defp pull_and_enqueue() do
-    query = from event in Event,
-    where: is_nil(event.dispatched_at),
-    where: is_nil(event.enqueued_at),
-    where: event.scheduled_for <= ^in_the_next()
+    spawn(fn ->
+      query = from event in Event,
+      where: is_nil(event.dispatched_at),
+      where: is_nil(event.enqueued_at),
+      where: event.scheduled_for <= ^in_the_next()
 
-    events = Repo.all(query)
+      events = Repo.all(query)
 
-    Logger.debug(%{count: length(events) ,event: "Events pulled"})
-    tasks = events |> Enum.map(&enqueue/1)
-    # Task.await_many(tasks)
-    Logger.debug(%{count: length(events),event: "All tasks finished"})
+      Logger.debug(%{count: length(events) ,event: "Events pulled"})
+      tasks = events |> Enum.map(&enqueue/1)
+      # Task.await_many(tasks)
+      Logger.debug(%{count: length(events),event: "All tasks finished"})
+    end)
   end
 
   def in_the_next do
