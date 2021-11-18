@@ -9,9 +9,9 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
     Event,
   }
 
-  @interval 30 * 1000 # every 15 seconds
+  @interval 10 * 1000 # every 15 seconds
   @buffer_lock 5 # this will lock it in advance
-  @pull_events_from_the_next 60 # seconds
+  @pull_events_from_the_next 30 # seconds
 
   def start_link(_opts) do
     GenServer.start_link(__MODULE__, %{})
@@ -33,8 +33,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
   end
 
   defp pull_and_enqueue() do
-    # spawn(fn ->
-      # TODO: explain that to see if there's any optimization to make?
+    spawn(fn ->
       query = from event in Event,
       where: is_nil(event.dispatched_at),
       where: is_nil(event.enqueued_at),
@@ -44,9 +43,9 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
 
       Logger.debug(%{count: length(events) ,event: "Events pulled"})
       tasks = events |> Enum.map(&enqueue/1)
-      # Task.await_many(tasks)
+      Task.await_many(tasks)
       Logger.debug(%{count: length(events),event: "All tasks finished"})
-    # end)
+    end)
   end
 
   def in_the_next do
@@ -75,10 +74,6 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
   defp start_dispatch_in(event, countdown) do
     Logger.debug(%{resource: event.id, event: "Will start link for the event"})
     {:ok, pid} = Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent.start_link(%{event_id: event.id})
-    # Task.async(fn ->
-    #   :timer.sleep(countdown)
-    #   Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent.run(%{event_id: event.id})
-    # end)
     Logger.debug(%{resource: event.id, event: "Pid of process received"})
     Process.send_after(pid, :dispatch, countdown)
     Logger.debug(%{resource: event.id, event: "Send after has been scheduled with the Pid on countdown #{countdown}"})
