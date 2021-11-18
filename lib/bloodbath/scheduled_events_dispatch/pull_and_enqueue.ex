@@ -9,9 +9,9 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
     Event,
   }
 
-  @interval 15 * 1000 # every 15 seconds
+  @interval 30 * 1000 # every 15 seconds
   @buffer_lock 5 # this will lock it in advance
-  @pull_events_from_the_next 30 # seconds
+  @pull_events_from_the_next 60 # seconds
 
   def start_link(_opts) do
     GenServer.start_link(__MODULE__, %{})
