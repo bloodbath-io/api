@@ -39,45 +39,66 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
     else
       Logger.debug(%{resource: event.id, event: "About to dispatch"})
 
-      spawn(fn ->
-        HTTPoison.start
-
-        options = [
-          # stream_to: self(),
-          # async: :once,
-          timeout: :infinity, # 50_000, # time we keep connections alive
-          recv_timeout: 60_000 # very large timeout on response, normal one is 5_000
-          # max_connections: 100
-        ]
-
-        arguments = [
-          event.endpoint,
-          event.body,
-          serialize_headers(event.headers),
-          options
-        ] |> Enum.reject(&is_nil/1)
-
+      if already_dispatched?(event.id) do
+        Logger.debug(%{resource: event.id, event: "Dispatch was canceled at the last minute. The event seem to have been already processed."})
+      else
         spawn(fn ->
-          Logger.debug(%{resource: event.id, event: "Within the closure, ready to be dispatched"})
-          # turns async, we could also use #spawn
-          # to avoid locking the process
-          response = HTTPoison |> apply(event.method, arguments)
-          Logger.debug(%{resource: event.id, event: "Response received", payload: response})
-          # NOTE: this isn't going to work properly
-          # we should have an event stream to pipeline the response update in batch (kafka?)
-          # this spawns one connection each time it happens, and may delay the database connections
-          # event |> set_response
-          # response |> insert_full_response(event)
+          event |> dispatch |> set_as_dispatched
         end)
-
-        Logger.debug(%{resource: event.id, event: "It was dispatched"})
-
-        event |> set_dispatch
-      end)
+      end
     end
   end
 
-  def set_dispatch(event) do
+  def already_dispatched?(event_id) do
+    # we rehydrate the event
+    # in case it was altered at
+    # some point in this timeframe
+    event = Event |> Repo.get(event_id)
+
+    if event.dispatched_at != nil do
+      false
+    else
+      true
+    end
+  end
+
+  def dispatch(event) do
+    HTTPoison.start
+
+    options = [
+      # stream_to: self(),
+      # async: :once,
+      timeout: :infinity, # 50_000, # time we keep connections alive
+      recv_timeout: 60_000 # very large timeout on response, normal one is 5_000
+      # max_connections: 100
+    ]
+
+    arguments = [
+      event.endpoint,
+      event.body,
+      serialize_headers(event.headers),
+      options
+    ] |> Enum.reject(&is_nil/1)
+
+    spawn(fn ->
+      Logger.debug(%{resource: event.id, event: "Within the closure, ready to be dispatched"})
+      # turns async, we could also use #spawn
+      # to avoid locking the process
+      response = HTTPoison |> apply(event.method, arguments)
+      Logger.debug(%{resource: event.id, event: "Response received", payload: response})
+      # NOTE: this isn't going to work properly
+      # we should have an event stream to pipeline the response update in batch (kafka?)
+      # this spawns one connection each time it happens, and may delay the database connections
+      # event |> set_response
+      # response |> insert_full_response(event)
+    end)
+
+    Logger.debug(%{resource: event.id, event: "It was dispatched"})
+
+    event
+  end
+
+  def set_as_dispatched(event) do
     Logger.debug(%{resource: event.id, event: "Updating dispatched_at"})
 
     event
