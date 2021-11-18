@@ -97,12 +97,13 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
     event
   end
 
-  def set_as_dispatched(event) do
-    Logger.debug(%{resource: event.id, event: "Updating dispatched_at"})
+  def set_as_dispatched(event_id) do
+    Logger.debug(%{resource: event_id, event: "Updating dispatched_at"})
 
-    event
-    |> Event.update_changeset(%{dispatched_at: Timex.now})
-    |> Repo.update!()
+    query = from event in Event,
+    where: event.id == ^event_id
+
+    Repo.update_all(query, set: [dispatched_at: Timex.now()])
   end
 
   def set_response(event) do
@@ -147,7 +148,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
     query = from event in Event,
     where: event.id == ^event_id
 
-    Logger.debug(%{resource: event_id, event: "About to query the locked_at"})
+    Logger.debug(%{resource: event_id, event: "Updating locked_at"})
     Repo.update_all(query, set: [locked_at: Timex.now()])
   end
 
