@@ -56,6 +56,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
     end
   end
 
+  @spec already_dispatched?(any) :: boolean
   def already_dispatched?(event_id) do
     # we rehydrate the event
     # in case it was altered at
