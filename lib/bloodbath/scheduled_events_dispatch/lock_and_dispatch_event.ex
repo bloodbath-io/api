@@ -50,7 +50,6 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
         #   Logger.debug(%{resource: event.id, event: "Dispatch was canceled at the last minute. The event seem to have been already processed."})
         # else
           event |> dispatch
-          set_dispatched(event.id)
         # end
       # end)
     end
@@ -88,10 +87,13 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
       options
     ] |> Enum.reject(&is_nil/1)
 
-    spawn(fn ->
+    # TODO: last thing i tried was to remove the spawn() from here, because it actually doesn't make much sense to have it
+    # it's a single event, therefore the genserver is perfectly fine to do that action without spawning an additional process
+    # pawn(fn ->
       Logger.debug(%{resource: event.id, event: "Within the closure, ready to be dispatched"})
       # turns async, we could also use #spawn
       # to avoid locking the process
+      set_dispatched(event.id)
       response = HTTPoison |> apply(event.method, arguments)
       Logger.debug(%{resource: event.id, event: "Response received", payload: response})
       # NOTE: this isn't going to work properly
@@ -99,7 +101,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
       # this spawns one connection each time it happens, and may delay the database connections
       # event |> set_response
       # response |> insert_full_response(event)
-    end)
+    # end)
 
     Logger.debug(%{resource: event.id, event: "It was dispatched"})
 
