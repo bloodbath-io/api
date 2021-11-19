@@ -39,12 +39,14 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
     else
       Logger.debug(%{resource: event.id, event: "About to dispatch"})
 
-      # if already_dispatched?(event.id) do
-      #   Logger.debug(%{resource: event.id, event: "Dispatch was canceled at the last minute. The event seem to have been already processed."})
-      # else
-        event |> dispatch
-        set_dispatched(event.id)
-      # end
+      spawn(fn ->
+        # if already_dispatched?(event.id) do
+        #   Logger.debug(%{resource: event.id, event: "Dispatch was canceled at the last minute. The event seem to have been already processed."})
+        # else
+          event |> dispatch
+          set_dispatched(event.id)
+        # end
+      end)
     end
   end
 
