@@ -34,7 +34,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
   end
 
   defp pull_and_enqueue() do
-    spawn(fn ->
+    # spawn(fn ->
       query = from event in Event,
       where: is_nil(event.dispatched_at),
       where: is_nil(event.enqueued_at),
@@ -47,7 +47,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
       _tasks = events |> Enum.map(&enqueue/1)
       # Task.await_many(tasks)
       Logger.debug(%{count: length(events),event: "All tasks finished"})
-    end)
+    # end)
   end
 
   def in_the_next do
