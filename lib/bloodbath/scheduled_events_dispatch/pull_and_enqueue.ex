@@ -23,6 +23,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
   end
 
   def handle_info(:enqueue, state) do
+    Logger.debug(%{event: "Going through loop enqueue"})
     pull_and_enqueue()
     schedule_work()
     {:noreply, state}
@@ -58,7 +59,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
 
     event
     |> Event.update_changeset(%{enqueued_at: Timex.now})
-    |> Repo.update()
+    |> Repo.update!()
 
     Logger.debug(%{resource: event.id, event: "We will calculate the difference between `#{event.scheduled_for}` and `#{Timex.now()}` and hold back for a while before locking the event"})
     dispatch_time = DateTime.diff(event.scheduled_for, Timex.now()) - @buffer_lock
@@ -75,9 +76,9 @@ defmodule Bloodbath.ScheduledEventsDispatch.PullAndEnqueue do
 
   defp start_dispatch_in(event, countdown_in_milliseconds) do
     Logger.debug(%{resource: event.id, event: "Will start link for the event"})
-    {:ok, pid} = Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent.start_link(%{event_id: event.id})
+    {:ok, pid} = Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent.start_link()
     Logger.debug(%{resource: event.id, event: "Pid of process received"})
-    Process.send_after(pid, :dispatch, countdown_in_milliseconds)
+    Process.send_after(pid, %{event_id: event.id}, countdown_in_milliseconds)
     Logger.debug(%{resource: event.id, event: "Send after has been scheduled with the Pid on countdown #{countdown_in_milliseconds}"})
   end
 end

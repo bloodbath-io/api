@@ -1,6 +1,6 @@
 defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
   require Logger
-  use Task
+  use GenServer
   import Ecto.Query, warn: false
 
   alias Bloodbath.Repo
@@ -11,11 +11,17 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
 
   @check_every 100 # milliseconds
 
-  def start_link(arg) do
-    Task.start_link(__MODULE__, :run, [arg])
+  def start_link() do
+    GenServer.start_link(__MODULE__, %{})
   end
 
-  def run(%{event_id: event_id}) do
+  def handle_info(%{event_id: event_id}, state) do
+    prepare_process(%{event_id: event_id})
+
+    {:noreply, state}
+  end
+
+  def prepare_process(%{event_id: event_id}) do
     Logger.debug(%{resource: event_id, event: "Running inside process"})
 
     event_id |> set_locked
