@@ -73,9 +73,9 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
     HTTPoison.start
 
     options = [
-      # stream_to: self(),
-      # async: :once,
-      timeout: :infinity, # 50_000, # time we keep connections alive
+      stream_to: self(),
+      async: :once,
+      timeout: 70_000, # 70_000, # time we keep connections alive -> always keep the connection slightly above
       recv_timeout: 60_000 # very large timeout on response, normal one is 5_000
       # max_connections: 100
     ]
@@ -95,8 +95,8 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
       # to avoid locking the process
       set_dispatched(event.id)
       # TODO: removed this temporarily to check what does the CPU burn
-      # response = HTTPoison |> apply(event.method, arguments)
-      # Logger.debug(%{resource: event.id, event: "Response received", payload: response})
+      response = HTTPoison |> apply(event.method, arguments)
+      Logger.debug(%{resource: event.id, event: "Response received", payload: response})
       # # NOTE: this isn't going to work properly
       # # we should have an event stream to pipeline the response update in batch (kafka?)
       # # this spawns one connection each time it happens, and may delay the database connections
