@@ -29,28 +29,17 @@ You need to start the server this way
 iex -S mix phx.server
 ```
 
-# Access
-
-[`localhost:4000`](http://localhost:4000)
-
-# Other
-
-## Upload a file with cURL
-
-```
-curl -X POST -F query="mutation { importTeamFromCsv(file: \"csv\") { id } }" -F csv=@team-members-list.csv localhost:4000/graphql
-```
-
-## Create uploader
-
-```
-mix arc.g avatar
-```
-
+# Production
 ## Dokku essentials
 
 ```
 dokku postgres:expose bloodbath # expose database port to access it from any computer
+```
+
+## Deploy in production
+
+```
+git push dokku
 ```
 
 ## SQL checks
@@ -72,7 +61,12 @@ SELECT scheduled_for, dispatched_at, response_received_at, dispatched_at - sched
 
 ```
 
-# Production
+## Short guide to AWS
+
+- We currently don't use ECS because it's useless
+- We use a public EC2 instance and RDS connected to it
+- You can access it through SSH and everything
+- Dokku is installed on it
 
 ## Connect to EC2
 
@@ -85,3 +79,7 @@ ssh -i ../aws/connect-to-bloodbath-in-ssh.pem ubuntu@108.129.41.141
 ### SSL not working / LetsEncrypt not working
 
 Disable the SSL on CloudFlare, it creates problems to access the endpoint in HTTP to activate the certificate itself.
+
+### No space left on device, impossible to push via Dokku
+
+Probably the logs accumulated while debugging for a while, simply remove /var/log to make some space in there.

@@ -75,8 +75,8 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
     options = [
       stream_to: self(),
       async: :once,
-      timeout: 8_000, # time we keep connections alive -> always keep the connection slightly above
-      recv_timeout: 5_000 # timeout on response
+      timeout: 5_000, # time we keep connections alive -> always keep the connection slightly above
+      recv_timeout: 2_000 # timeout on response
       # max_connections: 100
     ]
 
@@ -89,19 +89,19 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
 
     # TODO: last thing i tried was to remove the spawn() from here, because it actually doesn't make much sense to have it
     # it's a single event, therefore the genserver is perfectly fine to do that action without spawning an additional process
-    # pawn(fn ->
+    # spawn(fn ->
       Logger.debug(%{resource: event.id, event: "Within the closure, ready to be dispatched"})
       # turns async, we could also use #spawn
       # to avoid locking the process
       set_dispatched(event.id)
       # TODO: removed this temporarily to check what does the CPU burn
-      # response = HTTPoison |> apply(event.method, arguments)
-      # Logger.debug(%{resource: event.id, event: "Response received", payload: response})
+      response = HTTPoison |> apply(event.method, arguments)
+      Logger.debug(%{resource: event.id, event: "Response received", payload: response})
       # # NOTE: this isn't going to work properly
       # # we should have an event stream to pipeline the response update in batch (kafka?)
       # # this spawns one connection each time it happens, and may delay the database connections
-      # event |> set_response
-      # response |> insert_full_response(event)
+      event |> set_response
+      response |> insert_full_response(event)
     # end)
 
     Logger.debug(%{resource: event.id, event: "It was dispatched"})
