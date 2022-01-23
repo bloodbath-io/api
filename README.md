@@ -65,7 +65,7 @@ git push dokku
 ## Logs
 
 - We use Papertrailapp to monitor - the free tier - https://papertrailapp.com/dashboard
-- Please use laurent.schaffner.code@gmail.com to access it for now
+- Please use laurent@bloodbath.io to access it for now
 
 ## SQL checks
 

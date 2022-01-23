@@ -73,7 +73,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
     HTTPoison.start
 
     options = [
-      stream_to: self(),
+      # stream_to: self(),
       # async: :once,
       timeout: 5_000, # time we keep connections alive -> always keep the connection slightly above
       recv_timeout: 2_000 # timeout on response
