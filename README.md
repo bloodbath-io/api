@@ -30,6 +30,26 @@ iex -S mix phx.server
 ```
 
 # Production
+
+## Create everything to production
+
+### Have a configuration ready
+
+It should look like that
+
+```
+DATABASE_URL:             postgresql://postgres:e95e770ead483835dfa738b086074b21@bloodbath.ce1deu8qn9z0.eu-west-1.rds.amazonaws.com:5432/bloodbath
+DOKKU_APP_RESTORE:        1
+DOKKU_APP_TYPE:           herokuish
+DOKKU_LETSENCRYPT_EMAIL:  laurent@bloodbath.io
+DOKKU_PROXY_PORT:         80
+DOKKU_PROXY_PORT_MAP:     http:80:5000 https:443:5000
+DOKKU_PROXY_SSL_PORT:     443
+GIT_REV:                  ab5e7dd366339be0e84afeec61678c1c0f02a371
+MIX_ENV:                  prod
+SECRET_KEY_BASE:          UN5XrhCoYiMM/ALWhnUDgCvEOjAUI8vaZAKSu0Mq0mTDdfkJspaXj7uzqXeuuYQ
+```
+
 ## Dokku essentials
 
 ```
@@ -41,6 +61,11 @@ dokku postgres:expose bloodbath # expose database port to access it from any com
 ```
 git push dokku
 ```
+
+## Logs
+
+- We use Papertrailapp to monitor - the free tier - https://papertrailapp.com/dashboard
+- Please use laurent.schaffner.code@gmail.com to access it for now
 
 ## SQL checks
 
@@ -83,3 +108,13 @@ Disable the SSL on CloudFlare, it creates problems to access the endpoint in HTT
 ### No space left on device, impossible to push via Dokku
 
 Probably the logs accumulated while debugging for a while, simply remove /var/log to make some space in there.
+
+### Unable to resolve host ip-X-X-X-X
+
+Go in /etc/hosts and add
+
+```
+127.0.0.1 ip-X-X-X-X
+```
+
+It'll solve the problem manually
