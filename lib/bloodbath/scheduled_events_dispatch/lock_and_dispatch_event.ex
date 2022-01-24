@@ -75,9 +75,9 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
     options = [
       # stream_to: self(),
       # async: :once,
-      timeout: 5_000, # time we keep connections alive -> always keep the connection slightly above
+      timeout: 3_000, # time we keep connections alive -> always keep the connection slightly above
       recv_timeout: 2_000 # timeout on response
-      # max_connections: 100
+      max_connections: 80
     ]
 
     arguments = [
