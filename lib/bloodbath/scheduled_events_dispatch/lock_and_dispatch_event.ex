@@ -72,12 +72,13 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
   def dispatch(event) do
     HTTPoison.start
 
+    # checkout_timeout means we couldn't use one of the connections of HTTPoison to send the request because they are all busy (see https://github.com/edgurgel/httpoison/issues/359)
     options = [
       # stream_to: self(),
       # async: :once,
-      timeout: 8_000, # time we keep connections alive -> always keep the connection slightly above
+      timeout: 10_000, # time we keep connections alive -> always keep the connection slightly above
       recv_timeout: 5_000, # timeout on response
-      max_connections: 200
+      max_connections: 300
     ]
 
     arguments = [
