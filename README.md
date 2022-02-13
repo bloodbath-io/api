@@ -118,3 +118,7 @@ Go in /etc/hosts and add
 ```
 
 It'll solve the problem manually
+
+# Not to myself
+
+If there's a problem and .env isn't loaded, do `touch .env` in the CLI, we should find an alternative or something

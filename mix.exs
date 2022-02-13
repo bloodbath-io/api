@@ -64,7 +64,9 @@ defmodule Bloodbath.MixProject do
       {:arc_ecto, "~> 0.11.3"}, # file upload library linked to ecto
       {:httpoison, "~> 1.8"}, # send http payload
       {:date_time_parser, "~> 1.1.1"}, # parse string datetime into real time
-      {:logger_file_backend, "~> 0.0.12"} # log to file (in development also)
+      {:logger_file_backend, "~> 0.0.12"}, # log to file (in development also)
+      {:ex_aws, "~> 2.0"}, # aws kit
+      {:ex_aws_lambda, "~> 2.0"}, # lambda management for aws
     ]
   end
 

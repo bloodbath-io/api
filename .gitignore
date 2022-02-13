@@ -32,3 +32,6 @@ bloodbath-*.tar
 
 # all logs
 /logs/
+
+# environment variables
+.env

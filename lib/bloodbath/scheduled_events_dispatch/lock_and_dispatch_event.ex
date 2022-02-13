@@ -70,6 +70,8 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
   end
 
   def dispatch(event) do
+    call_lambda(event)
+
     HTTPoison.start
 
     # checkout_timeout means we couldn't use one of the connections of HTTPoison to send the request because they are all busy (see https://github.com/edgurgel/httpoison/issues/359)
@@ -169,5 +171,15 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
   defp serialize_headers(headers) when is_nil(headers), do: []
   defp serialize_headers(headers) do
     Poison.decode!(headers)
+  end
+
+  defp call_lambda(event) do
+    payload = %{nada: true}
+    response = ExAws.Lambda.invoke("lock-and-dispatch-event", payload, "no_context")
+    |> ExAws.request(region: "eu-west-1")
+
+    Logger.debug(%{resource: event.id, event: "Lambda was called", data: response})
+
+    true
   end
 end
