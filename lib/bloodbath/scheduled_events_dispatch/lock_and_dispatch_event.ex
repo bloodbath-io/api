@@ -174,8 +174,11 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
   end
 
   defp call_lambda(event) do
-    payload = %{nada: true}
-    response = ExAws.Lambda.invoke("lock-and-dispatch-event", payload, "no_context")
+    # TODO: add the relevant things there and add them to the struct of the lambda
+    # but it's working
+    payload = %{testing: "yo"}
+    context = %{}
+    response = ExAws.Lambda.invoke("lock-and-dispatch-event", payload, context)
     |> ExAws.request(region: "eu-west-1")
 
     Logger.debug(%{resource: event.id, event: "Lambda was called", data: response})
