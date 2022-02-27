@@ -70,8 +70,6 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
   end
 
   def dispatch(event) do
-    call_lambda(event)
-
     HTTPoison.start
 
     # checkout_timeout means we couldn't use one of the connections of HTTPoison to send the request because they are all busy (see https://github.com/edgurgel/httpoison/issues/359)
@@ -90,6 +88,8 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
       serialize_headers(event.headers),
       options
     ] |> Enum.reject(&is_nil/1)
+
+    call_lambda(event)
 
     # TODO: last thing i tried was to remove the spawn() from here, because it actually doesn't make much sense to have it
     # it's a single event, therefore the genserver is perfectly fine to do that action without spawning an additional process
@@ -174,9 +174,14 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
   end
 
   defp call_lambda(event) do
-    # TODO: add the relevant things there and add them to the struct of the lambda
-    # but it's working
-    payload = %{testing: "yo"}
+    payload = %{
+      id: event.id,
+      body: event.body,
+      endpoint: event.endpoint,
+      headers: event.headers,
+      method: event.method
+    }
+
     context = %{}
     response = ExAws.Lambda.invoke("lock-and-dispatch-event", payload, context)
     |> ExAws.request(region: "eu-west-1")
