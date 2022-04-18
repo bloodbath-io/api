@@ -15,7 +15,7 @@ defmodule BloodbathWeb.CallbackController do
     event = Event |> Repo.get(event_id)
 
     event |> set_response
-    insert_full_response(event, params["type"], params["body"], params["status"])
+    insert_full_response(event, params["type"], params["body"], params["status"], params["headers"], params["reason"])
 
     render(conn, "index.json")
   end
@@ -27,13 +27,14 @@ defmodule BloodbathWeb.CallbackController do
     |> Repo.update!()
   end
 
-  def insert_full_response(event, type, body, status) do
+  def insert_full_response(event, type, body, status, headers, reason) do
     attrs = %{
       type: type,
       body: body,
-      headers: %{}, # yes this is useless
+      headers: headers,
       request_url: event.endpoint, # yes this is useless
-      status_code: status
+      status_code: status,
+      reason: reason
     }
 
     Logger.debug(%{resource: event.id, event: "Ok received, we will create an EventResponse for it", data: attrs})
