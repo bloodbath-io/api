@@ -70,46 +70,8 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
   end
 
   def dispatch(event) do
-    # HTTPoison.start
-
-    # # checkout_timeout means we couldn't use one of the connections of HTTPoison to send the request because they are all busy (see https://github.com/edgurgel/httpoison/issues/359)
-    # options = [
-    #   # stream_to: self(),
-    #   # async: :once,
-    #   timeout: 20_000, # time we keep connections alive -> always keep the connection slightly above
-    #   connect_timeout: 30_000,
-    #   recv_timeout: 5_000, # timeout on response
-    #   max_connections: 500
-    # ]
-
-    # arguments = [
-    #   event.endpoint,
-    #   event.body,
-    #   serialize_headers(event.headers),
-    #   options
-    # ] |> Enum.reject(&is_nil/1)
-
     call_lambda(event)
-
-    # TODO: last thing i tried was to remove the spawn() from here, because it actually doesn't make much sense to have it
-    # it's a single event, therefore the genserver is perfectly fine to do that action without spawning an additional process
-    # spawn(fn ->
-      # Logger.debug(%{resource: event.id, event: "Within the closure, ready to be dispatched"})
-      # turns async, we could also use #spawn
-      # to avoid locking the process
-      set_dispatched(event.id)
-      # TODO: removed this temporarily to check what does the CPU burn
-      # response = HTTPoison |> apply(event.method, arguments)
-      # Logger.debug(%{resource: event.id, event: "Response received", payload: response})
-      # # # NOTE: this isn't going to work properly
-      # # # we should have an event stream to pipeline the response update in batch (kafka?)
-      # # # this spawns one connection each time it happens, and may delay the database connections
-      # event |> set_response
-      # response |> insert_full_response(event)
-    # end)
-
     Logger.debug(%{resource: event.id, event: "It was dispatched"})
-
     event
   end
 
@@ -120,42 +82,6 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
     where: event.id == ^event_id
 
     Repo.update_all(query, set: [dispatched_at: Timex.now()])
-  end
-
-  def set_response(event) do
-    Logger.debug(%{resource: event.id, event: "Updating response_received_at"})
-
-    event |> Event.update_changeset(%{response_received_at: Timex.now})
-    |> Repo.update!()
-  end
-
-  def insert_full_response({:ok, response}, event) do
-    attrs = %{
-      type: :ok,
-      body: response.body,
-      headers: Enum.into(response.headers, %{}),
-      request_url: response.request_url,
-      status_code: response.status_code
-    }
-
-    Logger.debug(%{resource: event.id, event: "Ok received, we will create an EventResponse for it", data: attrs})
-
-    %EventResponse{} |> EventResponse.create_changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:event, event)
-    |> Repo.insert()
-  end
-
-  def insert_full_response({:error, response}, event) do
-    attrs = %{
-      type: :error,
-      reason: Atom.to_string(response.reason)
-    }
-
-    Logger.debug(%{resource: event.id, event: "Error received, we will create an EventResponse for it", data: attrs})
-
-    %EventResponse{} |> EventResponse.create_changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:event, event)
-    |> Repo.insert()
   end
 
   # we don't want race conditions so we lock it straight through ID

@@ -32,7 +32,7 @@ defmodule BloodbathWeb.CallbackController do
       type: type,
       body: body,
       headers: headers,
-      request_url: event.endpoint, # yes this is useless
+      request_url: event.endpoint,
       status_code: status,
       reason: reason
     }
@@ -41,6 +41,6 @@ defmodule BloodbathWeb.CallbackController do
 
     %EventResponse{} |> EventResponse.create_changeset(attrs)
     |> Ecto.Changeset.put_assoc(:event, event)
-    |> Repo.insert()
+    |> Repo.insert!()
   end
 end
