@@ -9,6 +9,10 @@ defmodule BloodbathWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :internal do
+    plug :accepts, ["json"]
+  end
+
   pipeline :rest_authenticated do
     plug BloodbathWeb.Pipeline.Authenticated, %{routing_origin: :rest}
   end
@@ -27,6 +31,13 @@ defmodule BloodbathWeb.Router do
     pipe_through :rest_authorized_owner
     resources "/events", EventController, except: [:new, :edit, :update]
     get "/ping", PingController, :index
+
+    # this is internal
+    post "/callback", CallbackController, :create
+  end
+
+  scope "/internal", BloodbathWeb do
+    post "/callback", CallbackController, :create
   end
 
   scope "/" do

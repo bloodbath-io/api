@@ -70,42 +70,42 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
   end
 
   def dispatch(event) do
-    HTTPoison.start
+    # HTTPoison.start
 
-    # checkout_timeout means we couldn't use one of the connections of HTTPoison to send the request because they are all busy (see https://github.com/edgurgel/httpoison/issues/359)
-    options = [
-      # stream_to: self(),
-      # async: :once,
-      timeout: 20_000, # time we keep connections alive -> always keep the connection slightly above
-      connect_timeout: 30_000,
-      recv_timeout: 5_000, # timeout on response
-      max_connections: 500
-    ]
+    # # checkout_timeout means we couldn't use one of the connections of HTTPoison to send the request because they are all busy (see https://github.com/edgurgel/httpoison/issues/359)
+    # options = [
+    #   # stream_to: self(),
+    #   # async: :once,
+    #   timeout: 20_000, # time we keep connections alive -> always keep the connection slightly above
+    #   connect_timeout: 30_000,
+    #   recv_timeout: 5_000, # timeout on response
+    #   max_connections: 500
+    # ]
 
-    arguments = [
-      event.endpoint,
-      event.body,
-      serialize_headers(event.headers),
-      options
-    ] |> Enum.reject(&is_nil/1)
+    # arguments = [
+    #   event.endpoint,
+    #   event.body,
+    #   serialize_headers(event.headers),
+    #   options
+    # ] |> Enum.reject(&is_nil/1)
 
     call_lambda(event)
 
     # TODO: last thing i tried was to remove the spawn() from here, because it actually doesn't make much sense to have it
     # it's a single event, therefore the genserver is perfectly fine to do that action without spawning an additional process
     # spawn(fn ->
-      Logger.debug(%{resource: event.id, event: "Within the closure, ready to be dispatched"})
+      # Logger.debug(%{resource: event.id, event: "Within the closure, ready to be dispatched"})
       # turns async, we could also use #spawn
       # to avoid locking the process
       set_dispatched(event.id)
       # TODO: removed this temporarily to check what does the CPU burn
-      response = HTTPoison |> apply(event.method, arguments)
-      Logger.debug(%{resource: event.id, event: "Response received", payload: response})
-      # # NOTE: this isn't going to work properly
-      # # we should have an event stream to pipeline the response update in batch (kafka?)
-      # # this spawns one connection each time it happens, and may delay the database connections
-      event |> set_response
-      response |> insert_full_response(event)
+      # response = HTTPoison |> apply(event.method, arguments)
+      # Logger.debug(%{resource: event.id, event: "Response received", payload: response})
+      # # # NOTE: this isn't going to work properly
+      # # # we should have an event stream to pipeline the response update in batch (kafka?)
+      # # # this spawns one connection each time it happens, and may delay the database connections
+      # event |> set_response
+      # response |> insert_full_response(event)
     # end)
 
     Logger.debug(%{resource: event.id, event: "It was dispatched"})
