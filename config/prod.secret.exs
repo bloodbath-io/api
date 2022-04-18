@@ -13,7 +13,7 @@ database_url =
 
 config :bloodbath, Bloodbath.Repo,
   # ssl: true,
-  url: database_url,
+  url: database_url
   # pool_size: String.to_integer(System.get_env("POOL_SIZE") || "40"),
   # timeout: 8_000,
   # queue_target: 2_000,
