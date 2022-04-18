@@ -109,6 +109,8 @@ Disable the SSL on CloudFlare, it creates problems to access the endpoint in HTT
 
 Probably the logs accumulated while debugging for a while, simply remove /var/log to make some space in there.
 
+You'll have to recreate /var/log/nginx/error.log and /var/log/nginx/access.log
+
 ### Unable to resolve host ip-X-X-X-X
 
 Go in /etc/hosts and add
