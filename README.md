@@ -66,6 +66,7 @@ git push dokku
 
 - We use Papertrailapp to monitor - the free tier - https://papertrailapp.com/dashboard
 - Please use laurent@bloodbath.io to access it for now
+- Help to setup https://www.papertrail.com/blog/using-dokku-on-digitalocean/
 
 ## SQL checks
 

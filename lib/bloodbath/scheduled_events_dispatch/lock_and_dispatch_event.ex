@@ -71,6 +71,7 @@ defmodule Bloodbath.ScheduledEventsDispatch.LockAndDispatchEvent do
 
   def dispatch(event) do
     call_lambda(event)
+    set_dispatched(event.id)
     Logger.debug(%{resource: event.id, event: "It was dispatched"})
     event
   end
