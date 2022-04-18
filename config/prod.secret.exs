@@ -14,10 +14,10 @@ database_url =
 config :bloodbath, Bloodbath.Repo,
   # ssl: true,
   url: database_url,
-  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "80"),
-  timeout: 15_000,
-  queue_target: 5_000,
-  queue_interval: 10_000
+  # pool_size: String.to_integer(System.get_env("POOL_SIZE") || "40"),
+  # timeout: 8_000,
+  # queue_target: 2_000,
+  # queue_interval: 3_000
 
 secret_key_base =
   System.get_env("SECRET_KEY_BASE") ||
