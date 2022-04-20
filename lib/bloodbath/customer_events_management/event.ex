@@ -8,7 +8,7 @@ defmodule Bloodbath.CustomerEventsManagement.Event do
     Event,
   }
 
-  @events_hard_limit 5_000
+  @events_hard_limit 2_000
 
   @primary_key {:id, Ecto.UUID, autogenerate: true}
   @foreign_key_type Ecto.UUID
