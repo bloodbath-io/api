@@ -97,8 +97,10 @@ SELECT scheduled_for, dispatched_at, response_received_at, dispatched_at - sched
 ## Connect to EC2
 
 ```
-ssh -i ../aws/connect-to-bloodbath-in-ssh.pem ubuntu@108.129.41.141
+ssh -i "aws/connect-to-bloodbath-in-ssh.pem" ubuntu@ec2-108-129-41-141.eu-west-1.compute.amazonaws.com
 ```
+
+If you lose the SSH Key, follow those steps: https://aws.amazon.com/premiumsupport/knowledge-center/user-data-replace-key-pair-ec2/
 
 ## Troubleshooting
 
