@@ -33,12 +33,35 @@ iex -S mix phx.server
 
 ## Create everything to production
 
+### Before
+
+- Destroy and create the EC2
+- Don't forget to change the URL in Cloudflare (DNS) to point api.bloodbath.io to the public EC2 IPv4
+
+### Install Dokku
+
+- Follow the standard installation
+- Set the global domain as bloodbath.io
+- Add letsencrypt plugins
+
+### Allow public access to RDS
+
+- When creating or modifying the database, go in "Connectivity"
+- It's in the advanced settings to allow public incoming traffic
+- Please let AWS generate the password, somehow using your own password doesn't work and you won't be able to access it from Postico
+
+### Allow push from local to git dokku
+
+- Add remote origin `dokku@34.245.121.60:bloodbath-api` the IP being your public IPv4 EC2 instance
+- This won't work if you don't `sudo cat ~/.ssh/authorized_keys | sudo dokku ssh-keys:add admin` on the EC2 beforehand
+
 ### Have a configuration ready
 
 It should look like that
 
 ```
-DATABASE_URL:             postgresql://postgres:e95e770ead483835dfa738b086074b21@bloodbath.ce1deu8qn9z0.eu-west-1.rds.amazonaws.com:5432/bloodbath
+SECRET_KEY_BASE:          random
+DATABASE_URL:             postgresql://postgres:vZPzqr8prVFH1qJLpk8A@bloodbath-2.ce1deu8qn9z0.eu-west-1.rds.amazonaws.com:5432/bloodbath
 DOKKU_APP_RESTORE:        1
 DOKKU_APP_TYPE:           herokuish
 DOKKU_LETSENCRYPT_EMAIL:  laurent@bloodbath.io
@@ -48,6 +71,12 @@ DOKKU_PROXY_SSL_PORT:     443
 GIT_REV:                  ab5e7dd366339be0e84afeec61678c1c0f02a371
 MIX_ENV:                  prod
 SECRET_KEY_BASE:          UN5XrhCoYiMM/ALWhnUDgCvEOjAUI8vaZAKSu0Mq0mTDdfkJspaXj7uzqXeuuYQ
+```
+
+Basically you must add only this
+
+```
+dokku config:set bloodbath-api DATABASE_URL=postgresql://postgres:vZPzqr8prVFH1qJLpk8A@bloodbath-2.ce1deu8qn9z0.eu-west-1.rds.amazonaws.com:5432/bloodbath SECRET_KEY_BASE=random
 ```
 
 ## Dokku essentials
@@ -97,7 +126,7 @@ SELECT scheduled_for, dispatched_at, response_received_at, dispatched_at - sched
 ## Connect to EC2
 
 ```
-ssh -i "aws/connect-to-bloodbath-in-ssh.pem" ubuntu@ec2-108-129-41-141.eu-west-1.compute.amazonaws.com
+ssh -i "aws/connect-to-bloodbath-new.pem" ubuntu@ec2-108-129-41-141.eu-west-1.compute.amazonaws.com
 ```
 
 If you lose the SSH Key, follow those steps: https://aws.amazon.com/premiumsupport/knowledge-center/user-data-replace-key-pair-ec2/
